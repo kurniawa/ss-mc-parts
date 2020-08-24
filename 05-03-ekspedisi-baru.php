@@ -4,57 +4,38 @@ include_once "01-header.php";
 
 <div class="header"></div>
 
-<div class="mt-1em ml-1em">
-    <div class="d-inline">
+<div class="grid-2-10_auto mt-1em ml-1em">
+    <div>
         <img class="w-2em" src="img/icons/pencil.svg" alt="Data Pelanggan Baru">
     </div>
-    <div class="d-inline font-weight-bold">
-        Input Data Pelanggan Baru
+    <div class="font-weight-bold">
+        Input Data Ekspedisi Baru
     </div>
 </div>
 
 <div class="ml-1em mr-1em mt-2em">
-    <input class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik">
+    <div class="grid-2-auto grid-column-gap-1em">
+        <div class="bb-0_5px-grey pb-1em">
+            <select class="b-none" name="bentuk-perusahaan" id="bentukPerusahaan" required>
+                <option value="" selected disabled>Bentuk</option>
+                <option value="">-</option>
+                <option value="pt">PT</option>
+                <option value="cv">CV</option>
+            </select>
+        </div>
+        <input class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
+    </div>
+
     <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Alamat"></textarea>
-    <div class="grid-2-auto grid-column-gap-1em mt-1em">
-        <input class="input-1 pb-1em" type="text" placeholder="Pulau">
-        <input class="input-1 pb-1em" type="text" placeholder="Daerah">
-    </div>
-    <div class="grid-2-auto grid-column-gap-1em mt-1em">
+    <div class="mt-1em">
         <input class="input-1 pb-1em" type="text" placeholder="No. Kontak">
-        <input class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
-    </div>
-    <div class="grid-2-auto mt-1em">
-        <input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">
-        <div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2"><span class="justify-self-center font-size-2em font-weight-bold color-white">+</span></div>
     </div>
     <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Keterangan lain (opsional)"></textarea>
 </div>
 
-<div class="grid-2-10_auto_auto mt-1em ml-1em mr-1em">
-    <div class="">
-        <img class="w-2em" src="img/icons/speech-bubble.svg" alt="Reseller?">
-    </div>
-    <div class="font-weight-bold">
-        Apakah Pelanggan ini memiliki Reseller?
-    </div>
-    <div>
-        <div id="divToggleReseller" class="position-relative b-radius-25px b-1px-grey bg-color-grey w-4_5em" onclick="showInputReseller();">
-            <div id="toggleReseller" class="position-absolute w-3em text-center b-radius-25px b-1px-grey color-grey bg-color-white">tidak</div>
-        </div>
-    </div>
-</div>
-
-<div id="divInputNamaReseller" class="d-none ml-2em mr-2em mt-1em b-1px-grey p-1em">
-    <input class="input-1 pb-1em" type="text" placeholder="Nama Reseller">
-
-</div>
-
-<br><br>
-
 <div>
     <div class="m-1em h-4em bg-color-orange-2 grid-1-auto">
-        <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
+        <span class="justify-self-center font-weight-bold">Input Ekspedisi Baru</span>
     </div>
 </div>
 

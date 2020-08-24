@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/fonts.css">
+    <link rel="stylesheet" href="css/border.css">
     <script src="js/jquery-3.5.1.js"></script>
 
     <title>MC-Parts Smart System</title>

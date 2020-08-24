@@ -15,7 +15,12 @@ a {
 a:visited{
     color: black;
 }
-
+select:invalid{
+    color: #C4C4C4;
+}
+option{
+    color: black;
+}
 .header {
     height: 4em;
     background-color: #ffb800;
@@ -25,6 +30,16 @@ a:visited{
     border-bottom: 1px solid #e4e4e4;
     box-sizing: border-box;
     width: 100%;
+}
+.input-2 {
+    border: none;
+    box-sizing: border-box;
+    width: 100%;
+}
+.circle-small {
+    border-radius: 100%;
+    width: 1.5em;
+    height: 1.5em;
 }
 .text-center {
     text-align: center;
@@ -57,9 +72,18 @@ a:visited{
 .pl-0_5em {
     padding-left: 0.5em;
 }
+.pr-0_4em {
+    padding-right: 0.4em;
+}
 .pr-0_5em {
     padding-right: 0.5em;
 }
+.pr-1em {
+    padding-right: 1em;
+}
+
+/* margin */
+
 .m-1em {
     margin: 1em;
 }
@@ -75,11 +99,29 @@ a:visited{
 .mr-2em {
     margin-right: 2em;
 }
+.mt-0_3em {
+    margin-top: 0.3em;
+}
+.mt-0_4em {
+    margin-top: 0.4em;
+}
+.mt-0_5em {
+    margin-top: 0.5em;
+}
 .mt-1em {
     margin-top: 1em;
 }
 .mt-2em {
     margin-top: 2em;
+}
+.mb-0_3em {
+    margin-bottom: 0.3em;
+}
+.mb-0_4em {
+    margin-bottom: 0.4em;
+}
+.mb-0_5em {
+    margin-bottom: 0.5em;
 }
 .mb-1em {
     margin-bottom: 1em;
@@ -87,8 +129,14 @@ a:visited{
 .d-inline {
     display: inline;
 }
+.d-none {
+    display: none;
+}
 .h-4em {
     height: 4em;
+}
+.w-0_8em {
+    width: 0.8em;
 }
 .w-1em {
     width: 1em;
@@ -108,14 +156,8 @@ a:visited{
 .w-5em {
     width: 5em;
 }
-.b-05px {
-    border: 0.5px solid;
-}
-.b-radius-25px {
-    border-radius: 50px;
-}
-.b-1px-grey {
-    border: 1px solid #C4C4C4;
+.w-11em {
+    width: 11em;
 }
 .bg-color-orange-1 {
     background-color: #FFED50;

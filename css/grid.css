@@ -9,6 +9,11 @@
     grid-template-columns: auto auto;
     align-items: center;
 }
+.grid-2-10_auto {
+    display: grid;
+    grid-template-columns: 10% auto;
+    align-items: center;
+}
 .grid-2-10_auto_auto {
     display: grid;
     grid-template-columns: 10% auto auto;
@@ -24,12 +29,16 @@
 .grid-column-gap-1em {
     grid-column-gap: 1em;
 }
-
+.justify-self-left {
+    justify-self: left;
+}
 .justify-self-center {
     justify-self: center;
 }
 .justify-self-right {
     justify-self: right;
 }
-
+.justify-items-center {
+    justify-items: center;
+}
 
