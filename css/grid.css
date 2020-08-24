@@ -1,0 +1,35 @@
+.grid-1-auto {
+    display: grid;
+    grid-template-columns: auto;
+    align-items: center;
+}
+
+.grid-2-auto {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+}
+.grid-2-10_auto_auto {
+    display: grid;
+    grid-template-columns: 10% auto auto;
+    align-items: center;
+}
+
+.grid-3-auto {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    align-items: center;
+}
+
+.grid-column-gap-1em {
+    grid-column-gap: 1em;
+}
+
+.justify-self-center {
+    justify-self: center;
+}
+.justify-self-right {
+    justify-self: right;
+}
+
+
