@@ -9,7 +9,7 @@
     grid-template-columns: auto auto;
     align-items: center;
 }
-.grid-2-10_auto {
+.grid-2-10-auto {
     display: grid;
     grid-template-columns: 10% auto;
     align-items: center;
@@ -55,4 +55,6 @@
 .justify-items-center {
     justify-items: center;
 }
-
+.justify-items-right {
+    justify-items: end;
+}

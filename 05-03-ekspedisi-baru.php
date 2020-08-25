@@ -4,7 +4,7 @@ include_once "01-header.php";
 
 <div class="header"></div>
 
-<div class="grid-2-10_auto mt-1em ml-1em">
+<div class="grid-2-10-auto mt-1em ml-1em">
     <div>
         <img class="w-2em" src="img/icons/pencil.svg" alt="Data Pelanggan Baru">
     </div>

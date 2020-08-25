@@ -57,11 +57,17 @@ option{
 .p-1em {
     padding: 1em;
 }
-.p-05em {
+.p-0_5em {
     padding: 0.5em;
 }
 .pb-1em {
     padding-bottom: 1em;
+}
+.pb-0_5em {
+    padding-bottom: 0.5em;
+}
+.pt-0_5em {
+    padding-top: 0.5em;
 }
 .pt-1em {
     padding-top: 1em;
@@ -162,6 +168,9 @@ option{
 }
 .w-5em {
     width: 5em;
+}
+.w-10em {
+    width: 10em;
 }
 .w-11em {
     width: 11em;

@@ -8,7 +8,7 @@ include_once "01-header.php";
 </a>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
-    <div class="justify-self-left grid-2-auto b-1px-grey b-radius-25px mr-1em pl-1em pr-0_4em w-11em">
+    <div class="justify-self-left grid-2-auto b-1px-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
         <input class="input-2 mt-0_4em mb-0_4em" type="text" placeholder="Cari...">
         <div class="justify-self-right grid-1-auto justify-items-center circle-small bg-color-orange-1">
             <img class="w-0_8em" src="img/icons/loupe.svg" alt="">
@@ -22,7 +22,7 @@ include_once "01-header.php";
     </div>
 </div>
 
-<div id="div-daftar-spk">
+<div id="divDaftarEkspedisi">
 </div>
 
 <script>
@@ -35,17 +35,35 @@ include_once "01-header.php";
             responseText = JSON.parse(responseText);
             console.log(responseText);
             for (const ekspedisi of responseText) {
-                $newElement = "<div class='grid-4-8-auto-auto-5 ml-1em mr-1em'>" +
+                $newElement = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-grey'>" +
+                    "<div class='grid-4-8-auto-auto-5'>" +
                     "<div class='font-weight-bold'>" + ekspedisi.bentuk + ".</div>" +
                     "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
                     "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
-                    "<div class='justify-self-right'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                    "<div class='justify-self-right'><img class='w-0_7em' src='img/icons/dropdown.svg' onclick='showDetailEkspedisi(" + ekspedisi.id + ");'></div>" +
+                    "</div>" +
+                    "<div id='divDetailEkspedisi-" + ekspedisi.id + "' class='d-none b-1px-grey p-0_5em mt-1em'>" +
+
+                    "<div class='grid-2-10-auto'>" +
+                    "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+                    "<div>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+                    "</div>" +
+
+                    "<div class='grid-1-auto justify-items-right mt-1em'>" +
+                    "<div class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></div>" +
+                    "</div>" +
+
+                    "</div>" +
                     "</div>" +
                     "<div class='d-none alamat justify-self-right text-right'>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>";
-                $("#div-daftar-spk").append($newElement);
+                $("#divDaftarEkspedisi").append($newElement);
             }
         }
     });
+
+    function showDetailEkspedisi(id) {
+        $("#divDetailEkspedisi-" + id).toggle(400);
+    }
 </script>
 
 <style>
