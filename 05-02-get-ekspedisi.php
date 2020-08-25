@@ -2,7 +2,7 @@
 
 include_once "01-config.php";
 
-$sql = "SELECT * FROM pelanggan";
+$sql = "SELECT * FROM ekspedisi";
 
 $res = mysqli_query($con, $sql);
 

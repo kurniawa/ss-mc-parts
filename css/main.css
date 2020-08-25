@@ -135,9 +135,16 @@ option{
 .h-4em {
     height: 4em;
 }
+.w-0_6em {
+    width: 0.6em;
+}
+.w-0_7em {
+    width: 0.7em;
+}
 .w-0_8em {
     width: 0.8em;
 }
+
 .w-1em {
     width: 1em;
 }
@@ -164,6 +171,10 @@ option{
 .color-red {
     color: red;
 }
+.color-blue-purple {
+    color: #706DFF;
+}
+/* background color */
 .bg-color-orange-1 {
     background-color: #FFED50;
 }

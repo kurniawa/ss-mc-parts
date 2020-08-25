@@ -34,12 +34,14 @@ include_once "01-header.php";
             console.log(responseText);
             responseText = JSON.parse(responseText);
             console.log(responseText);
-            for (const pelanggan of responseText) {
-                $newElement = "<div class='grid-3-auto ml-1em mr-1em'>" +
-                    "<div class='singkatan circle-medium grid-1-auto bg-color-orange-2 justify-items-center'>" + pelanggan.singkatan + "</div>" +
-                    "<div class='nama'>" + pelanggan.nama + "</div>" +
-                    "<div class='alamat justify-self-right text-right'>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
-                    "</div>";
+            for (const ekspedisi of responseText) {
+                $newElement = "<div class='grid-4-8-auto-auto-5 ml-1em mr-1em'>" +
+                    "<div class='font-weight-bold'>" + ekspedisi.bentuk + ".</div>" +
+                    "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
+                    "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
+                    "<div class='justify-self-right'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                    "</div>" +
+                    "<div class='d-none alamat justify-self-right text-right'>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>";
                 $("#div-daftar-spk").append($newElement);
             }
         }
