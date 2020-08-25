@@ -53,7 +53,7 @@ include_once "01-header.php";
 <br><br>
 
 <div>
-    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto">
+    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="">
         <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
     </div>
 </div>

@@ -159,6 +159,11 @@ option{
 .w-11em {
     width: 11em;
 }
+
+/* color */
+.color-red {
+    color: red;
+}
 .bg-color-orange-1 {
     background-color: #FFED50;
 }

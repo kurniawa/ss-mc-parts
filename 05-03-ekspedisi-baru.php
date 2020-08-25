@@ -19,46 +19,62 @@ include_once "01-header.php";
             <select class="b-none" name="bentuk-perusahaan" id="bentukPerusahaan" required>
                 <option value="" selected disabled>Bentuk</option>
                 <option value="">-</option>
-                <option value="pt">PT</option>
-                <option value="cv">CV</option>
+                <option value="PT">PT</option>
+                <option value="CV">CV</option>
             </select>
         </div>
-        <input class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
+        <input id="nama" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
     </div>
 
-    <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Alamat"></textarea>
+    <textarea id="alamat" class="mt-1em pt-1em pl-1em" name="alamat" placeholder="Alamat"></textarea>
     <div class="mt-1em">
-        <input class="input-1 pb-1em" type="text" placeholder="No. Kontak">
+        <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak">
     </div>
-    <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Keterangan lain (opsional)"></textarea>
+    <textarea id="keterangan" class="mt-1em pt-1em pl-1em" name="keterangan" placeholder="Keterangan lain (opsional)"></textarea>
 </div>
+<div id="peringatan" class="d-none color-red p-1em">
 
+</div>
 <div>
-    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto">
+    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="inputEkspedisiBaru();">
         <span class="justify-self-center font-weight-bold">Input Ekspedisi Baru</span>
     </div>
 </div>
 
 <script>
-    function showInputReseller() {
-        if ($("#toggleReseller").html() == "tidak") {
-            $("#toggleReseller").animate({
-                left: "1.35em"
-            }, 200);
-            $("#divToggleReseller").css("background-color", "#FFED50");
-            $("#toggleReseller").html("ya");
+    function inputEkspedisiBaru() {
+        $bentuk = $("#bentukPerusahaan").val();
+        $nama = $("#nama").val();
+        $alamat = $("#alamat").val();
+        $kontak = $("#kontak").val();
+        $keterangan = $("#keterangan").val();
+        $peringatan = $("#peringatan");
 
-            $("#divInputNamaReseller").toggle(200);
-        } else {
-
-            $("#toggleReseller").animate({
-                left: '0em'
-            }, 200);
-            $("#divToggleReseller").css("background-color", "#E4E4E4");
-            $("#toggleReseller").html("tidak");
-
-            $("#divInputNamaReseller").toggle(200);
+        console.log($alamat);
+        if ($nama == "") {
+            $peringatan.html("Nama Ekspedisi harus diisi!");
+            if ($peringatan.css("display") == "none") {
+                $peringatan.toggle(100);
+            }
+        } else if ($nama != "" && $peringatan.css("display") != "none") {
+            $peringatan.toggle(100);
         }
+
+        $.ajax({
+            url: "05-04-input-ekspedisi-baru.php",
+            type: "POST",
+            async: false,
+            data: {
+                nama: $nama,
+                bentuk: $bentuk,
+                alamat: $alamat,
+                kontak: $kontak,
+                keterangan: $keterangan
+            },
+            success: function(responseText) {
+                console.log(responseText);
+            }
+        });
     }
 </script>
 
@@ -78,7 +94,8 @@ include_once "01-header.php";
     }
 
 
-    #alamat {
+    #alamat,
+    #keterangan {
         box-sizing: border-box;
         width: 100%;
         height: 8em;
