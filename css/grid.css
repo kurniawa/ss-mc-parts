@@ -45,8 +45,26 @@
     grid-template-columns: 8% auto auto 5%;
     align-items: center;
 }
+.grid-column-gap-0_5em {
+    grid-column-gap: 0.5em;
+}
 .grid-column-gap-1em {
     grid-column-gap: 1em;
+}
+.grid-row-gap-0_1em {
+    grid-row-gap: 0.1em;
+}
+.grid-row-gap-0_2em {
+    grid-row-gap: 0.2em;
+}
+.grid-row-gap-0_3em {
+    grid-row-gap: 0.3em;
+}
+.grid-row-gap-0_4em {
+    grid-row-gap: 0.4em;
+}
+.grid-row-gap-0_5em {
+    grid-row-gap: 0.5em;
 }
 .justify-self-left {
     justify-self: left;
@@ -61,5 +79,8 @@
     justify-items: center;
 }
 .justify-items-right {
+    justify-items: right;
+}
+.justify-items-end {
     justify-items: end;
 }

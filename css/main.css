@@ -102,6 +102,9 @@ option{
 .mr-1em {
     margin-right: 1em;
 }
+.mr-1_5em {
+    margin-right: 1.5em;
+}
 .mr-2em {
     margin-right: 2em;
 }
@@ -138,8 +141,26 @@ option{
 .d-none {
     display: none;
 }
+.h-0_2em {
+    height: 0.2em;
+}
+.h-0_4em {
+    height: 0.4em;
+}
+.h-0_5em {
+    height: 0.5em;
+}
 .h-4em {
     height: 4em;
+}
+.w-0_2em {
+    width: 0.2em;
+}
+.w-0_4em {
+    width: 0.4em;
+}
+.w-0_5em {
+    width: 0.5em;
 }
 .w-0_6em {
     width: 0.6em;

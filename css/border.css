@@ -7,9 +7,13 @@
 .b-radius-50px {
     border-radius: 50px;
 }
+.b-radius-100 {
+    border-radius: 100%;
+}
 .b-1px-grey {
     border: 1px solid #E4E4E4;
 }
+
 .bb-1px-grey {
     border-bottom: 1px solid #E4E4E4;
 }
