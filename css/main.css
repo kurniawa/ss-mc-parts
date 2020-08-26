@@ -157,6 +157,9 @@ option{
 .w-2em {
     width: 2em;
 }
+.w-2_5em {
+    width: 2.5em;
+}
 .w-3em {
     width: 3em;
 }
@@ -174,6 +177,9 @@ option{
 }
 .w-11em {
     width: 11em;
+}
+.w-15em {
+    width: 15em;
 }
 
 /* color */

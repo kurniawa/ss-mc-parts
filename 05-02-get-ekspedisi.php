@@ -2,7 +2,12 @@
 
 include_once "01-config.php";
 
-$sql = "SELECT * FROM ekspedisi";
+if (!empty($_POST["id"])) {
+    $id = $_POST["id"];
+    $sql = "SELECT * FROM ekspedisi WHERE id=$id";
+} else {
+    $sql = "SELECT * FROM ekspedisi";
+}
 
 $res = mysqli_query($con, $sql);
 
