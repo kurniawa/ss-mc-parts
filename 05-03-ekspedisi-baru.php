@@ -61,10 +61,11 @@ include_once "01-header.php";
         }
 
         $.ajax({
-            url: "05-04-input-ekspedisi-baru.php",
+            url: "05-04-insert-edit-ekspedisi.php",
             type: "POST",
             async: false,
             data: {
+                id: "",
                 nama: $nama,
                 bentuk: $bentuk,
                 alamat: $alamat,
