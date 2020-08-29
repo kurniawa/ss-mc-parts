@@ -13,7 +13,7 @@ include_once "01-header.php";
     </div>
     <div class="div-filter-icon">
 
-        <div class="icon-small-circle bg-orange-1">
+        <div class="icon-small-circle bg-color-orange-1">
             <img class="icon-img w-1em" src="img/icons/sort-by-attributes.svg" alt="sort-icon">
         </div>
     </div>
@@ -33,7 +33,7 @@ include_once "01-header.php";
             console.log(responseText);
             for (const pelanggan of responseText) {
                 $newElement = "<div class='grid-3-auto ml-1em mr-1em'>" +
-                    "<div class='singkatan circle-medium grid-1-auto bg-orange-2'>" + pelanggan.singkatan + "</div>" +
+                    "<div class='singkatan circle-medium grid-1-auto justify-items-center bg-color-orange-2'>" + pelanggan.singkatan + "</div>" +
                     "<div class='nama'>" + pelanggan.nama + "</div>" +
                     "<div class='alamat justify-self-right text-right'>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
                     "</div>";

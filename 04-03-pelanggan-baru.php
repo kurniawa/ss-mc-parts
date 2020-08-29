@@ -24,9 +24,11 @@ include_once "01-header.php";
         <input class="input-1 pb-1em" type="text" placeholder="No. Kontak">
         <input class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
     </div>
-    <div class="grid-2-auto mt-1em">
+    <div id="divInputEkspedisi" class="grid-2-auto grid-row-gap-1em mt-1em">
         <input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">
-        <div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2"><span class="justify-self-center font-size-2em font-weight-bold color-white">+</span></div>
+        <div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="btnTambahEkspedisi();">
+            <span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>
+        </div>
     </div>
     <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Keterangan lain (opsional)"></textarea>
 </div>
@@ -39,8 +41,8 @@ include_once "01-header.php";
         Apakah Pelanggan ini memiliki Reseller?
     </div>
     <div>
-        <div id="divToggleReseller" class="position-relative b-radius-25px b-1px-grey bg-color-grey w-4_5em" onclick="showInputReseller();">
-            <div id="toggleReseller" class="position-absolute w-3em text-center b-radius-25px b-1px-grey color-grey bg-color-white">tidak</div>
+        <div id="divToggleReseller" class="position-relative b-radius-50px b-1px-grey bg-color-grey w-4_5em" onclick="showInputReseller();">
+            <div id="toggleReseller" class="position-absolute w-3em text-center b-radius-50px b-1px-grey color-grey bg-color-white">tidak</div>
         </div>
     </div>
 </div>
@@ -78,6 +80,14 @@ include_once "01-header.php";
 
             $("#divInputNamaReseller").toggle(200);
         }
+    }
+
+    function btnTambahEkspedisi() {
+        $inputEkspedisi = '<input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">' +
+            '<div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="btnTambahEkspedisi();">' +
+            '<span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>' +
+            '</div>';
+        $("#divInputEkspedisi").append($inputEkspedisi);
     }
 </script>
 

@@ -66,6 +66,9 @@
 .grid-row-gap-0_5em {
     grid-row-gap: 0.5em;
 }
+.grid-row-gap-1em {
+    grid-row-gap: 1em;
+}
 .justify-self-left {
     justify-self: left;
 }
