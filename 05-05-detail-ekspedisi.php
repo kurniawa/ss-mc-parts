@@ -5,8 +5,10 @@ include_once "01-header.php";
 $id = $_GET["id"];
 ?>
 <div id="pageDetailEkspedisi">
-    <div class="header grid-1-auto justify-items-end">
-        <div class="grid-1-auto grid-row-gap-0_2em mr-1_5em z-index-3" onclick="showMenu();">
+    <div class="header grid-2-auto">
+        <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="backToEkspedisi();">
+
+        <div class="grid-1-auto justify-self-right grid-row-gap-0_2em mr-1_5em z-index-3" onclick="showMenu();">
             <div class="w-0_4em h-0_4em b-radius-100 bg-color-white"></div>
             <div class="w-0_4em h-0_4em b-radius-100 bg-color-white"></div>
             <div class="w-0_4em h-0_4em b-radius-100 bg-color-white"></div>
@@ -57,14 +59,15 @@ $id = $_GET["id"];
                     console.log($ekspedisi);
                     $bentukEkspedisi = $ekspedisi[0].bentuk;
                     $namaEkspedisi = $ekspedisi[0].nama;
-                    $alamatEkspedisi = $ekspedisi[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br />');
+                    $alamatEkspedisi = $ekspedisi[0].alamat;
+                    $alamatEkspedisiBr = $ekspedisi[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br />');
                     $kontakEkspedisi = $ekspedisi[0].kontak;
                     $keterangan = $ekspedisi[0].keterangan;
                     console.log($alamatEkspedisi);
                     console.log($alamatEkspedisi.replace(new RegExp('\r?\n', 'g'), '<br />'));
                     $("#bentukPerusahaan").html($bentukEkspedisi);
                     $("#namaEkspedisi").html($namaEkspedisi);
-                    $("#alamatEkspedisi").html($alamatEkspedisi);
+                    $("#alamatEkspedisi").html($alamatEkspedisiBr);
                     $("#kontakEkspedisi").html($kontakEkspedisi);
                 }
             });
@@ -86,7 +89,12 @@ $id = $_GET["id"];
             $("#pageDetailEkspedisi").toggle(1000);
             $("#pageEditEkspedisi").toggle(1000);
             $("#showDotMenuContent").toggle();
+            $("#areaClosingDotMenu").toggle();
             history.pushState(null, null, "./edit-ekspedisi");
+        }
+
+        function backToEkspedisi() {
+            window.location.replace("05-01-ekspedisi.php");
         }
     </script>
     <style>
@@ -116,7 +124,9 @@ $id = $_GET["id"];
 
 
 <div id="pageEditEkspedisi" class="d-none">
-    <div class="header"></div>
+    <div class="header grid-1-auto">
+        <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="backButton();">
+    </div>
 
     <div class="grid-2-10-auto mt-1em ml-1em">
         <div>
@@ -184,7 +194,7 @@ $id = $_GET["id"];
             }
 
             $.ajax({
-                url: "05-04-insert-edit-ekspedisi-baru.php",
+                url: "05-04-insert-edit-ekspedisi.php",
                 type: "POST",
                 async: false,
                 data: {
@@ -197,6 +207,9 @@ $id = $_GET["id"];
                 },
                 success: function(responseText) {
                     console.log(responseText);
+                    if (responseText == "Data updated successfully.") {
+                        window.location.replace("05-05-detail-ekspedisi.php?id=" + $id);
+                    }
                 }
             });
         }
@@ -205,6 +218,10 @@ $id = $_GET["id"];
             // history.back();
             $("#pageDetailEkspedisi").toggle(1000);
             $("#pageEditEkspedisi").toggle(1000);
+        }
+
+        function backButton() {
+            history.back();
         }
     </script>
 

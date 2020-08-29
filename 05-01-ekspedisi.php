@@ -35,12 +35,12 @@ include_once "01-header.php";
             responseText = JSON.parse(responseText);
             console.log(responseText);
             for (const ekspedisi of responseText) {
-                $newElement = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-grey' onclick='showDropDownEkspedisi(" + ekspedisi.id + ");'>" +
+                $newElement = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-grey'>" +
                     "<div class='grid-4-8-auto-auto-5'>" +
                     "<div class='font-weight-bold'>" + ekspedisi.bentuk + ".</div>" +
                     "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
                     "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
-                    "<div class='justify-self-right'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                    "<div id='divDropdown-" + ekspedisi.id + "' class='justify-self-right' onclick='showDropDownEkspedisi(" + ekspedisi.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
                     "</div>" +
                     "<div id='divDetailEkspedisi-" + ekspedisi.id + "' class='d-none b-1px-grey p-0_5em mt-1em'>" +
 
@@ -62,7 +62,16 @@ include_once "01-header.php";
     });
 
     function showDropDownEkspedisi(id) {
-        $("#divDetailEkspedisi-" + id).toggle(400);
+        $selectedDiv = $("#divDetailEkspedisi-" + id);
+        $selectedDiv.toggle(400);
+
+        setTimeout(() => {
+            if ($selectedDiv.css("display") === "block") {
+                $("#divDropdown-" + id + " img").attr("src", "img/icons/dropup.svg");
+            } else {
+                $("#divDropdown-" + id + " img").attr("src", "img/icons/dropdown.svg");
+            }
+        }, 450);
     }
 </script>
 
