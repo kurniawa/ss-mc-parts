@@ -53,12 +53,7 @@ option{
 .text-right {
     text-align: right;
 }
-.position-relative {
-    position: relative;
-}
-.position-absolute {
-    position: absolute;
-}
+
 /* padding */
 .p-1em {
     padding: 1em;
@@ -150,6 +145,8 @@ option{
 .d-none {
     display: none;
 }
+
+/* height */
 .h-0_2em {
     height: 0.2em;
 }
@@ -162,6 +159,11 @@ option{
 .h-4em {
     height: 4em;
 }
+.h-100vh {
+    height: 100vh;
+}
+
+/* width */
 .w-0_2em {
     width: 0.2em;
 }
@@ -211,13 +213,22 @@ option{
 .w-15em {
     width: 15em;
 }
+.w-100vw {
+    width: 100vw;
+}
 
 /* color */
 .color-red {
     color: red;
 }
+.color-soft-red {
+    color: #FF856A;
+}
 .color-blue-purple {
     color: #706DFF;
+}
+.color-bright-green {
+    color: #00EE51;
 }
 /* background color */
 .bg-color-orange-1 {
@@ -236,7 +247,31 @@ option{
 .border-solid-red {
     border: 1px solid red;
 }
-
+/*position*/
+.position-relative {
+    position: relative;
+}
+.position-absolute {
+    position: absolute;
+}
+.top-0 {
+    top: 0;
+}
+.top-50vh {
+    top: 50vh;
+}
+.top-60vh {
+    top: 60vh;
+}
+.top-70vh {
+    top: 70vh;
+}
+.opacity-0_5 {
+    opacity: 0.5;
+}
+.opacity-1 {
+    opacity: 1;
+}
 /* z-index */
 .z-index-3 {
     z-index: 3;

@@ -24,10 +24,12 @@ include_once "01-header.php";
         <input class="input-1 pb-1em" type="text" placeholder="No. Kontak">
         <input class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
     </div>
-    <div id="divInputEkspedisi" class="grid-2-auto grid-row-gap-1em mt-1em">
-        <input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">
-        <div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="btnTambahEkspedisi();">
-            <span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>
+    <div id="divInputEkspedisi" class="mt-1em">
+        <div class="containerInputEkspedisi grid-2-auto mb-1em">
+            <input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">
+            <div class="btnTambahKurangEkspedisi justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="showPertanyaanEkspedisiTransit();">
+                <span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>
+            </div>
         </div>
     </div>
     <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Keterangan lain (opsional)"></textarea>
@@ -60,6 +62,30 @@ include_once "01-header.php";
     </div>
 </div>
 
+<div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
+</div>
+
+<div class="position-absolute z-index-3 top-50vh grid-1-auto w-100vw">
+    <div id="pertanyaanEkspedisiTransit" class="d-none justify-self-center bg-color-white p-1em">
+        <div class="grid-2-auto">
+            <div><img class="w-2em" src="img/icons/speech-bubble.svg" alt=""></div>
+            <div>
+                <h3>
+                    Apakah ini Ekspedisi Transit?
+                </h3>
+            </div>
+        </div>
+        <div class="grid-2-auto justify-items-center">
+            <div class="color-soft-red">
+                <h3>Tidak</h3>
+            </div>
+            <div class="color-bright-green">
+                <h3>Ya</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     function showInputReseller() {
         if ($("#toggleReseller").html() == "tidak") {
@@ -82,12 +108,38 @@ include_once "01-header.php";
         }
     }
 
+    function showPertanyaanEkspedisiTransit() {
+        history.pushState(null, null, "./pertanyaan-ekspedisi-transit");
+        $("#closingAreaPertanyaan").toggle(300);
+        $("#pertanyaanEkspedisiTransit").toggle(300);
+    }
+    window.onpopstate = function() {
+        $("#closingAreaPertanyaan").css("display", "none");
+        $("#pertanyaanEkspedisiTransit").css("display", "none");
+    }
+
     function btnTambahEkspedisi() {
-        $inputEkspedisi = '<input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">' +
-            '<div class="justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="btnTambahEkspedisi();">' +
+
+        $inputEkspedisi = '<div class="containerInputEkspedisi grid-2-auto mb-1em">' +
+            '<input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">' +
+            '<div class="btnTambahKurangEkspedisi justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="showPertanyaanEkspedisiTransit();">' +
             '<span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>' +
+            '</div>' +
             '</div>';
         $("#divInputEkspedisi").append($inputEkspedisi);
+
+        $(".btnTambahKurangEkspedisi").each(function(index) {
+            console.log(index);
+            console.log($(".btnTambahKurangEkspedisi").length);
+            if (index + 1 != $(".btnTambahKurangEkspedisi").length) {
+                $(".btnTambahKurangEkspedisi:eq(" + index + ")").prop("onclick", null).off("click").on("click", btnKurangEkspedisi);
+                $(".btnTambahKurangEkspedisi:eq(" + index + ") span").html("-");
+            }
+        });
+
+        function btnKurangEkspedisi() {
+            console.log("btnKurangEkspedisi");
+        }
     }
 </script>
 

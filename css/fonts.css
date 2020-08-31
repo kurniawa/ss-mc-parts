@@ -1,6 +1,12 @@
 .font-weight-bold{
     font-weight: 700;
 }
+.font-size-1_2em {
+    font-size: 1.2em;
+}
+.font-size-1_5em {
+    font-size: 1.5em;
+}
 .font-size-2em {
     font-size: 2em;
 }
