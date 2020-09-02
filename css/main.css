@@ -150,6 +150,9 @@ option{
 .h-0_2em {
     height: 0.2em;
 }
+.h-0_3em {
+    height: 0.3em;
+}
 .h-0_4em {
     height: 0.4em;
 }
@@ -243,6 +246,9 @@ option{
 }
 .bg-color-white {
     background-color: white;
+}
+.bg-color-soft-red {
+    background-color: #FF856A;
 }
 .border-solid-red {
     border: 1px solid red;

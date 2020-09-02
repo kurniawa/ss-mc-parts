@@ -24,13 +24,13 @@ include_once "01-header.php";
         <input class="input-1 pb-1em" type="text" placeholder="No. Kontak">
         <input class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
     </div>
+
     <div id="divInputEkspedisi" class="mt-1em">
-        <div class="containerInputEkspedisi grid-2-auto mb-1em">
-            <input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">
-            <div class="btnTambahKurangEkspedisi justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="showPertanyaanEkspedisiTransit();">
-                <span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>
-            </div>
-        </div>
+
+    </div>
+
+    <div class="grid-1-auto justify-items-center">
+        <div class="bg-color-orange-1 pl-1em pr-1em pt-0_5em pb-0_5em b-radius-50px" onclick="showPertanyaanEkspedisiTransit();">+ Tambah Ekspedisi</div>
     </div>
     <textarea class="mt-1em pt-1em pl-1em" name="alamat" id="alamat" placeholder="Keterangan lain (opsional)"></textarea>
 </div>
@@ -71,15 +71,15 @@ include_once "01-header.php";
             <div><img class="w-2em" src="img/icons/speech-bubble.svg" alt=""></div>
             <div>
                 <h3>
-                    Apakah ini Ekspedisi Transit?
+                    Apakah Anda ingin menambahkan Ekspedisi Transit?
                 </h3>
             </div>
         </div>
         <div class="grid-2-auto justify-items-center">
-            <div class="color-soft-red">
+            <div class="color-soft-red" onclick="addInputEkspedisi('tidak')">
                 <h3>Tidak</h3>
             </div>
-            <div class="color-bright-green">
+            <div class="color-bright-green" onclick="addInputEkspedisi('ya')">
                 <h3>Ya</h3>
             </div>
         </div>
@@ -118,28 +118,31 @@ include_once "01-header.php";
         $("#pertanyaanEkspedisiTransit").css("display", "none");
     }
 
-    function btnTambahEkspedisi() {
+    $i = 0;
 
-        $inputEkspedisi = '<div class="containerInputEkspedisi grid-2-auto mb-1em">' +
-            '<input class="input-1 pb-1em" type="text" placeholder="Ekspedisi">' +
-            '<div class="btnTambahKurangEkspedisi justify-self-center grid-1-auto circle-medium bg-color-orange-2" onclick="showPertanyaanEkspedisiTransit();">' +
-            '<span class="justify-self-center font-size-2em font-weight-bold color-white">+</span>' +
+    function addInputEkspedisi($jawaban) {
+        $("#closingAreaPertanyaan").css("display", "none");
+        $("#pertanyaanEkspedisiTransit").css("display", "none");
+        if ($jawaban == 'tidak') {
+            $placeholder = "Ekspedisi";
+        } else {
+            $placeholder = "Ekspedisi Transit";
+        }
+
+        $newDiv = '<div id="inputID-' + $i + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
+            '<input class="input-1 pb-1em" type="text" placeholder="' + $placeholder + '">' +
+            '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $i + ');">' +
+            '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
             '</div>' +
             '</div>';
-        $("#divInputEkspedisi").append($inputEkspedisi);
+        $("#divInputEkspedisi").append($newDiv);
+        $i++;
+        history.back();
+    }
 
-        $(".btnTambahKurangEkspedisi").each(function(index) {
-            console.log(index);
-            console.log($(".btnTambahKurangEkspedisi").length);
-            if (index + 1 != $(".btnTambahKurangEkspedisi").length) {
-                $(".btnTambahKurangEkspedisi:eq(" + index + ")").prop("onclick", null).off("click").on("click", btnKurangEkspedisi);
-                $(".btnTambahKurangEkspedisi:eq(" + index + ") span").html("-");
-            }
-        });
-
-        function btnKurangEkspedisi() {
-            console.log("btnKurangEkspedisi");
-        }
+    function btnKurangEkspedisi($inputID) {
+        console.log("btnKurangEkspedisi");
+        $("#inputID-" + $inputID).remove();
     }
 </script>
 
@@ -179,8 +182,8 @@ include_once "01-header.php";
 
     .circle-medium {
         border-radius: 100%;
-        width: 3em;
-        height: 3em;
+        width: 2.5em;
+        height: 2.5em;
     }
 
     .icon-img {

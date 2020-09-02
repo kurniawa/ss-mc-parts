@@ -19,6 +19,16 @@
     grid-template-columns: 15% auto;
     align-items: center;
 }
+.grid-2-auto_10 {
+    display: grid;
+    grid-template-columns: auto 10%;
+    align-items: center;
+}
+.grid-2-auto_15 {
+    display: grid;
+    grid-template-columns: auto 15%;
+    align-items: center;
+}
 .grid-2-10_auto_auto {
     display: grid;
     grid-template-columns: 10% auto auto;
