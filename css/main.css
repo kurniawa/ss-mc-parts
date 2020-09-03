@@ -216,6 +216,12 @@ option{
 .w-15em {
     width: 15em;
 }
+.w-75vw {
+    width: 75vw;
+}
+.w-80vw {
+    width: 80vw;
+}
 .w-100vw {
     width: 100vw;
 }
@@ -281,4 +287,8 @@ option{
 /* z-index */
 .z-index-3 {
     z-index: 3;
+}
+
+.hover-bg-color-grey:hover {
+    background-color: #E4E4E4;
 }
