@@ -181,26 +181,49 @@ include_once "01-header.php";
                 },
                 success: function(responseText) {
                     console.log(responseText);
-                    $results = JSON.parse(responseText);
-                    console.log($results);
 
-                    if ($results.length > 5) {
-                        $results.splice(5);
-                    }
+                    $htmlToAppend = "";
 
                     $("#searchResults-" + $id).removeClass("d-none").addClass("grid-1-auto");
 
-                    $htmlToAppend = "";
-                    for (const ekspedisi of $results) {
-                        $htmlToAppend = $htmlToAppend + "<div class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em'>" + ekspedisi.nama + "</div>";
+                    if (responseText === "not found!") {
+                        $htmlToAppend = $htmlToAppend +
+                            "<div class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em color-grey'>Ekspedisi tidak ditemukan!</div>";
+                        $("#searchResults-" + $id).html($htmlToAppend);
+
+                    } else {
+
+                        $results = JSON.parse(responseText);
+                        console.log($results);
+
+                        if ($results.length > 5) {
+                            $results.splice(5);
+                        }
+                        $idResult = 0;
+                        for (const ekspedisi of $results) {
+                            $htmlToAppend = $htmlToAppend +
+                                "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $id + "," + $idResult + ")'>" +
+                                ekspedisi.nama + "</div>";
+                            $idResult++;
+                        }
+
+                        $("#searchResults-" + $id).html($htmlToAppend);
+
                     }
 
-                    $("#searchResults-" + $id).html($htmlToAppend);
 
                 }
             });
 
         }
+    }
+
+    function pickChoice($id, $idResult) {
+        $inputID = $("#inputID-" + $id);
+        $chosenValue = $("#chosenValue-" + $idResult);
+        $searchResults = $("#searchResults-" + $id);
+        $inputID.val($chosenValue.html());
+        $searchResults.removeClass("grid-1-auto").addClass("d-none");
     }
 </script>
 
