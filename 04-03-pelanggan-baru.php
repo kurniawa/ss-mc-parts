@@ -57,6 +57,10 @@ include_once "01-header.php";
 
 <br><br>
 
+<!-- Warning apabila ada yang kurang -->
+
+<div id="warning" class="d-none"></div>
+
 <div>
     <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="inputPelangganBaru();">
         <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
@@ -126,13 +130,15 @@ include_once "01-header.php";
         $("#pertanyaanEkspedisiTransit").css("display", "none");
         if ($jawaban == 'tidak') {
             $placeholder = "Ekspedisi";
+            $tipeEkspedisi = "inputEkspedisiNormal";
         } else {
             $placeholder = "Ekspedisi Transit";
+            $tipeEkspedisi = "inputEkspedisiTransit";
         }
 
         $newDiv = '<div id="divInputID-' + $i + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
             '<div class="bb-1px-solid-grey">' +
-            '<input id="inputID-' + $i + '" class="input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $i + ');">' +
+            '<input id="inputID-' + $i + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $i + ');">' +
             '<div id="searchResults-' + $i + '" class="d-none b-1px-solid-grey bb-none"></div>' +
             '</div>' +
             '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $i + ');">' +
@@ -159,9 +165,60 @@ include_once "01-header.php";
         $kontak = $("#kontak").val();
         $singkatan = $("#singkatan").val();
         $keterangan = $("#keterangan").val();
+        $warning = "";
 
         $arrayGaPenting = [$nama, $alamat, $pulau, $daerah, $kontak, $singkatan, $keterangan];
         console.log($arrayGaPenting);
+
+        // Sebelum Insert, cek terlebih dahulu apakah ekspedisi yang diinput terdaftar di database
+        // Sebelumnya cek dulu apakah input ekspedisi kosong
+
+        console.log("$('.inputEkspedisiNormal').length : " + $(".inputEkspedisiNormal").length);
+        console.log("$('.inputEkspedisiTransit').length : " + $(".inputEkspedisiTransit").length);
+
+        if ($(".inputEkspedisiAll").length != 0) {
+
+            $(".inputEkspedisiAll").each(function(index) {
+
+                $resultCekEkspedisi = cekEkspedisi($(this).val());
+                if ($resultCekEkspedisi === "No result!") {
+                    $warning = $warning + "<div>Ekspedisi tidak sesuai. Silahkan input ulang ekspedisi atau tambahkan ekspedisi baru terlebih dahulu.</div>";
+                    return false;
+                }
+
+            });
+
+            $("#warning").html($warning).removeClass("d-none");
+        }
+        $.ajax({});
+    }
+
+    function cekEkspedisi(params) {
+        console.log(params);
+        $responseText = "";
+
+        if (params != "") {
+            $.ajax({
+                type: "POST",
+                url: "04-04-cek-ekspedisi.php",
+                async: false,
+                data: {
+                    nama: params
+                },
+                success: function(responseText) {
+                    console.log(responseText);
+                    $responseText = responseText;
+                }
+            });
+        }
+
+        console.log($responseText);
+        if ($responseText === "No result!") {
+            return $responseText;
+        } else {
+            return "Entahlah";
+        }
+
     }
 
     function searchEkspedisi($id) {
