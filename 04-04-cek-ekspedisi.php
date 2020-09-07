@@ -8,7 +8,8 @@ $sql = "SELECT * FROM ekspedisi WHERE nama = '$nama'";
 $res = mysqli_query($con, $sql);
 
 if (mysqli_num_rows($res) > 0) {
-    echo "Found!";
+    $row = mysqli_fetch_assoc($res);
+    echo $row["id"];
     die;
 } else {
     echo "No result!";

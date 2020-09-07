@@ -169,34 +169,73 @@ include_once "01-header.php";
 
         $arrayGaPenting = [$nama, $alamat, $pulau, $daerah, $kontak, $singkatan, $keterangan];
         console.log($arrayGaPenting);
+        // Cek apakah nama, pulau, daerah nya belum terisi
 
         // Sebelum Insert, cek terlebih dahulu apakah ekspedisi yang diinput terdaftar di database
         // Sebelumnya cek dulu apakah input ekspedisi kosong
 
         console.log("$('.inputEkspedisiNormal').length : " + $(".inputEkspedisiNormal").length);
         console.log("$('.inputEkspedisiTransit').length : " + $(".inputEkspedisiTransit").length);
+        var arrayEkspedisiNormalID = new Array();
+        var arrayEkspedisiTransitID = new Array();
+        console.log("arrayEkspedisiNormalID: " + arrayEkspedisiNormalID);
+        console.log("arrayEkspedisiTransitID: " + arrayEkspedisiTransitID);
 
         if ($(".inputEkspedisiAll").length != 0) {
 
-            $(".inputEkspedisiAll").each(function(index) {
+            $inputEkspedisiNormalIndex = 0;
+            $inputEkspedisiTransitIndex = 0;
 
+            $(".inputEkspedisiAll").each(function(index) {
+                // cek ekspedisi sekaligus kalo emang ada, return id
                 $resultCekEkspedisi = cekEkspedisi($(this).val());
                 if ($resultCekEkspedisi === "No result!") {
                     $warning = $warning + "<div>Ekspedisi tidak sesuai. Silahkan input ulang ekspedisi atau tambahkan ekspedisi baru terlebih dahulu.</div>";
+                    $("#warning").html($warning).removeClass("d-none");
                     return false;
+                } else {
+
+                    if ($(".inputEkspedisiNormal:eq(" + $inputEkspedisiNormalIndex + ")").val() == null) {
+                        arrayEkspedisiTransitID.push($resultCekEkspedisi);
+                        $inputEkspedisiTransitIndex++;
+                    } else {
+                        arrayEkspedisiNormalID.push($resultCekEkspedisi);
+                        $inputEkspedisiNormalIndex++;
+                    }
                 }
 
             });
 
-            $("#warning").html($warning).removeClass("d-none");
+            console.log("arrayEkspedisiNormalID: " + JSON.stringify(arrayEkspedisiNormalID));
+            console.log("arrayEkspedisiTransitID: " + JSON.stringify(arrayEkspedisiTransitID));
+
         }
-        $.ajax({});
+
+        $.ajax({
+            type: "POST",
+            url: "04-05-input-pelanggan-baru.php",
+            async: false,
+            data: {
+                nama: $nama,
+                alamat: $alamat,
+                pulau: $pulau,
+                daerah: $daerah,
+                kontak: $kontak,
+                singkatan: $singkatan,
+                keterangan: $keterangan,
+                arrayEkspedisiNormalID: arrayEkspedisiNormalID,
+                arrayEkspedisiTransitID: arrayEkspedisiTransitID
+            },
+            success: function(responseText) {
+                console.log(responseText);
+            }
+        });
+
     }
 
     function cekEkspedisi(params) {
         console.log(params);
-        $responseText = "";
-
+        $idToReturn = "";
         if (params != "") {
             $.ajax({
                 type: "POST",
@@ -207,17 +246,12 @@ include_once "01-header.php";
                 },
                 success: function(responseText) {
                     console.log(responseText);
-                    $responseText = responseText;
+                    $idToReturn = responseText;
                 }
             });
         }
-
-        console.log($responseText);
-        if ($responseText === "No result!") {
-            return $responseText;
-        } else {
-            return "Entahlah";
-        }
+        console.log($idToReturn);
+        return $idToReturn;
 
     }
 
@@ -280,7 +314,8 @@ include_once "01-header.php";
         $chosenValue = $("#chosenValue-" + $idResult);
         $searchResults = $("#searchResults-" + $id);
         $inputID.val($chosenValue.html());
-        $searchResults.removeClass("grid-1-auto").addClass("d-none");
+        $searchResults.remove();
+        // $searchResults.removeClass("grid-1-auto").addClass("d-none");
     }
 </script>
 
