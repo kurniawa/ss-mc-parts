@@ -29,7 +29,7 @@ include_once "01-header.php";
             Jalan
         </div>
         <div class="gridMenuItem">
-            <a href="04-01-pelanggan.php" class="menuIcons">
+            <a href="05-01-ekspedisi.php" class="menuIcons">
                 <img src="img/icons/shipment.svg" alt="Icon SPK">
                 <div>
                     Ekspedisi

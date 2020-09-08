@@ -50,6 +50,16 @@
     grid-template-columns: auto auto 5%;
     align-items: center;
 }
+.grid-3-10_40_50 {
+    display: grid;
+    grid-template-columns: 10% 40% 50%;
+    align-items: center;
+}
+.grid-3-10_80_10 {
+    display: grid;
+    grid-template-columns: 10% 80% 10%;
+    align-items: center;
+}
 .grid-4-8-auto-auto-5 {
     display: grid;
     grid-template-columns: 8% auto auto 5%;

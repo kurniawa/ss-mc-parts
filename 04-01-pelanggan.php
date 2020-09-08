@@ -8,8 +8,11 @@ include_once "01-header.php";
 </a>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
-    <div class="cari">
-        <input class="input-cari" type="text" placeholder="Cari...">
+    <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
+        <input class="input-2 mt-0_4em mb-0_4em" type="text" placeholder="Cari...">
+        <div class="justify-self-right grid-1-auto justify-items-center circle-small bg-color-orange-1">
+            <img class="w-0_8em" src="img/icons/loupe.svg" alt="">
+        </div>
     </div>
     <div class="div-filter-icon">
 
@@ -23,6 +26,8 @@ include_once "01-header.php";
 </div>
 
 <script>
+    $arrayBgColors = ["#FFB08E", "#DEDEDE", "#D1FFCA", "#FFB800"];
+
     $.ajax({
         type: "POST",
         url: "04-02-get-pelanggan.php",
@@ -32,10 +37,34 @@ include_once "01-header.php";
             responseText = JSON.parse(responseText);
             console.log(responseText);
             for (const pelanggan of responseText) {
-                $newElement = "<div class='grid-3-auto ml-1em mr-1em'>" +
-                    "<div class='singkatan circle-medium grid-1-auto justify-items-center bg-color-orange-2'>" + pelanggan.singkatan + "</div>" +
-                    "<div class='nama'>" + pelanggan.nama + "</div>" +
-                    "<div class='alamat justify-self-right text-right'>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+                $randomIndex = Math.floor(Math.random() * 4);
+                console.log("$randomIndex: " + $randomIndex);
+
+                $newElement = "<div class='ml-1em mr-1em pb-1em bb-1px-solid-grey pt-1em font-size-0_9em'>" +
+                    "<div class='grid-3-10_80_10'>" +
+                    "<div class='singkatan circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: " + $arrayBgColors[$randomIndex] + "'>" + pelanggan.singkatan + "</div>" +
+                    "<div class='justify-self-left font-weight-bold'>" + pelanggan.nama + " - " + pelanggan.daerah + "</div>" +
+                    "<div id='divDropdown-" + pelanggan.id + "' class='justify-self-right' onclick='showDropDown(" + pelanggan.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                    "</div>" +
+
+                    // DROPDOWN
+                    "<div id='divDetailDropDown-" + pelanggan.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+
+                    "<div class='grid-2-10-auto'>" +
+
+                    "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+                    "<div>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+                    "<div><img class='w-2em' src='img/icons/phonebook.svg'></div>" +
+                    "<div>" + pelanggan.kontak + "</div>" +
+
+                    "</div>" +
+
+                    "<div class='grid-1-auto justify-items-right mt-1em'>" +
+                    "<a href='04-05-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+                    "</div>" +
+                    "</div>" +
+
+                    // END OF DROPDOWN
                     "</div>";
                 $("#div-daftar-spk").append($newElement);
             }
@@ -88,8 +117,8 @@ include_once "01-header.php";
 
     .circle-medium {
         border-radius: 100%;
-        width: 3em;
-        height: 3em;
+        width: 2.5em;
+        height: 2.5em;
     }
 
     .icon-img {
