@@ -9,6 +9,11 @@
     grid-template-columns: auto auto;
     align-items: center;
 }
+.grid-2-50_50 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    align-items: center;
+}
 .grid-2-10-auto {
     display: grid;
     grid-template-columns: 10% auto;

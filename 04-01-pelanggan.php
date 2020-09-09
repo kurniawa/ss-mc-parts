@@ -63,8 +63,8 @@ include_once "01-header.php";
                     "<a href='04-05-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
                     "</div>" +
                     "</div>" +
-
                     // END OF DROPDOWN
+
                     "</div>";
                 $("#div-daftar-spk").append($newElement);
             }
@@ -113,12 +113,6 @@ include_once "01-header.php";
         width: 2.5em;
         height: 2.5em;
         position: relative;
-    }
-
-    .circle-medium {
-        border-radius: 100%;
-        width: 2.5em;
-        height: 2.5em;
     }
 
     .icon-img {
