@@ -14,7 +14,7 @@
     grid-template-columns: 50% 50%;
     align-items: center;
 }
-.grid-2-10-auto {
+.grid-2-10_auto {
     display: grid;
     grid-template-columns: 10% auto;
     align-items: center;
