@@ -43,9 +43,9 @@ $id = $_GET["id"];
                 <div id="customerInfo" class="mt-0_5em font-size-0_9em font-weight-bold">Alamat Customer</div>
             </div>
 
-            <div class="grid-1-auto justify-items-right">
+            <!-- <div class="grid-1-auto justify-items-right">
                 <img class="w-1em" src="img/icons/edit-grey.svg" alt="">
-            </div>
+            </div> -->
 
         </div>
 
@@ -58,9 +58,9 @@ $id = $_GET["id"];
                 <div id="customerExpedition" class="mt-0_5em font-size-0_9em font-weight-bold">Info Ekspedisi</div>
             </div>
 
-            <div class="grid-1-auto justify-items-right">
+            <!-- <div class="grid-1-auto justify-items-right">
                 <img class="w-1em" src="img/icons/edit-grey.svg" alt="">
-            </div>
+            </div> -->
 
         </div>
 
@@ -70,7 +70,7 @@ $id = $_GET["id"];
     <!-- DAFTAR PRODUK CUSTOMER INI -->
     <div class="ml-0_5em mr-0_5em mt-1em">
 
-        <div class="grid-2-10-auto grid-row-gap-0_5em">
+        <div class="grid-2-10_auto grid-row-gap-0_5em">
             <img class="w-2_5em" src="img/icons/shopping-cart.svg" alt="">
             <div id="">Daftar Produk Orderan Pelanggan ini:</div>
         </div>
@@ -79,6 +79,8 @@ $id = $_GET["id"];
 </div>
 <script>
     $id = <?php echo $id ?>;
+    $indexAddExpedition = 1;
+
     $(document).ready(function() {
         $.ajax({
             url: "01-get.php",
@@ -122,7 +124,6 @@ $id = $_GET["id"];
                         $idExpeditionAll = JSON.parse(responseText);
                         console.log($idExpeditionAll);
 
-                        $index = 1;
                         for (const $eachExpeditionID of $idExpeditionAll) {
 
                             $.ajax({
@@ -148,25 +149,25 @@ $id = $_GET["id"];
                                     }
 
                                     $address = $expedition[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br>');
-                                    $("#customerExpedition").append($address);
+                                    $("#customerExpedition").html($address);
 
                                     // APPEND input-input ekspedisi untuk pelanggan ini
-                                    $htmlToAppend = '<div id="divInputID-' + $index + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
+                                    $htmlToAppend = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
                                         '<div class="bb-1px-solid-grey">' +
 
-                                        '<input id="inputID-' + $index + '" class="inputEkspedisiAll ' + $tipeEkspedisi +
+                                        '<input id="inputID-' + $indexAddExpedition + '" class="inputEkspedisiAll ' + $tipeEkspedisi +
                                         ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder +
-                                        '" onkeyup="searchEkspedisi(' + $index + ');" value="' + $expedition[0].nama + '">' +
+                                        '" onkeyup="searchEkspedisi(' + $indexAddExpedition + ');" value="' + $expedition[0].nama + '">' +
 
-                                        '<div id="searchResults-' + $index + '" class="d-none b-1px-solid-grey bb-none"></div>' +
+                                        '<div id="searchResults-' + $indexAddExpedition + '" class="d-none b-1px-solid-grey bb-none"></div>' +
                                         '</div>' +
-                                        '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $index + ');">' +
+                                        '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $indexAddExpedition + ');">' +
                                         '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
                                         '</div>' +
                                         '</div>';
 
                                     $("#divInputEkspedisi").append($htmlToAppend);
-                                    $index++;
+                                    $indexAddExpedition++;
 
                                 }
                             });
@@ -192,11 +193,12 @@ $id = $_GET["id"];
     }
 
     function moveToPageEditCustomer() {
+        let id = 1;
         $("#pageDetailCustomer").toggle(1000);
         $("#pageEditCustomer").toggle(1000);
         $("#showDotMenuContent").toggle();
         $("#areaClosingDotMenu").toggle();
-        history.pushState(1, null, "./edit-customer");
+        history.pushState(1, `Selected: ${id}`, "./edit-customer");
     }
 
     function backToCustomer() {
@@ -274,7 +276,7 @@ $id = $_GET["id"];
             <img class="w-2em" src="img/icons/speech-bubble.svg" alt="Reseller?">
         </div>
         <div class="font-weight-bold">
-            Apakah ingin menambahkan Reseller?
+            Pelanggan ini tidak memiliki Reseller. Apakah ingin menambahkan Reseller?
         </div>
         <div>
             <div id="divToggleReseller" class="position-relative b-radius-50px b-1px-solid-grey bg-color-grey w-4_5em h-1_5em" onclick="showInputReseller();">
@@ -295,7 +297,7 @@ $id = $_GET["id"];
     <div id="warning" class="d-none"></div>
 
     <div>
-        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="inputPelangganBaru();">
+        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="editCustomerInfo();">
             <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
         </div>
     </div>
@@ -323,14 +325,6 @@ $id = $_GET["id"];
             </div>
         </div>
     </div>
-    <script>
-        window.addEventListener('popstate', (event) => {
-            console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
-            console.log(event.state);
-            $("#pageDetailCustomer").toggle(1000);
-            $("#pageEditCustomer").toggle(1000);
-        });
-    </script>
 </div>
 
 <script>
@@ -357,16 +351,18 @@ $id = $_GET["id"];
     window.addEventListener('popstate', (event) => {
         console.log("location: " + document.location + ", state: " + JSON.stringify(event.state));
         console.log(event.state);
-        $("#pageDetailCustomer").toggle(1000);
-        $("#pageEditCustomer").toggle(1000);
-        // if (event.state == null) {
-        //     $("#pageDetailCustomer").toggle(1000);
-        //     $("#pageEditCustomer").toggle(1000);
+        // console.log(event.state.id);
+        // $("#pageDetailCustomer").toggle(1000);
+        // $("#pageEditCustomer").toggle(1000);
+        // Logic ini tidak bisa untuk forward
+        if (event.state == null) {
+            $("#pageDetailCustomer").toggle(1000);
+            $("#pageEditCustomer").toggle(1000);
 
-        // } else if (event.state == 1) {
-        //     $("#closingAreaPertanyaan").css("display", "none");
-        //     $("#pertanyaanEkspedisiTransit").css("display", "none");
-        // }
+        } else if (event.state == 1) {
+            $("#closingAreaPertanyaan").css("display", "none");
+            $("#pertanyaanEkspedisiTransit").css("display", "none");
+        }
 
     });
 
@@ -374,6 +370,195 @@ $id = $_GET["id"];
         history.pushState(2, null, "./pertanyaan-ekspedisi-transit");
         $("#closingAreaPertanyaan").toggle(300);
         $("#pertanyaanEkspedisiTransit").toggle(300);
+    }
+
+    function addInputEkspedisi($jawaban) {
+        $("#closingAreaPertanyaan").css("display", "none");
+        $("#pertanyaanEkspedisiTransit").css("display", "none");
+        if ($jawaban == 'tidak') {
+            $placeholder = "Ekspedisi";
+            $tipeEkspedisi = "inputEkspedisiNormal";
+        } else {
+            $placeholder = "Ekspedisi Transit";
+            $tipeEkspedisi = "inputEkspedisiTransit";
+        }
+
+        $newDiv = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
+            '<div class="bb-1px-solid-grey">' +
+            '<input id="inputID-' + $indexAddExpedition + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $indexAddExpedition + ');">' +
+            '<div id="searchResults-' + $indexAddExpedition + '" class="d-none b-1px-solid-grey bb-none"></div>' +
+            '</div>' +
+            '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $indexAddExpedition + ');">' +
+            '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
+            '</div>' +
+            '</div>';
+
+        $("#divInputEkspedisi").append($newDiv);
+        $indexAddExpedition++;
+        history.back();
+    }
+
+    function searchEkspedisi($id) {
+        $namaEkspedisi = $("#inputID-" + $id).val();
+
+        if ($namaEkspedisi == "") {
+            $("#searchResults-" + $id).html("").removeClass("grid-1-auto").addClass("d-none");
+
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "06-live-search.php",
+                async: false,
+                data: {
+                    nama: "%" + $namaEkspedisi + "%",
+                    table: "ekspedisi"
+                },
+                success: function(responseText) {
+                    console.log(responseText);
+
+                    $htmlToAppend = "";
+
+                    $("#searchResults-" + $id).removeClass("d-none").addClass("grid-1-auto");
+
+                    if (responseText === "not found!") {
+                        $htmlToAppend = $htmlToAppend +
+                            "<div class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em color-grey'>Ekspedisi tidak ditemukan!</div>";
+                        $("#searchResults-" + $id).html($htmlToAppend);
+
+                    } else {
+
+                        $results = JSON.parse(responseText);
+                        console.log($results);
+
+                        if ($results.length > 5) {
+                            $results.splice(5);
+                        }
+                        $idResult = 0;
+                        for (const ekspedisi of $results) {
+                            $htmlToAppend = $htmlToAppend +
+                                "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $id + "," + $idResult + ")'>" +
+                                ekspedisi.nama + "</div>";
+                            $idResult++;
+                        }
+
+                        $("#searchResults-" + $id).html($htmlToAppend);
+
+                    }
+
+
+                }
+            });
+
+        }
+    }
+
+    function pickChoice($id, $idResult) {
+        $inputID = $("#inputID-" + $id);
+        $chosenValue = $("#chosenValue-" + $idResult);
+        $searchResults = $("#searchResults-" + $id);
+        $inputID.val($chosenValue.html());
+        $searchResults.remove();
+        // $searchResults.removeClass("grid-1-auto").addClass("d-none");
+    }
+
+    function editCustomerInfo() {
+        $id = <?php echo ($id) ?>;
+        $nama = $("#nama").val();
+        $alamat = $("#alamat").val();
+        $pulau = $("#pulau").val();
+        $daerah = $("#daerah").val();
+        $kontak = $("#kontak").val();
+        $singkatan = $("#singkatan").val();
+        $keterangan = $("#keterangan").val();
+        $warning = "";
+
+        $arrayGaPenting = [$nama, $alamat, $pulau, $daerah, $kontak, $singkatan, $keterangan];
+        console.log($arrayGaPenting);
+        // Cek apakah nama, pulau, daerah nya belum terisi
+
+        // Sebelum Insert, cek terlebih dahulu apakah ekspedisi yang diinput terdaftar di database
+        // Sebelumnya cek dulu apakah input ekspedisi kosong
+
+        console.log("$('.inputEkspedisiNormal').length : " + $(".inputEkspedisiNormal").length);
+        console.log("$('.inputEkspedisiTransit').length : " + $(".inputEkspedisiTransit").length);
+        var arrayEkspedisiNormalID = new Array();
+        var arrayEkspedisiTransitID = new Array();
+        console.log("arrayEkspedisiNormalID: " + arrayEkspedisiNormalID);
+        console.log("arrayEkspedisiTransitID: " + arrayEkspedisiTransitID);
+
+        if ($(".inputEkspedisiAll").length != 0) {
+
+            $inputEkspedisiNormalIndex = 0;
+            $inputEkspedisiTransitIndex = 0;
+
+            $(".inputEkspedisiAll").each(function(index) {
+                // cek ekspedisi sekaligus kalo emang ada, return id
+                $resultCekEkspedisi = cekEkspedisi($(this).val());
+                if ($resultCekEkspedisi === "No result!") {
+                    $warning = $warning + "<div>Ekspedisi tidak sesuai. Silahkan input ulang ekspedisi atau tambahkan ekspedisi baru terlebih dahulu.</div>";
+                    $("#warning").html($warning).removeClass("d-none");
+                    return false;
+                } else {
+
+                    if ($(".inputEkspedisiNormal:eq(" + $inputEkspedisiNormalIndex + ")").val() == null) {
+                        arrayEkspedisiTransitID.push($resultCekEkspedisi);
+                        $inputEkspedisiTransitIndex++;
+                    } else {
+                        arrayEkspedisiNormalID.push($resultCekEkspedisi);
+                        $inputEkspedisiNormalIndex++;
+                    }
+                }
+
+            });
+
+            console.log("arrayEkspedisiNormalID: " + JSON.stringify(arrayEkspedisiNormalID));
+            console.log("arrayEkspedisiTransitID: " + JSON.stringify(arrayEkspedisiTransitID));
+
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "04-05-insert-edit-customer.php",
+            async: false,
+            data: {
+                id: $id,
+                nama: $nama,
+                alamat: $alamat,
+                pulau: $pulau,
+                daerah: $daerah,
+                kontak: $kontak,
+                singkatan: $singkatan,
+                keterangan: $keterangan,
+                arrayEkspedisiNormalID: arrayEkspedisiNormalID,
+                arrayEkspedisiTransitID: arrayEkspedisiTransitID
+            },
+            success: function(responseText) {
+                console.log(responseText);
+            }
+        });
+
+    }
+
+    function cekEkspedisi(params) {
+        console.log(params);
+        $idToReturn = "";
+        if (params != "") {
+            $.ajax({
+                type: "POST",
+                url: "04-04-cek-ekspedisi.php",
+                async: false,
+                data: {
+                    nama: params
+                },
+                success: function(responseText) {
+                    console.log(responseText);
+                    $idToReturn = responseText;
+                }
+            });
+        }
+        console.log($idToReturn);
+        return $idToReturn;
+
     }
 </script>
 

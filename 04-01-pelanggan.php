@@ -60,7 +60,7 @@ include_once "01-header.php";
                     "</div>" +
 
                     "<div class='grid-1-auto justify-items-right mt-1em'>" +
-                    "<a href='04-05-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+                    "<a href='04-06-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
                     "</div>" +
                     "</div>" +
                     // END OF DROPDOWN
