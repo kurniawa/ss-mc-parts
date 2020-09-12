@@ -50,7 +50,7 @@ include_once "01-header.php";
                     // DROPDOWN
                     "<div id='divDetailDropDown-" + pelanggan.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
 
-                    "<div class='grid-2-10-auto'>" +
+                    "<div class='grid-2-10_auto'>" +
 
                     "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
                     "<div>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +

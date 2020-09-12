@@ -22,6 +22,7 @@ if (mysqli_num_rows($res) > 0) {
     }
     echo json_encode($rows);
 } else {
-    echo "Query: " . $sql . " has 0 result.";
+    // echo "Query: " . $sql . " has 0 result.";
+    echo "No result.";
     die;
 }

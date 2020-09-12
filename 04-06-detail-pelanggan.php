@@ -20,6 +20,10 @@ $id = $_GET["id"];
             <img class="w-1em" src="img/icons/edit.svg" alt="">
             <div class="">Edit</div>
         </div>
+        <div class="dotMenuItem grid-2-auto grid-column-gap-0_5em pl-1em pr-1em pt-0_5em pb-0_5em" onclick="deleteCustomer();">
+            <img class="w-1em" src="img/icons/edit.svg" alt="">
+            <div class="">Hapus</div>
+        </div>
     </div>
 
     <div id="areaClosingDotMenu" onclick="closingDotMenuContent();"></div>
@@ -137,37 +141,42 @@ $id = $_GET["id"];
                                 },
                                 success: function(responseText) {
                                     console.log(responseText);
-                                    $expedition = JSON.parse(responseText);
-                                    console.log($expedition);
-
-                                    if ($eachExpeditionID.expedisi_transit == 'y') {
-                                        $tipeEkspedisi = "inputEkspedisiTransit";
-                                        $placeholder = "Ekspedisi Transit";
+                                    if (responseText === "No result.") {
+                                        console.log(responseText);
                                     } else {
-                                        $tipeEkspedisi = "inputEkspedisiNormal";
-                                        $placeholder = "Ekspedisi Normal";
+                                        $expedition = JSON.parse(responseText);
+                                        console.log($expedition);
+
+                                        if ($eachExpeditionID.expedisi_transit == 'y') {
+                                            $tipeEkspedisi = "inputEkspedisiTransit";
+                                            $placeholder = "Ekspedisi Transit";
+                                        } else {
+                                            $tipeEkspedisi = "inputEkspedisiNormal";
+                                            $placeholder = "Ekspedisi Normal";
+                                        }
+
+                                        $address = $expedition[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br>');
+                                        $("#customerExpedition").html($address);
+
+                                        // APPEND input-input ekspedisi untuk pelanggan ini
+                                        $htmlToAppend = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
+                                            '<div class="bb-1px-solid-grey">' +
+
+                                            '<input id="inputID-' + $indexAddExpedition + '" class="inputEkspedisiAll ' + $tipeEkspedisi +
+                                            ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder +
+                                            '" onkeyup="searchEkspedisi(' + $indexAddExpedition + ');" value="' + $expedition[0].nama + '">' +
+
+                                            '<div id="searchResults-' + $indexAddExpedition + '" class="d-none b-1px-solid-grey bb-none"></div>' +
+                                            '</div>' +
+                                            '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $indexAddExpedition + ');">' +
+                                            '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
+                                            '</div>' +
+                                            '</div>';
+
+                                        $("#divInputEkspedisi").append($htmlToAppend);
+                                        $indexAddExpedition++;
+
                                     }
-
-                                    $address = $expedition[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br>');
-                                    $("#customerExpedition").html($address);
-
-                                    // APPEND input-input ekspedisi untuk pelanggan ini
-                                    $htmlToAppend = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
-                                        '<div class="bb-1px-solid-grey">' +
-
-                                        '<input id="inputID-' + $indexAddExpedition + '" class="inputEkspedisiAll ' + $tipeEkspedisi +
-                                        ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder +
-                                        '" onkeyup="searchEkspedisi(' + $indexAddExpedition + ');" value="' + $expedition[0].nama + '">' +
-
-                                        '<div id="searchResults-' + $indexAddExpedition + '" class="d-none b-1px-solid-grey bb-none"></div>' +
-                                        '</div>' +
-                                        '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $indexAddExpedition + ');">' +
-                                        '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
-                                        '</div>' +
-                                        '</div>';
-
-                                    $("#divInputEkspedisi").append($htmlToAppend);
-                                    $indexAddExpedition++;
 
                                 }
                             });
@@ -209,6 +218,37 @@ $id = $_GET["id"];
         console.log("btnKurangEkspedisi");
         $("#divInputID-" + $id).remove();
         $("#searchResults-" + $id).removeClass("grid-1-auto").addClass("d-none");
+    }
+
+    function deleteCustomer() {
+        let results;
+        $.ajax({
+            type: "POST",
+            url: "01-crud.php",
+            cache: false,
+            async: false,
+            data: {
+                id: $id,
+                table: "pelanggan_use_expedisi",
+                column: "id_pelanggan",
+                type: "delete"
+            },
+            success: function(responseText) {
+                console.log(responseText);
+                responseText = JSON.parse(responseText);
+                console.log(responseText[1]);
+
+                // Seandainya tidak ditemukan relasi pun, maka fungsi hapus customer tetap dijalankan di line berikut
+
+                results = deleteItems($id, "pelanggan", "id");
+                results = JSON.parse(results);
+                if (results[0] === "deleted") {
+                    window.location.replace("04-01-pelanggan.php");
+                } else {
+                    console.log(results);
+                }
+            }
+        });
     }
 </script>
 <style>
