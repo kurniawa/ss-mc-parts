@@ -125,25 +125,27 @@ $id = $_GET["id"];
                     },
                     success: function(responseText) {
                         console.log(responseText);
-                        $idExpeditionAll = JSON.parse(responseText);
-                        console.log($idExpeditionAll);
+                        if (responseText === "No result.") {
+                            console.log(responseText);
+                        } else {
 
-                        for (const $eachExpeditionID of $idExpeditionAll) {
+                            $idExpeditionAll = JSON.parse(responseText);
+                            console.log($idExpeditionAll);
 
-                            $.ajax({
-                                url: "01-get.php",
-                                type: "POST",
-                                async: false,
-                                data: {
-                                    id: $customer[0].id,
-                                    table: "ekspedisi",
-                                    column: "id"
-                                },
-                                success: function(responseText) {
-                                    console.log(responseText);
-                                    if (responseText === "No result.") {
+                            for (const $eachExpeditionID of $idExpeditionAll) {
+
+                                $.ajax({
+                                    url: "01-get.php",
+                                    type: "POST",
+                                    async: false,
+                                    data: {
+                                        id: $customer[0].id,
+                                        table: "ekspedisi",
+                                        column: "id"
+                                    },
+                                    success: function(responseText) {
                                         console.log(responseText);
-                                    } else {
+
                                         $expedition = JSON.parse(responseText);
                                         console.log($expedition);
 
@@ -176,10 +178,11 @@ $id = $_GET["id"];
                                         $("#divInputEkspedisi").append($htmlToAppend);
                                         $indexAddExpedition++;
 
-                                    }
 
-                                }
-                            });
+
+                                    }
+                                });
+                            }
 
                         }
 
@@ -211,7 +214,8 @@ $id = $_GET["id"];
     }
 
     function backToCustomer() {
-        window.location.replace("04-01-pelanggan.php");
+        // window.location.replace("04-01-pelanggan.php");
+        window.history.back();
     }
 
     function btnKurangEkspedisi($id) {
