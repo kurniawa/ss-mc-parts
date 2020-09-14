@@ -73,21 +73,6 @@ include_once "01-header.php";
 </script>
 
 <style>
-    .header {
-        height: 4em;
-        background-color: #ffb800;
-    }
-
-    .btn-atas-kanan {
-        display: inline;
-        border-radius: 25px;
-        background-color: #FFED50;
-        padding: 0.5em 1em 0.5em 1em;
-        position: absolute;
-        top: 1em;
-        right: 0.5em;
-    }
-
     .input-cari {
         border: none;
         width: 10em;

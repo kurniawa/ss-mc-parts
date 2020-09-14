@@ -36,6 +36,12 @@ option{
     box-sizing: border-box;
     width: 100%;
 }
+.input-select-option-1 {
+    border: 1px solid #E4E4E4;
+    border-radius: 10px;
+    box-sizing: border-box;
+    width: 100%;
+}
 .circle-small {
     border-radius: 100%;
     width: 1.5em;
@@ -217,7 +223,9 @@ option{
 .w-0_8em {
     width: 0.8em;
 }
-
+.w-0_9em {
+    width: 0.9em;
+}
 .w-1em {
     width: 1em;
 }
@@ -323,4 +331,16 @@ option{
 
 .hover-bg-color-grey:hover {
     background-color: #E4E4E4;
+}
+
+/* PACAKGE: BUTTON */
+
+.btn-atas-kanan {
+    display: inline;
+    border-radius: 25px;
+    background-color: #FFED50;
+    padding: 0.5em 1em 0.5em 1em;
+    position: absolute;
+    top: 1em;
+    right: 0.5em;
 }
