@@ -109,6 +109,12 @@
 .grid-row-gap-1em {
     grid-row-gap: 1em;
 }
+.grid-row-gap-2em {
+    grid-row-gap: 2em;
+}
+.grid-row-gap-3em {
+    grid-row-gap: 3em;
+}
 .justify-self-left {
     justify-self: left;
 }

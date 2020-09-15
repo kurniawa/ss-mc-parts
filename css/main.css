@@ -161,6 +161,12 @@ option{
 .mt-2em {
     margin-top: 2em;
 }
+.mt-3em {
+    margin-top: 3em;
+}
+.mt-4em {
+    margin-top: 4em;
+}
 .mb-0_3em {
     margin-bottom: 0.3em;
 }
@@ -175,6 +181,9 @@ option{
 }
 .d-inline {
     display: inline;
+}
+.d-inline-block {
+    display: inline-block;
 }
 .d-none {
     display: none;
@@ -254,6 +263,9 @@ option{
 }
 .w-5em {
     width: 5em;
+}
+.w-6em {
+    width: 6em;
 }
 .w-10em {
     width: 10em;

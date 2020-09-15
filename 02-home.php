@@ -52,10 +52,10 @@ include_once "01-header.php";
             Stok
         </div>
         <div class="gridMenuItem">
-            <div class="menuIcons">
-                <img src="img/icons/pencil.svg" alt="Icon SPK">
-            </div>
-            Produk
+            <a href="06-01-produk.php" class="menuIcons">
+                <img src="img/icons/products.svg" alt="Icon SPK">
+                <div>Produk</div>
+            </a>
         </div>
         <div class="gridMenuItem">
             <div class="menuIcons">
