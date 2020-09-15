@@ -4,50 +4,56 @@ include_once "01-header.php";
 
 <div class="header"></div>
 
-<div class="mt-1em ml-1em grid-2-10_auto">
-    <div class="">
-        <img class="w-2em" src="img/icons/pencil.svg" alt="">
-    </div>
-    <div class="font-weight-bold">
-        Untuk siapa SPK ini?
-    </div>
-</div>
+<div id="SPKBaru">
 
-<div class="ml-0_5em mr-0_5em mt-2em">
-
-    <div class="grid-2-auto grid-column-gap-1em mt-1em">
-        <input id="SPKNo" class="input-1 pb-1em" type="text" placeholder="No." disabled>
-        <input type="date" class="input-select-option-1 pb-1em" name="date" id="date" value="<?php echo date('Y-m-d'); ?>">
-    </div>
-
-    <div id="divInputCustomerName" class="containerInputEkspedisi mt-1em mb-1em">
-        <div class="bb-1px-solid-grey">
-            <input id="inputCustomerName" class="input-1 pb-1em bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
-            <div id="searchResults" class="d-none b-1px-solid-grey bb-none"></div>
+    <div class="mt-1em ml-1em grid-2-10_auto">
+        <div class="">
+            <img class="w-2em" src="img/icons/pencil.svg" alt="">
+        </div>
+        <div class="font-weight-bold">
+            Untuk siapa SPK ini?
         </div>
     </div>
 
-    <input id="description" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
+    <div class="ml-0_5em mr-0_5em mt-2em">
+
+        <div class="grid-2-auto grid-column-gap-1em mt-1em">
+            <input id="SPKNo" class="input-1 pb-1em" type="text" placeholder="No." disabled>
+            <input type="date" class="input-select-option-1 pb-1em" name="date" id="date" value="<?php echo date('Y-m-d'); ?>">
+        </div>
+
+        <div id="divInputCustomerName" class="containerInputEkspedisi mt-1em mb-1em">
+            <div class="bb-1px-solid-grey">
+                <input id="inputCustomerName" class="input-1 pb-1em bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
+                <div id="searchResults" class="d-none b-1px-solid-grey bb-none"></div>
+            </div>
+        </div>
+
+        <input id="description" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
 
 
-</div>
-
-
-<br><br>
-
-<div id="warning" class="d-none"></div>
-
-<div>
-    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="beginInsertingProducts();">
-        <span class="justify-self-center font-weight-bold">Mulai Proses SPK >></span>
     </div>
+
+
+    <br><br>
+
+    <div id="warning" class="d-none"></div>
+
+    <div>
+        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="beginInsertingProducts();">
+            <span class="justify-self-center font-weight-bold">Mulai Proses SPK >></span>
+        </div>
+    </div>
+
+    <div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
+    </div>
+
 </div>
 
-<div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
-</div>
 
 <script>
     $(document).ready(function() {
+        $("#containerBeginSPK").css("display", "none");
         let lastID = getLastID("spk");
         console.log(lastID);
         lastID = JSON.parse(lastID);
@@ -56,6 +62,8 @@ include_once "01-header.php";
         let SPKNo = parseFloat(lastID[1]) + 1;
 
         $("#SPKNo").val(SPKNo);
+        // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
+        $(".divSPKNumber").html(SPKNo);
     });
 
     $i = 0;
@@ -129,6 +137,20 @@ include_once "01-header.php";
         $inputCustomerName.val($chosenValue.html());
         // $searchResults.remove();
         $searchResults.removeClass("grid-1-auto").addClass("d-none");
+
+        // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
+        $(".divSPKCustomer").html($chosenValue.html());
+    }
+
+    function beginInsertingProducts() {
+        if ($("#SPKBaru").css("display") === "block") {
+            $("#SPKBaru").toggle();
+            $("#containerBeginSPK").toggle();
+            let SPKDate = formatDate($("#date").val());
+
+            $(".divSPKDate").html(SPKDate);
+            $(".divTitleDesc").html($("#description").val());
+        }
     }
 </script>
 
@@ -177,5 +199,6 @@ include_once "01-header.php";
 </style>
 
 <?php
+include_once "03-03-01-begin-inserting-products.php";
 include_once "01-footer.php";
 ?>

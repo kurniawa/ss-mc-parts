@@ -52,6 +52,11 @@ option{
     width: 2.5em;
     height: 2.5em;
 }
+.circle-L {
+    border-radius: 100%;
+    width: 3.5em;
+    height: 3.5em;
+}
 .text-area-mode-1 {
     box-sizing: border-box;
     width: 100%;
@@ -194,6 +199,9 @@ option{
 .h-4em {
     height: 4em;
 }
+.h-9em {
+    height: 9em;
+}
 .h-10em {
     height: 10em;
 }
@@ -309,6 +317,30 @@ option{
 .top-0 {
     top: 0;
 }
+.top-1em {
+    top: 1em;
+}
+.top-2em {
+    top: 2em;
+}
+.top-3em {
+    top: 3em;
+}
+.top-4em {
+    top: 4em;
+}
+.top-5em {
+    top: 5em;
+}
+.top-8em {
+    top: 8em;
+}
+.top-9em {
+    top: 9em;
+}
+.top-10em {
+    top: 10em;
+}
 .top-50vh {
     top: 50vh;
 }
@@ -317,6 +349,40 @@ option{
 }
 .top-70vh {
     top: 70vh;
+}
+.left-25 {
+    left: 25%;
+}
+.left-30 {
+    left: 30%;
+}
+.left-35 {
+    left: 35%;
+}
+.left-40 {
+    left: 40%;
+}
+.left-50 {
+    left: 50%;
+}
+.left-60 {
+    left: 60%;
+}
+.left-65 {
+    left: 65%;
+}
+.left-70 {
+    left: 70%;
+}
+.left-75 {
+    left: 75%;
+}
+.bottom-0 {
+    bottom: 0;
+}
+
+.transform-translate--50_0 {
+    transform: translate(-50%,0);
 }
 .opacity-0_5 {
     opacity: 0.5;

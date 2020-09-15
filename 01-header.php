@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/border.css">
     <script src="js/jquery-3.5.1.js"></script>
+    <script src="js/functions.js"></script>
 
     <title>MC-Parts Smart System</title>
 </head>
