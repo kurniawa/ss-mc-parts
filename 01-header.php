@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="css/grid.css">
     <link rel="stylesheet" href="css/fonts.css">
     <link rel="stylesheet" href="css/border.css">
+    <link rel="stylesheet" href="js/jquery-ui-1.12.1/jquery-ui.css">
     <script src="js/jquery-3.5.1.js"></script>
+    <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="js/functions.js"></script>
 
     <title>MC-Parts Smart System</title>

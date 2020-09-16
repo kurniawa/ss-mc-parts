@@ -1,0 +1,200 @@
+[
+    {
+        "tipe_produk": "sj-basic",
+        "bahan": [
+            {
+                "nama_bahan": "C24-07",
+                "harga": 11500
+            },
+            {
+                "nama_bahan": "Vario",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Vario R",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Vario MCR",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Vario M",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Vario MC",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "MB-Tech",
+                "harga": 34000
+            },
+            {
+                "nama_bahan": "Zeus",
+                "harga": 21000
+            },
+            {
+                "nama_bahan": "Amplas(SBT)",
+                "harga": 14500
+            },
+            {
+                "nama_bahan": "Rider(SBT)",
+                "harga": 14500
+            },
+            {
+                "nama_bahan": "Carbon-RD14",
+                "harga": 14500
+            },
+            {
+                "nama_bahan": "Fero/BigDot",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Graffiti",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "OSBAC",
+                "harga": 12500
+            },
+            {
+                "nama_bahan": "Kulit Jeruk",
+                "harga": 9500
+            },
+            {
+                "nama_bahan": "Lucky Hole",
+                "harga": 9500
+            },
+            {
+                "nama_bahan": "Lucky Hole Warna",
+                "harga": 9500
+            },
+            {
+                "nama_bahan": "Vario Warna",
+                "harga": 12500
+            }
+        ],
+        "variasi": [
+            {
+                "jenis_variasi": [
+                    {
+                        "nama": "Polos"
+                    },
+                    {
+                        "nama": "LG",
+                        "jenis_logo": [
+                            "Bludru",
+                            "Polimas",
+                            "Sablon",
+                            "Bayang",
+                            "Stiker"
+                        ]
+                    },
+                    {
+                        "nama": "TATO",
+                        "jenis_tato": [
+                            "Polimas",
+                            "Sablon",
+                            "Bayang"
+                        ]
+                    }
+                ],
+                "harga_1": 500,
+                "harga_2": 1000
+            }
+        ],
+        "warna": [
+            "merah",
+            "kuning",
+            "hijau",
+            "biru",
+            "pink"
+        ],
+        "jahit": [
+            {
+                "tipe_jht": [
+                    "jht univ",
+                    "jht JB",
+                    "jht JB2",
+                    "NMAX",
+                    "jht REVO",
+                    "RXK",
+                    "RXK-02"
+                ],
+                "harga_1": 1000,
+                "harga_2": 1500
+            }
+        ],
+        "ukuran": [
+            {
+                "tipe_ukuran": "JB 93x53",
+                "harga": 3250
+            },
+            {
+                "tipe_ukuran": "Super-JB 97x53",
+                "harga": 4500
+            }
+        ]
+    },
+    {
+        "tipe_produk": "sj-kombi",
+        "kombinasi": [
+            {
+                "nama_kombinasi": "Kombinasi List Miring (A)",
+                "harga": 16000
+            },
+            {
+                "nama_kombinasi": "Kombinasi List Miring (B)",
+                "harga": 13000
+            },
+            {
+                "nama_kombinasi": "Kombinasi Sayap Warna (A) Motif + LG + jht",
+                "harga": 19500
+            },
+            {
+                "nama_kombinasi": "Kombinasi Warna Japstyle + jht",
+                "harga": 19000
+            },
+            {
+                "nama_kombinasi": "Bahan (A) Japstyle",
+                "harga": 21000
+            },
+            {
+                "nama_kombinasi": "Bahan (B) Japstyle",
+                "harga": 18000
+            },
+            {
+                "nama_kombinasi": "Kombinasi Warna X-Ride (L) + ROTAN Warna",
+                "harga": 20500
+            },
+            {
+                "nama_kombinasi": "Kombinasi Warna X-Ride (L) TANPA ROTAN",
+                "harga": 19500
+            }
+        ]
+    },
+    {
+        "tipe_produk": "sj-std",
+        "variasi": [
+            {
+                "nama_variasi": "Standard RXK'95 JetDarat",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "Standard RXK'95 JetDarat NEW Bahan (A)",
+                "harga": 26500
+            },
+            {
+                "nama_variasi": "Standard RXK'95 JetDarat List Warna",
+                "harga": 19000
+            }
+        ]
+    },
+    {
+        "tipe_produk": "busa-stang"
+    },
+    {
+        "tipe_produk": "tank-pad"
+    }
+]
