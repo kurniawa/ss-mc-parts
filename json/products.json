@@ -3,8 +3,34 @@
         "tipe_produk": "sj-basic",
         "bahan": [
             {
-                "nama_bahan": "C24-07",
-                "harga": 11500
+                "nama_bahan": "C38",
+                "harga": 12500,
+                "desc": "C38 dari MAX backing biru."
+            },
+            {
+                "nama_bahan": "C38 MC",
+                "harga": 12500,
+                "desc": "C38 dari MAX. Backing putih + Merek MC lama(Thailand)."
+            },
+            {
+                "nama_bahan": "C36",
+                "harga": 12500,
+                "desc": "C36 dari MAX backing biru."
+            },
+            {
+                "nama_bahan": "C36 MC",
+                "harga": 12500,
+                "desc": "C36 dari MAX. Backing putih + Merek MC lama(Thailand)."
+            },
+            {
+                "nama_bahan": "C30 07",
+                "harga": 12500,
+                "desc": "C30 dari MAX backing biru."
+            },
+            {
+                "nama_bahan": "C30 MC",
+                "harga": 12500,
+                "desc": "C30 dari MAX. Backing putih + Merek MC lama(Thailand)."
             },
             {
                 "nama_bahan": "Vario",
@@ -20,11 +46,13 @@
             },
             {
                 "nama_bahan": "Vario M",
-                "harga": 12500
+                "harga": 12500,
+                "desc": "Biji Kopi dari Royal. Backing biru."
             },
             {
                 "nama_bahan": "Vario MC",
-                "harga": 12500
+                "harga": 12500,
+                "desc": "Biji Kopi dari MAX. Backing putih + Merek MC lama(Thailand)."
             },
             {
                 "nama_bahan": "MB-Tech",
@@ -47,7 +75,7 @@
                 "harga": 14500
             },
             {
-                "nama_bahan": "Fero/BigDot",
+                "nama_bahan": "BigDot",
                 "harga": 12500
             },
             {
@@ -59,8 +87,26 @@
                 "harga": 12500
             },
             {
-                "nama_bahan": "Kulit Jeruk",
+                "nama_bahan": "L55",
                 "harga": 9500
+            },
+            {
+                "nama_bahan": "K. Jeruk CK",
+                "harga": 9500
+            },
+            {
+                "nama_bahan": "L55 CK",
+                "harga": 9500
+            },
+            {
+                "nama_bahan": "U. Tangan MC",
+                "harga": 9500,
+                "desc": "Urat Tangan dari MAX. Backing putih + Merek MC lama(Thailand)."
+            },
+            {
+                "nama_bahan": "U. Tangan MCR",
+                "harga": 9500,
+                "desc": "Urat Tangan dari Royal. Backing putih + Merek MC baru(Sayap)."
             },
             {
                 "nama_bahan": "Lucky Hole",
@@ -84,11 +130,43 @@
                     {
                         "nama": "LG",
                         "jenis_logo": [
-                            "Bludru",
+                            {
+                                "nama": "Bludru",
+                                "variasi": [
+                                    "Bride",
+                                    "Somjin"
+                                ]
+                            },
                             "Polimas",
-                            "Sablon",
+                            {
+                                "nama": "Sablon",
+                                "variasi": [
+                                    "D. Duck",
+                                    "Doraemon",
+                                    "H. Kitty",
+                                    "M. Mouse",
+                                    "Pikachu",
+                                    "SpiderMan"
+                                ]
+                            },
                             "Bayang",
-                            "Stiker"
+                            {
+                                "nama": "Stiker",
+                                "variasi": [
+                                    "46",
+                                    "AHRS",
+                                    "AHM",
+                                    "Bikers",
+                                    "KWHR",
+                                    "MB-TECH",
+                                    "MSTR",
+                                    "REPSOL",
+                                    "Somjin",
+                                    "TDR",
+                                    "YOSHI",
+                                    "Holly56"
+                                ]
+                            }
                         ]
                     },
                     {
@@ -96,12 +174,23 @@
                         "jenis_tato": [
                             "Polimas",
                             "Sablon",
-                            "Bayang"
+                            "Bayang",
+                            "Sixpack"
                         ]
                     }
                 ],
                 "harga_1": 500,
                 "harga_2": 1000
+            }
+        ],
+        "ukuran": [
+            {
+                "tipe_ukuran": "JB 93x53",
+                "harga": 3250
+            },
+            {
+                "tipe_ukuran": "Super-JB 97x53",
+                "harga": 4500
             }
         ],
         "warna": [
@@ -117,23 +206,13 @@
                     "jht univ",
                     "jht JB",
                     "jht JB2",
-                    "NMAX",
-                    "jht REVO",
-                    "RXK",
-                    "RXK-02"
+                    "jht NMAX",
+                    "jht abs-REVO",
+                    "jht RXK",
+                    "jht RXK-02"
                 ],
                 "harga_1": 1000,
                 "harga_2": 1500
-            }
-        ],
-        "ukuran": [
-            {
-                "tipe_ukuran": "JB 93x53",
-                "harga": 3250
-            },
-            {
-                "tipe_ukuran": "Super-JB 97x53",
-                "harga": 4500
             }
         ]
     },
@@ -176,20 +255,41 @@
     },
     {
         "tipe_produk": "sj-std",
-        "variasi": [
+        "variasi_1": [
             {
-                "nama_variasi": "Standard RXK'95 JetDarat",
+                "nama_variasi": "C70",
                 "harga": 18500
             },
             {
-                "nama_variasi": "Standard RXK'95 JetDarat NEW Bahan (A)",
+                "nama_variasi": "CB",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "GL Pro",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "Grand 97",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "Jupiter Z",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "RXK'95 JetDarat",
+                "harga": 18500
+            },
+            {
+                "nama_variasi": "RXK'95 JetDarat NEW Bahan (A)",
                 "harga": 26500
             },
             {
-                "nama_variasi": "Standard RXK'95 JetDarat List Warna",
+                "nama_variasi": "RXK'95 JetDarat List Warna",
                 "harga": 19000
             }
-        ]
+        ],
+        "variasi_2": "Press + Alas"
     },
     {
         "tipe_produk": "busa-stang"

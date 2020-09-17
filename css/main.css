@@ -7,7 +7,7 @@ body{
     font-size: 0.8em;
 }
 
-textarea, select, input, button { outline: none; }
+textarea, input, button { outline: none; }
 a {
     text-decoration: none;
     color: black;
@@ -202,6 +202,9 @@ option{
 .h-0_5em {
     height: 0.5em;
 }
+.h-1em {
+    height: 1em;
+}
 .h-1_5em {
     height: 1.5em;
 }
@@ -275,6 +278,9 @@ option{
 }
 .w-15em {
     width: 15em;
+}
+.w-100 {
+    width: 100%;
 }
 .w-75vw {
     width: 75vw;

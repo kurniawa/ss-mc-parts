@@ -13,6 +13,9 @@
 .b-radius-100 {
     border-radius: 100%;
 }
+.b-1px-solid-black {
+    border: 1px solid black;
+}
 .b-1px-solid-grey {
     border: 1px solid #E4E4E4;
 }
