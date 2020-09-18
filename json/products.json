@@ -33,7 +33,7 @@
                 "desc": "C30 dari MAX. Backing putih + Merek MC lama(Thailand)."
             },
             {
-                "nama_bahan": "Vario",
+                "nama_bahan": "C24 07",
                 "harga": 12500
             },
             {
@@ -63,11 +63,17 @@
                 "harga": 21000
             },
             {
-                "nama_bahan": "Amplas(SBT)",
-                "harga": 14500
+                "nama_bahan": "Amplas MCR",
+                "harga": 14500,
+                "desc": "Bahan Amplas dari Royal. Backing putih + Merek MC baru(Sayap)."
             },
             {
-                "nama_bahan": "Rider(SBT)",
+                "nama_bahan": "Amplas SBT",
+                "harga": 14500,
+                "desc": "Bahan Amplas dari Sumber Baru. Backing putih + Merek SB-Tech. Kualitas Premium."
+            },
+            {
+                "nama_bahan": "Rider SBT",
                 "harga": 14500
             },
             {
@@ -76,7 +82,13 @@
             },
             {
                 "nama_bahan": "BigDot",
-                "harga": 12500
+                "harga": 12500,
+                "desc": "BD sama-sama dari Royal. Backing biru."
+            },
+            {
+                "nama_bahan": "BigDot MCR",
+                "harga": 12500,
+                "desc": "BD dari Royal. Backing putih + merek MC baru(Sayap)"
             },
             {
                 "nama_bahan": "Graffiti",
@@ -91,8 +103,9 @@
                 "harga": 9500
             },
             {
-                "nama_bahan": "K. Jeruk CK",
-                "harga": 9500
+                "nama_bahan": "K. Jeruk CK-R",
+                "harga": 9500,
+                "desc": "Kulit jeruk coklat dari Royal."
             },
             {
                 "nama_bahan": "L55 CK",
@@ -198,18 +211,21 @@
             "kuning",
             "hijau",
             "biru",
-            "pink"
+            "pink",
+            "coklat",
+            "emas",
+            "campur warna"
         ],
         "jahit": [
             {
                 "tipe_jht": [
-                    "jht univ",
-                    "jht JB",
-                    "jht JB2",
-                    "jht NMAX",
-                    "jht abs-REVO",
-                    "jht RXK",
-                    "jht RXK-02"
+                    "univ",
+                    "JB",
+                    "JB2",
+                    "NMAX",
+                    "abs-REVO",
+                    "RXK",
+                    "RXK-02"
                 ],
                 "harga_1": 1000,
                 "harga_2": 1500
@@ -221,6 +237,10 @@
         "kombinasi": [
             {
                 "nama_kombinasi": "Kombinasi List Miring (A)",
+                "harga": 16000
+            },
+            {
+                "nama_kombinasi": "Kombinasi List Miring (A) + LG",
                 "harga": 16000
             },
             {
@@ -265,6 +285,10 @@
                 "harga": 18500
             },
             {
+                "nama_variasi": "F1ZR",
+                "harga": 19000
+            },
+            {
                 "nama_variasi": "GL Pro",
                 "harga": 18500
             },
@@ -286,6 +310,18 @@
             },
             {
                 "nama_variasi": "RXK'95 JetDarat List Warna",
+                "harga": 19000
+            },
+            {
+                "nama_variasi": "Supra 125",
+                "harga": 19000
+            },
+            {
+                "nama_variasi": "Supra Fit NEW",
+                "harga": 19000
+            },
+            {
+                "nama_variasi": "Supra X",
                 "harga": 19000
             }
         ],
