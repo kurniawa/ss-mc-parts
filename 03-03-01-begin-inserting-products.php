@@ -27,7 +27,7 @@
     <div class="divProductList"></div>
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
-        <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJBasic();">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Basic</span>
         </div>
         <div class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -55,9 +55,19 @@
 <script>
     $(document).ready(function() {
         $(".productType").css("display", "none");
+        $("#containerSJBasic").css("display", "none");
     });
 
     function toggleProductType() {
         $(".productType").toggle(500);
     }
+
+    function toggleSJBasic() {
+        $("#containerSJBasic").toggle();
+        $("#containerBeginSPK").toggle();
+    }
 </script>
+
+<?php
+include_once "03-03-02-sj-basic.php";
+?>

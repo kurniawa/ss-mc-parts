@@ -155,47 +155,7 @@ include_once "01-header.php";
 </script>
 
 <style>
-    #divToggleReseller {
-        height: 1.5em;
-    }
 
-    .btn-atas-kanan {
-        display: inline;
-        border-radius: 25px;
-        background-color: #FFED50;
-        padding: 0.5em 1em 0.5em 1em;
-        position: absolute;
-        top: 1em;
-        right: 0.5em;
-    }
-
-    .div-filter-icon {
-        justify-self: end;
-    }
-
-    .icon-small-circle {
-        border-radius: 100%;
-        width: 2.5em;
-        height: 2.5em;
-        position: relative;
-    }
-
-    .circle-medium {
-        border-radius: 100%;
-        width: 2.5em;
-        height: 2.5em;
-    }
-
-    .icon-img {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-
-    .div-cari-filter {
-        border-bottom: 0.5px solid #E4E4E4;
-    }
 </style>
 
 <?php

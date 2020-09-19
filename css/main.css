@@ -225,6 +225,9 @@ option{
 }
 
 /* width */
+.w-inherit {
+    width: inherit;
+}
 .w-0_2em {
     width: 0.2em;
 }
@@ -290,6 +293,9 @@ option{
 }
 .w-100vw {
     width: 100vw;
+}
+.w-calc-100-1em {
+    width: calc(100% - 1em);
 }
 
 /* color */
@@ -399,6 +405,13 @@ option{
     bottom: 0;
 }
 
+.bottom-0_5em {
+    bottom: 0.5em;
+}
+.right-0_5em {
+    right: 0.5em;
+}
+
 .transform-translate--50_0 {
     transform: translate(-50%,0);
 }
@@ -411,6 +424,10 @@ option{
 /* z-index */
 .z-index-3 {
     z-index: 3;
+}
+
+.box-sizing-border-box {
+    box-sizing: border-box;
 }
 
 .hover-bg-color-grey:hover {

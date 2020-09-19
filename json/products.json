@@ -150,7 +150,9 @@
                                     "Somjin"
                                 ]
                             },
-                            "Polimas",
+                            {
+                                "nama": "Polimas"
+                            },
                             {
                                 "nama": "Sablon",
                                 "variasi": [
@@ -162,7 +164,9 @@
                                     "SpiderMan"
                                 ]
                             },
-                            "Bayang",
+                            {
+                                "nama": "Bayang"
+                            },
                             {
                                 "nama": "Stiker",
                                 "variasi": [
