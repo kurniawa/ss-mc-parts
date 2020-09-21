@@ -4,6 +4,12 @@
 .b-05px {
     border: 0.5px solid;
 }
+.b-radius-5px {
+    border-radius: 5px;
+}
+.b-radius-10px {
+    border-radius: 10px;
+}
 .b-radius-25px {
     border-radius: 25px;
 }

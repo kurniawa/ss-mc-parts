@@ -404,9 +404,11 @@ option{
 .bottom-0 {
     bottom: 0;
 }
-
 .bottom-0_5em {
     bottom: 0.5em;
+}
+.bottom-5em {
+    bottom: 5em;
 }
 .right-0_5em {
     right: 0.5em;

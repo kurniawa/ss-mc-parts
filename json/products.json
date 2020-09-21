@@ -145,7 +145,8 @@
                         "jenis_logo": [
                             {
                                 "nama": "Bludru",
-                                "variasi": [
+                                "gambar": [
+                                    "46",
                                     "Bride",
                                     "Somjin"
                                 ]
@@ -155,7 +156,7 @@
                             },
                             {
                                 "nama": "Sablon",
-                                "variasi": [
+                                "gambar": [
                                     "D. Duck",
                                     "Doraemon",
                                     "H. Kitty",
@@ -169,7 +170,7 @@
                             },
                             {
                                 "nama": "Stiker",
-                                "variasi": [
+                                "gambar": [
                                     "46",
                                     "AHRS",
                                     "AHM",
@@ -237,42 +238,42 @@
         ]
     },
     {
-        "tipe_produk": "sj-kombi",
-        "kombinasi": [
+        "tipe_produk": "sj-varia",
+        "varia": [
             {
-                "nama_kombinasi": "Kombinasi List Miring (A)",
+                "nama_varia": "Kombinasi List Miring (A)",
                 "harga": 16000
             },
             {
-                "nama_kombinasi": "Kombinasi List Miring (A) + LG",
+                "nama_varia": "Kombinasi List Miring (A) + LG",
                 "harga": 16000
             },
             {
-                "nama_kombinasi": "Kombinasi List Miring (B)",
+                "nama_varia": "Kombinasi List Miring (B)",
                 "harga": 13000
             },
             {
-                "nama_kombinasi": "Kombinasi Sayap Warna (A) Motif + LG + jht",
+                "nama_varia": "Kombinasi Sayap Warna (A) Motif + LG + jht",
                 "harga": 19500
             },
             {
-                "nama_kombinasi": "Kombinasi Warna Japstyle + jht",
+                "nama_varia": "Kombinasi Warna Japstyle + jht",
                 "harga": 19000
             },
             {
-                "nama_kombinasi": "Bahan (A) Japstyle",
+                "nama_varia": "Bahan (A) Japstyle",
                 "harga": 21000
             },
             {
-                "nama_kombinasi": "Bahan (B) Japstyle",
+                "nama_varia": "Bahan (B) Japstyle",
                 "harga": 18000
             },
             {
-                "nama_kombinasi": "Kombinasi Warna X-Ride (L) + ROTAN Warna",
+                "nama_varia": "Kombinasi Warna X-Ride (L) + ROTAN Warna",
                 "harga": 20500
             },
             {
-                "nama_kombinasi": "Kombinasi Warna X-Ride (L) TANPA ROTAN",
+                "nama_varia": "Kombinasi Warna X-Ride (L) TANPA ROTAN",
                 "harga": 19500
             }
         ]
