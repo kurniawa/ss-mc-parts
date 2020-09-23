@@ -4,52 +4,31 @@
         <div>
             <h2>Tipe: Sarung Jok Basic</h2>
         </div>
+        <div id="divArraySJBasic">
 
-        <input id="namaBahan" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan">
-
-        <!-- <input id="variasi2" class="input-1 mt-1em pb-1em" type="text" placeholder="Variasi"> -->
-
-        <div class="grid-1-auto mt-1em mb-0_5em">
-            <select name="variasi" id="variasi" class="pt-0_5em pb-0_5em" onchange="showNextVarian(this.value);">
-                <option value="" disabled selected>Pilih Variasi</option>
-            </select>
         </div>
 
-        <div id="divVariasiLG" class="grid-2-auto_10 mt-1em">
-            <select name="variasiLG" id="variasiLG" class="pt-0_5em pb-0_5em" onchange="showVariasiLG(this.value);">
-                <option value="" disabled selected>Pilih Variasi LOGO</option>
-            </select>
-            <span class="ui-icon ui-icon-closethick justify-self-center" onclick="closeVariasiLG();"></span>
-        </div>
-
-        <div id="divSelectVariasiBludru" class="grid-2-auto_10 mt-1em">
-            <select name="selectVariasiBludru" id="selectVariasiBludru" class="pt-0_5em pb-0_5em">
-                <option value="" disabled selected>Pilih Gambar Bludru</option>
-            </select>
-            <span class="ui-icon ui-icon-closethick justify-self-center" onclick="collapseAndReset(['#divSelectVariasiBludru', '#choseVariasiBludru'],['#selectVariasiBludru', '#variasiLG'])"></span>
-        </div>
-
-        <div id="divJumlah">
-            <input type="number" name="jumlah" id="inputJumlah" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
-        </div>
-
-        <div id="divSelectVariasiTato" class="grid-2-auto_10 mt-1em">
-            <select name="variasiTato" id="variasiTato" class="pt-0_5em pb-0_5em">
-                <option value="" disable selected>Pilih Variasi TATO</option>
-            </select>
-            <span class="ui-icon ui-icon-closethick justify-self-center"></span>
-        </div>
 
         <br><br>
 
         <div id="warning" class="d-none"></div>
 
-        <div id="divAvailableOptions" class="position-absolute bottom-5em">
+        <div id="divBtnKunciItem" class="grid-1-auto justify-items-center">
+            <div id="btnKunciItem" class="b-radius-50px bg-color-orange-1 pt-0_5em pb-0_5em pl-1em pr-1em">
+                <span class="ui-icon ui-icon-locked"></span>
+                <span class="font-weight-bold">kunci item</span>
+            </div>
+        </div>
+
+        <div id="divPilihanTambahItemSejenis" class="grid-1-auto m-1em">
+            <div id="divRadioPilihan" class="justify-self-center b-1px-solid-grey p-1em">
+            </div>
+        </div>
+
+        <div id="divAvailableOptions" class="position-absolute bottom-5em w-calc-100-1em">
             Available options:
             <div id="availableOptions">
-                <div id="choseVariasiBludru" class="pt-0_5em pb-0_5em pl-1em pr-1em b-radius-10px bg-color-soft-red d-none">
-                    Variasi Bludru
-                </div>
+
             </div>
 
         </div>
@@ -64,18 +43,23 @@
 </div>
 
 <script>
+    let indexSJBasic = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
+    let pilihanSJBasicSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
     let arrayBahan = new Array();
     let arrayVariasi = new Array();
-    let arrayVariasiLGBludru = new Array();
+    let arrayVariasiLG = [],
+        arrayGambarLGBludru = [],
+        arrayGambarLGPolimas = [],
+        arrayGambarLGSablon = [],
+        arrayGambarLGBayang = [],
+        arrayGambarLGStiker = [];
+
+    // console.log('Length divSJBasic: ' + $('div.divSJBasic').length);
+
     // let testArray = ["test1", "test1", "test1", "test1", "test1", "test1", "test1", "test1"];
 
     // console.log(testArray);
     $(document).ready(function() {
-        $("#divVariasiLG").css("display", "none");
-        $("#divSelectVariasiBludru").css("display", "none");
-        $("#divSelectVariasiTato").css("display", "none");
-        $("#choseVariasiBludru").css("display", "none");
-
 
         fetch('json/products.json').then(response => response.json()).then(data => {
             console.log(data);
@@ -83,27 +67,36 @@
                 console.log(bahan.nama_bahan);
                 arrayBahan.push(bahan.nama_bahan);
             }
-
             for (const variasi of data[0].variasi[0].jenis_variasi) {
                 console.log(variasi.nama);
                 arrayVariasi.push(variasi.nama);
-                $("#variasi").append('<option value="' + variasi.nama + '">' + variasi.nama + '</option>');
             }
             for (const variasiLG of data[0].variasi[0].jenis_variasi[1].jenis_logo) {
                 console.log(variasiLG.nama);
-                $("#variasiLG").append('<option value="' + variasiLG.nama + '">' + variasiLG.nama + '</option>');
+                arrayVariasiLG.push(variasiLG.nama);
             }
-            for (const variasiLGBludru of data[0].variasi[0].jenis_variasi[1].jenis_logo[0].gambar) {
-                arrayVariasiLGBludru.push(variasiLGBludru);
-                $("#selectVariasiBludru").append('<option value="' + variasiLGBludru + '">' + variasiLGBludru + '</option>');
+            for (const gambarLGBludru of data[0].variasi[0].jenis_variasi[1].jenis_logo[0].gambar) {
+                arrayGambarLGBludru.push(gambarLGBludru);
+            }
+            for (const gambarLGPolimas of data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar) {
+                // console.log(data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar);
+                arrayGambarLGPolimas.push(gambarLGPolimas);
+            }
+            for (const gambarLGSablon of data[0].variasi[0].jenis_variasi[1].jenis_logo[2].gambar) {
+                arrayGambarLGSablon.push(gambarLGSablon);
+            }
+            for (const gambarLGBayang of data[0].variasi[0].jenis_variasi[1].jenis_logo[3].gambar) {
+                arrayGambarLGBayang.push(gambarLGBayang);
+            }
+            for (const gambarLGStiker of data[0].variasi[0].jenis_variasi[1].jenis_logo[4].gambar) {
+                arrayGambarLGStiker.push(gambarLGStiker);
             }
         });
 
-        console.log(arrayBahan);
+        // console.log(arrayBahan);
 
-        $("#namaBahan").autocomplete({
-            source: arrayBahan
-        });
+        addSJBasic(); // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Basic pertama pada halaman web.
+        $('#divPilihanTambahItemSejenis').hide();
 
         // $("#variasi2").autocomplete({
         //     source: arrayVariasi
@@ -113,43 +106,169 @@
 
     });
 
-    function showNextVarian(value) {
-        console.log(value);
 
-        if (value === "LG") {
-            $("#divVariasiLG").toggle();
-            $("#divVariasiTATO").css("display", "none");
-        } else if (value === "TATO") {
-            $("#divVariasiTATO").toggle()
-            $("#divVariasiLG").css("display", "none");
-        }
-    }
+    function addSJBasic() {
+        let elementsToAppend =
+            `<div id="divSJBasic-${indexSJBasic}" class="divSJBasic b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
+                <input id="inputNamaBahan-${indexSJBasic}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">
+            </div>`;
 
-    function showVariasiLG(value) {
-        console.log(value);
-        if (value === "Bludru") {
-            $("#choseVariasiBludru").toggle();
-        }
+        $('#divArraySJBasic').append(elementsToAppend);
+
+        $("#inputNamaBahan-" + indexSJBasic).autocomplete({
+            source: arrayBahan,
+            select: function(event, ui) {
+                console.log(ui);
+                console.log(ui.item.value);
+                cekBahanAddSelectVariasi(ui.item.value, indexSJBasic);
+            }
+        });
+
     }
 
     function showSelectVariasiBludru() {
         $("#selectVariasiBludru").toggle();
     }
 
-    function closeVariasiLG() {
-        $("#variasi").prop("selectedIndex", 0);
-        document.getElementById("variasiLG").selectedIndex = 0;
-        $("#divVariasiLG").css("display", "none");
+    function cekBahanAddSelectVariasi(namaBahan) {
+        // console.log(namaBahan);
+        try {
+            arrayBahan.forEach(namaBahan2 => {
+                if (namaBahan === namaBahan2) {
+                    console.log('namaBahan1:' + namaBahan);
+                    console.log('namaBahan2:' + namaBahan2);
+                    // document.getElementById('divSelectVariasi').style.display = 'grid';
+
+                    let htmlSelectVariasi =
+                        `<div id="divSelectVariasi-${indexSJBasic}" class="grid-1-auto mt-1em mb-0_5em">
+                            <select name="selectVariasi-${indexSJBasic}" id="selectVariasi-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showNextVarian(this.value);">
+                                <option value="" disabled selected>Pilih Variasi</option>
+                            </select>
+                        </div>`;
+
+                    $('#divSJBasic-' + indexSJBasic).append(htmlSelectVariasi);
+
+                    arrayVariasi.forEach(variasi => {
+                        $("#selectVariasi-" + indexSJBasic).append('<option value="' + variasi + '">' + variasi + '</option>');
+                    });
+
+                    throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
+                } else {
+                    console.log("Nama Bahan not found!")
+                    $('#divSelectVariasi-' + indexSJBasic).remove();
+                }
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
-    document.getElementById("choseVariasiBludru").addEventListener('click', () => {
-        toggleShowElement(['#divSelectVariasiBludru']);
-        $("#choseVariasiBludru").css("display", "none");
-    });
+    function showNextVarian(variasi) {
+        console.log(variasi);
+        if (variasi === "" || variasi === "Polos") {
 
-    document.getElementById('selectVariasiBludru').addEventListener('change', () => {
+            $("#divSelectVariasiLG-" + indexSJBasic).remove();
+            $("#divSelectVariasiTato-" + indexSJBasic).remove();
 
-    });
+        } else if (variasi === "LG") {
+
+            let htmlVariasiLG =
+                `<div id="divSelectVariasiLG-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
+                    <select name="selectVariasiLG-${indexSJBasic}" id="selectVariasiLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions(this.value);">
+                        <option value="" disabled selected>Pilih Variasi LOGO</option>
+                    </select>
+                    <span class="ui-icon ui-icon-closethick justify-self-center" onclick="closeVariasiLGTato();"></span>
+                </div>`;
+
+            $('#divSJBasic-' + indexSJBasic).append(htmlVariasiLG);
+
+            arrayVariasiLG.forEach(variasiLG => {
+                $("#selectVariasiLG-" + indexSJBasic).append('<option value="' + variasiLG + '">' + variasiLG + '</option>');
+            });
+
+            pilihanSJBasicSejenis[0] =
+                `<input type="radio" name="radioTambahItemSejenis" id=""> Beda gambar LOGO`;
+            pilihanSJBasicSejenis[1] = "";
+
+            $("#divSelectVariasiTato-" + indexSJBasic).remove();
+
+        } else if (variasi === "TATO") {
+
+            let htmlVariasiTATO =
+                `<div id="divSelectVariasiTato-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
+                    <select name="selectVariasiTato-${indexSJBasic}" id="selectVariasiTato-${indexSJBasic}" class="pt-0_5em pb-0_5em">
+                        <option value="" disable selected>Pilih Variasi TATO</option>
+                    </select>
+                    <span class="ui-icon ui-icon-closethick justify-self-center"></span>
+                </div>`;
+
+            $('#divSJBasic-' + indexSJBasic).append(htmlVariasiTATO);
+
+            pilihanSJBasicSejenis[0] = "";
+            pilihanSJBasicSejenis[1] =
+                `<input type="radio" name="radioTambahItemSejenis" id=""> Beda gambar TATO`;
+
+            $("#divSelectVariasiLG-" + indexSJBasic).remove();
+
+        }
+    }
+
+    function showBoxAvailableOptions(value) {
+        let htmlBox;
+        if (value === "Bludru") {
+            let htmlBoxGambarLGBludru =
+                `<div id="choseVariasiBludru" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick="showOptionsOfVariasiLG(this.id, '${value}');">
+                    Gambar LG Bludru
+                </div>`;
+            $('#availableOptions').html(htmlBoxGambarLGBludru);
+
+        } else if (value === "jumlah") {
+            htmlBox =
+                `<div id="choseJumlah" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red box-sizing-border-box" onclick="showInputJumlah('#'+this.id);">
+                    Jumlah
+                </div>`;
+            $('#availableOptions').html(htmlBox);
+        }
+    }
+
+    function showInputJumlah(idToRemove) {
+        let htmlInputJumlah =
+            `<div id="divJumlah-${indexSJBasic}" class="mt-1em">
+                    <input type="number" name="jumlah-${indexSJBasic}" id="inputJumlah-${indexSJBasic}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
+                </div>`;
+        $('#divSJBasic-' + indexSJBasic).append(htmlInputJumlah);
+
+        $(idToRemove).remove();
+
+    }
+
+    function closeVariasiLGTato() {
+        $("#selectVariasi-" + indexSJBasic).prop("selectedIndex", 0);
+        $('#divSelectVariasiLG-' + indexSJBasic).remove();
+        $('#divSelectVariasiTato-' + indexSJBasic).remove();
+    }
+
+    function showOptionsOfVariasiLG(idToRemove, value) {
+        console.log(idToRemove, value);
+        if (value === "Bludru") {
+
+            let htmlVariasiLGBludru =
+                `<div id="divSelectVariasiLGBludru-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
+                    <select name="selectVariasiLGBludru-${indexSJBasic}" id="selectVariasiLGBludru-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('jumlah')">
+                        <option value="" disabled selected>Pilih Gambar Bludru</option>
+                    </select>
+                    <span class="ui-icon ui-icon-closethick justify-self-center" onclick="collapseAndReset(['#divSelectVariasiBludru-${indexSJBasic}', '#choseVariasiBludru-${indexSJBasic}'],['#selectVariasiBludru-${indexSJBasic}', '#selectVariasiLG-${indexSJBasic}'])"></span>
+                </div>`;
+
+            $("#divSJBasic-" + indexSJBasic).append(htmlVariasiLGBludru);
+            arrayGambarLGBludru.forEach(gambarLGBludru => {
+                $("#selectVariasiLGBludru-" + indexSJBasic).append('<option value="' + gambarLGBludru + '">' + gambarLGBludru + '</option>');
+            });
+
+            $('#' + idToRemove).remove();
+
+        }
+    }
 
     function toggleShowElement(idAll, time) {
         idAll.forEach(id => {
@@ -168,6 +287,13 @@
             $(idElement).css("display", "none");
         });
     }
+
+    document.getElementById('btnKunciItem').addEventListener('click', () => {
+        let htmlRadioToAppend = pilihanSJBasicSejenis[0] + pilihanSJBasicSejenis[1];
+        $('#divRadioPilihan').html(htmlRadioToAppend);
+        $('#divPilihanTambahItemSejenis').show();
+
+    });
 
     function insertNewProduct() {
 

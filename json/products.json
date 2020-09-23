@@ -152,7 +152,10 @@
                                 ]
                             },
                             {
-                                "nama": "Polimas"
+                                "nama": "Polimas",
+                                "gambar": [
+                                    "test"
+                                ]
                             },
                             {
                                 "nama": "Sablon",
@@ -166,7 +169,10 @@
                                 ]
                             },
                             {
-                                "nama": "Bayang"
+                                "nama": "Bayang",
+                                "gambar": [
+                                    "test"
+                                ]
                             },
                             {
                                 "nama": "Stiker",
