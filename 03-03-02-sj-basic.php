@@ -43,6 +43,7 @@
 </div>
 
 <script>
+    let sjBasic = [{}];
     let indexSJBasic = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
     let pilihanSJBasicSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
     let arrayBahan = new Array();
@@ -53,6 +54,10 @@
         arrayGambarLGSablon = [],
         arrayGambarLGBayang = [],
         arrayGambarLGStiker = [];
+
+    // ini nantinya untuk menampung id - id element yang mau di remove ata di reset
+    let idElementToRemove;
+    let idElementToReset;
 
     // console.log('Length divSJBasic: ' + $('div.divSJBasic').length);
 
@@ -121,6 +126,11 @@
                 console.log(ui);
                 console.log(ui.item.value);
                 cekBahanAddSelectVariasi(ui.item.value, indexSJBasic);
+                // sjBasic.push({
+                //     'nama_bahan': ui.item.value
+                // });
+                sjBasic[indexSJBasic]['nama_bahan'] = ui.item.value;
+                console.log(sjBasic);
             }
         });
 
@@ -167,18 +177,35 @@
         console.log(variasi);
         if (variasi === "" || variasi === "Polos") {
 
-            $("#divSelectVariasiLG-" + indexSJBasic).remove();
-            $("#divSelectVariasiTato-" + indexSJBasic).remove();
+            idElementToRemove = [{
+                'id': `#divSelectVariasiLG-${indexSJBasic}`
+            }, {
+                'id': `#divSelectVariasiTato-${indexSJBasic}`
+            }, {
+                'id': `#divJumlah-${indexSJBasic}`
+            }];
+
+            removeElement(JSON.stringify(idElementToRemove));
+
 
         } else if (variasi === "LG") {
+            idElementToRemove = [{
+                'id': `#divSelectVariasiLG-${indexSJBasic}`
+            }, {
+                'id': `#divJumlah-${indexSJBasic}`
+            }];
+            console.log(idElementToRemove);
+            idElementToReset = [{
+                'id': `#selectVariasi-${indexSJBasic}`
+            }];
 
             let htmlVariasiLG =
                 `<div id="divSelectVariasiLG-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
                     <select name="selectVariasiLG-${indexSJBasic}" id="selectVariasiLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions(this.value);">
                         <option value="" disabled selected>Pilih Variasi LOGO</option>
                     </select>
-                    <span class="ui-icon ui-icon-closethick justify-self-center" onclick="closeVariasiLGTato();"></span>
-                </div>`;
+                    <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + JSON.stringify(idElementToRemove) + ");resetElement(" + JSON.stringify(idElementToReset) + ");'></span>" +
+                '</div>';
 
             $('#divSJBasic-' + indexSJBasic).append(htmlVariasiLG);
 
@@ -211,13 +238,18 @@
             $("#divSelectVariasiLG-" + indexSJBasic).remove();
 
         }
+
+        sjBasic[indexSJBasic]['variasi'] = {
+            'nama': variasi
+        };
+        console.log(sjBasic);
     }
 
     function showBoxAvailableOptions(value) {
         let htmlBox;
         if (value === "Bludru") {
             let htmlBoxGambarLGBludru =
-                `<div id="choseVariasiBludru" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick="showOptionsOfVariasiLG(this.id, '${value}');">
+                `<div id="choseVariasiBludru" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick="showOptionsOfVariasiLG('${value}');">
                     Gambar LG Bludru
                 </div>`;
             $('#availableOptions').html(htmlBoxGambarLGBludru);
@@ -242,14 +274,33 @@
 
     }
 
-    function closeVariasiLGTato() {
-        $("#selectVariasi-" + indexSJBasic).prop("selectedIndex", 0);
-        $('#divSelectVariasiLG-' + indexSJBasic).remove();
-        $('#divSelectVariasiTato-' + indexSJBasic).remove();
+    function removeElement(idElements) {
+        // idElements = JSON.parse(idElements);
+        console.log(idElements);
+        console.log(idElements[0].id);
+        for (const element of idElements) {
+            $(element.id).remove();
+        }
     }
 
-    function showOptionsOfVariasiLG(idToRemove, value) {
-        console.log(idToRemove, value);
+    function resetElement(idElements) {
+        for (const element of idElements) {
+            $(element.id).prop('selectedIndex', 0);
+        }
+    }
+
+    function showOptionsOfVariasiLG(value) {
+        idElementToRemove = [{
+            'id': `#divSelectVariasiLGBludru-${indexSJBasic}`
+        }, {
+            'id': `#divJumlah-${indexSJBasic}`
+        }];
+        idElementToRemove = JSON.stringify(idElementToRemove);
+        idElementToReset = [{
+            'id': `#selectVariasiLG-${indexSJBasic}`
+        }];
+        idElementToReset = JSON.stringify(idElementToReset);
+
         if (value === "Bludru") {
 
             let htmlVariasiLGBludru =
@@ -257,17 +308,16 @@
                     <select name="selectVariasiLGBludru-${indexSJBasic}" id="selectVariasiLGBludru-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('jumlah')">
                         <option value="" disabled selected>Pilih Gambar Bludru</option>
                     </select>
-                    <span class="ui-icon ui-icon-closethick justify-self-center" onclick="collapseAndReset(['#divSelectVariasiBludru-${indexSJBasic}', '#choseVariasiBludru-${indexSJBasic}'],['#selectVariasiBludru-${indexSJBasic}', '#selectVariasiLG-${indexSJBasic}'])"></span>
-                </div>`;
+                    <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + idElementToRemove + "); resetElement(" + idElementToReset + ");'></span>" +
+                "</div>";
 
             $("#divSJBasic-" + indexSJBasic).append(htmlVariasiLGBludru);
             arrayGambarLGBludru.forEach(gambarLGBludru => {
                 $("#selectVariasiLGBludru-" + indexSJBasic).append('<option value="' + gambarLGBludru + '">' + gambarLGBludru + '</option>');
             });
 
-            $('#' + idToRemove).remove();
-
         }
+
     }
 
     function toggleShowElement(idAll, time) {
@@ -275,16 +325,6 @@
             if ($(id).css("display") === "none") {
                 $(id).toggle(time);
             }
-        });
-    }
-
-    function collapseAndReset(idToCollapse, idToReset) {
-        idToReset.forEach(idElement => {
-            $(idElement).prop("selectedIndex", 0);
-            // document.getElementById(idElement).selectedIndex = 0;
-        });
-        idToCollapse.forEach(idElement => {
-            $(idElement).css("display", "none");
         });
     }
 
