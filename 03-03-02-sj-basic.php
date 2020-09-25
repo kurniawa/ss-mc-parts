@@ -183,9 +183,12 @@
                 'id': `#divSelectVariasiTato-${indexSJBasic}`
             }, {
                 'id': `#divJumlah-${indexSJBasic}`
+            }, {
+                'id': `#choseVariasiBludru`
             }];
 
             removeElement(JSON.stringify(idElementToRemove));
+            showBoxAvailableOptions("Jumlah");
 
 
         } else if (variasi === "LG") {
@@ -201,7 +204,7 @@
 
             let htmlVariasiLG =
                 `<div id="divSelectVariasiLG-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
-                    <select name="selectVariasiLG-${indexSJBasic}" id="selectVariasiLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions(this.value);">
+                    <select name="selectVariasiLG-${indexSJBasic}" id="selectVariasiLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('LG'+this.value);">
                         <option value="" disabled selected>Pilih Variasi LOGO</option>
                     </select>
                     <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + JSON.stringify(idElementToRemove) + ");resetElement(" + JSON.stringify(idElementToReset) + ");'></span>" +
@@ -246,20 +249,54 @@
     }
 
     function showBoxAvailableOptions(value) {
+        let divID = `box${value}`;
+        let text = '';
         let htmlBox;
-        if (value === "Bludru") {
-            let htmlBoxGambarLGBludru =
-                `<div id="choseVariasiBludru" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick="showOptionsOfVariasiLG('${value}');">
-                    Gambar LG Bludru
-                </div>`;
-            $('#availableOptions').html(htmlBoxGambarLGBludru);
+        if (value === "LGBludru") {
 
-        } else if (value === "jumlah") {
+            let htmlBoxGambarLGBludru =
+                '<div id="choseVariasiBludru" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"' +
+                `onclick='showOptionsOfVariasiLG("${value}");'>` +
+                'Gambar LG Bludru' +
+                '</div>';
+            $('#availableOptions').append(htmlBoxGambarLGBludru);
+            text = 'Gambar LG Bludru'
+
+        } else if (value === "LGPolimas") {
+            let htmlBoxGambarLGPolimas =
+                '<div id="choseVariasiPolimas" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"' +
+                `onclick='showOptionsOfVariasiLG("${value}");'>` +
+                'Gambar LG Polimas' +
+                '</div>';
+            $('#availableOptions').append(htmlBoxGambarLGPolimas);
+
+        } else if (value === "LGSablon") {
+            let htmlBoxGambarLGSablon =
+                '<div id="choseVariasiSablon" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"' +
+                `onclick='showOptionsOfVariasiLG("${value}");'>` +
+                'Gambar LG Sablon' +
+                '</div>';
+            $('#availableOptions').append(htmlBoxGambarLGSablon);
+        } else if (value === "LGBayang") {
+            let htmlBoxGambarLGBayang =
+                '<div id="choseVariasiBayang" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"' +
+                `onclick='showOptionsOfVariasiLG("${value}");'>` +
+                'Gambar LG Bayang' +
+                '</div>';
+            $('#availableOptions').append(htmlBoxGambarLGBayang);
+        } else if (value === "LGStiker") {
+            let htmlBoxGambarLGStiker =
+                '<div id="choseVariasiStiker" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"' +
+                `onclick='showOptionsOfVariasiLG("${value}");'>` +
+                'Gambar LG Stiker' +
+                '</div>';
+            $('#availableOptions').append(htmlBoxGambarLGStiker);
+        } else if (value === "Jumlah") {
             htmlBox =
-                `<div id="choseJumlah" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red box-sizing-border-box" onclick="showInputJumlah('#'+this.id);">
+                `<div id="choseJumlah" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick="showInputJumlah('#'+this.id);">
                     Jumlah
                 </div>`;
-            $('#availableOptions').html(htmlBox);
+            $('#availableOptions').append(htmlBox);
         }
     }
 
@@ -272,6 +309,54 @@
 
         $(idToRemove).remove();
 
+    }
+
+    function showOptionsOfVariasiLG(value) {
+        let divID = `divSelectVariasiLG${value}-${indexSJBasic}`;
+        let selectID = `selectVariasiLG${value}-${indexSJBasic}`;
+        let selectName = selectID;
+        let text = `Pilih Gambar ${value}`;
+        let idBoxToRemove = `#choseVariasi${value}`;
+        let arrayGambarToAppend = [];
+
+        idElementToRemove = [{
+            'id': `#${divID}`
+        }, {
+            'id': `#divJumlah-${indexSJBasic}`
+        }];
+        idElementToRemove = JSON.stringify(idElementToRemove);
+        idElementToReset = [{
+            'id': `#selectVariasiLG-${indexSJBasic}`
+        }];
+        idElementToReset = JSON.stringify(idElementToReset);
+
+        let htmlToAppend =
+            `<div id="${divID}" class="grid-2-auto_10 mt-1em">
+                    <select name="${selectName}" id="${selectID}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('jumlah')">
+                        <option value="" disabled selected>${text}</option>
+                    </select>
+                    <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + idElementToRemove + "); resetElement(" + idElementToReset + ");'></span>" +
+            "</div>";
+
+        $("#divSJBasic-" + indexSJBasic).append(htmlToAppend);
+
+        if (value === "Bludru") {
+            arrayGambarToAppend = arrayGambarLGBludru;
+        } else if (value === "Polimas") {
+            arrayGambarToAppend = arrayGambarLGPolimas;
+        } else if (value === "Sablon") {
+            arrayGambarToAppend = arrayGambarLGSablon;
+        } else if (value === "Bayang") {
+            arrayGambarToAppend = arrayGambarLGBayang;
+        } else if (value === "Stiker") {
+            arrayGambarToAppend = arrayGambarLGStiker;
+        }
+
+        arrayGambarToAppend.forEach(gambarLG => {
+            $(`#${selectID}`).append('<option value="' + gambarLG + '">' + gambarLG + '</option>');
+        });
+
+        $(idBoxToRemove).remove();
     }
 
     function removeElement(idElements) {
@@ -287,37 +372,6 @@
         for (const element of idElements) {
             $(element.id).prop('selectedIndex', 0);
         }
-    }
-
-    function showOptionsOfVariasiLG(value) {
-        idElementToRemove = [{
-            'id': `#divSelectVariasiLGBludru-${indexSJBasic}`
-        }, {
-            'id': `#divJumlah-${indexSJBasic}`
-        }];
-        idElementToRemove = JSON.stringify(idElementToRemove);
-        idElementToReset = [{
-            'id': `#selectVariasiLG-${indexSJBasic}`
-        }];
-        idElementToReset = JSON.stringify(idElementToReset);
-
-        if (value === "Bludru") {
-
-            let htmlVariasiLGBludru =
-                `<div id="divSelectVariasiLGBludru-${indexSJBasic}" class="grid-2-auto_10 mt-1em">
-                    <select name="selectVariasiLGBludru-${indexSJBasic}" id="selectVariasiLGBludru-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('jumlah')">
-                        <option value="" disabled selected>Pilih Gambar Bludru</option>
-                    </select>
-                    <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + idElementToRemove + "); resetElement(" + idElementToReset + ");'></span>" +
-                "</div>";
-
-            $("#divSJBasic-" + indexSJBasic).append(htmlVariasiLGBludru);
-            arrayGambarLGBludru.forEach(gambarLGBludru => {
-                $("#selectVariasiLGBludru-" + indexSJBasic).append('<option value="' + gambarLGBludru + '">' + gambarLGBludru + '</option>');
-            });
-
-        }
-
     }
 
     function toggleShowElement(idAll, time) {
