@@ -60,31 +60,6 @@
     let idElementToRemove;
     let idElementToReset;
 
-    let pathBehavior = [{
-        'select': [{
-            'value': ''
-        }]
-    }, {
-        'select': [{
-            'value': 'Polos'
-        }]
-    }];
-
-    let webBehaviorCreateElement = [
-        'inputBahan',
-        ['', 'Polos', 'LG', 'Tato'],
-        ['', ['boxJumlah', 'boxJhtKepala'],
-            ['selectTipeLG'],
-            ['selectTipeTato']
-        ],
-        ['', [
-            ['inputJumlah', 'removeBoxJumlah'],
-            ['selectTipeJahit', 'removeBoxJht']
-        ]]
-    ];
-
-    console.log(webBehaviorCreateElement);
-    let webBehaviorRemoveElement = ['removeSelectVariasi', 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
 
     // console.log('Length divSJBasic: ' + $('div.divSJBasic').length);
 
@@ -130,7 +105,6 @@
 
         // console.log(arrayBahan);
 
-        addSJBasic(); // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Basic pertama pada halaman web.
         $('#divPilihanTambahItemSejenis').hide();
 
         // $("#variasi2").autocomplete({
@@ -141,12 +115,88 @@
 
     });
 
+    let webBehaviorCreateElement = [
+        ['createElement', '', 'inputBahan'],
+        ['', 'Polos', 'LG', 'Tato'],
+        ['', ['boxJumlah', 'boxJhtKepala'],
+            ['selectTipeLG'],
+            ['selectTipeTato']
+        ],
+        ['', [
+            ['inputJumlah', 'removeBoxJumlah'],
+            ['selectTipeJahit', 'removeBoxJht']
+        ]]
+    ];
+
+    console.log(webBehaviorCreateElement);
+    let webBehaviorRemoveElement = ['removeSelectVariasi', 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
+
+    let elementHTML = [
+        `<input id="inputBahan-${indexSJBasic}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">`,
+
+        `<div id="divSelectVariasi-${indexSJBasic}" class="grid-1-auto mt-1em mb-0_5em">
+            <select name="selectVariasi-${indexSJBasic}" id="selectVariasi-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showNextVarian(this.value);">
+                <option value="" disabled selected>Pilih Variasi</option>
+            </select>
+        </div>`
+    ];
+
+    async function pilihFungsi(namaFungsi, divID, elementHTML, elementName) {
+        window[namaFungsi](divID, elementHTML, elementName);
+        console.log('pilih fungsi dijalankan: ' + namaFungsi + '\n' + divID + '\n' + elementHTML);
+    }
+
+    function createElement(divID, elementHTML, elementName) {
+        console.log('running create Element');
+        console.log(divID + ' ' + elementHTML);
+        console.log('elementName: ' + elementName);
+        $(divID).html(elementHTML);
+
+        if (elementName === 'inputBahan') {
+            $("#inputBahan-" + indexSJBasic).autocomplete({
+                source: arrayBahan,
+                select: function(event, ui) {
+                    console.log(ui);
+                    console.log(ui.item.value);
+                    cekBahanAddSelectVariasi(ui.item.value, indexSJBasic);
+                    // sjBasic.push({
+                    //     'nama_bahan': ui.item.value
+                    // });
+                    sjBasic[indexSJBasic]['nama_bahan'] = ui.item.value;
+                    console.log('sjBasic: ' + sjBasic);
+                }
+            });
+
+        } else if (elementName === 'selectPolosLGTato') {
+            arrayVariasi.forEach(variasi => {
+                $("#selectVariasi-" + indexSJBasic).append('<option value="' + variasi + '">' + variasi + '</option>');
+            });
+        }
+    }
+
+    asyn
+
+    function removeElement(params) {
+
+    }
+
+    function resetElement(params) {
+
+    }
+
+    // addSJBasic().then(function(resolve) {
+    //     pilihFungsi('createElement', `#divInputBahan-${indexSJBasic}`, elementHTML[0], 'inputBahan');
+    // });
+    addSJBasic();
+    pilihFungsi('createElement', `#divInputBahan-${indexSJBasic}`, elementHTML[0], 'inputBahan');
+
+    // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Basic pertama pada halaman web.
+
 
     function addSJBasic() {
         let elementsToAppend =
             `<div id="divSJBasic-${indexSJBasic}" class="divSJBasic b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
-                <input id="inputNamaBahan-${indexSJBasic}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">
-
+                <div id='divInputBahan-${indexSJBasic}'></div>
                 <div id='divPolosLGTato-${indexSJBasic}'></div>
                 <div id='divJenisLGTato-${indexSJBasic}'></div>
                 <div id='divGambar-${indexSJBasic}'></div>
@@ -156,20 +206,7 @@
 
         $('#divArraySJBasic').append(elementsToAppend);
 
-        $("#inputNamaBahan-" + indexSJBasic).autocomplete({
-            source: arrayBahan,
-            select: function(event, ui) {
-                console.log(ui);
-                console.log(ui.item.value);
-                cekBahanAddSelectVariasi(ui.item.value, indexSJBasic);
-                // sjBasic.push({
-                //     'nama_bahan': ui.item.value
-                // });
-                sjBasic[indexSJBasic]['nama_bahan'] = ui.item.value;
-                console.log(sjBasic);
-            }
-        });
-
+        return true;
     }
 
     function cekBahanAddSelectVariasi(namaBahan) {
@@ -181,23 +218,12 @@
                     console.log('namaBahan2:' + namaBahan2);
                     // document.getElementById('divSelectVariasi').style.display = 'grid';
 
-                    let htmlSelectVariasi =
-                        `<div id="divSelectVariasi-${indexSJBasic}" class="grid-1-auto mt-1em mb-0_5em">
-                            <select name="selectVariasi-${indexSJBasic}" id="selectVariasi-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="showNextVarian(this.value);">
-                                <option value="" disabled selected>Pilih Variasi</option>
-                                <option value="">-</option>
-                            </select>
-                        </div>`;
-
-                    $('#divPolosLGTato-' + indexSJBasic).html(htmlSelectVariasi);
-
-                    arrayVariasi.forEach(variasi => {
-                        $("#selectVariasi-" + indexSJBasic).append('<option value="' + variasi + '">' + variasi + '</option>');
-                    });
+                    pilihFungsi('createElement', `#divPolosLGTato-${indexSJBasic}`, elementHTML[1], 'selectPolosLGTato');
 
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
                     console.log("Nama Bahan not found!")
+                    pilihFungsi('removeElement')
                     $('#divSelectVariasi-' + indexSJBasic).remove();
                 }
             });
@@ -374,7 +400,7 @@
         $(idBoxToRemove).remove();
     }
 
-    function removeElement(idElements) {
+    function removeElement2(idElements) {
         idElements = JSON.parse(idElements);
         console.log(idElements);
         console.log(idElements[0].id);
@@ -383,7 +409,7 @@
         }
     }
 
-    function resetElement(idElements) {
+    function resetElement2(idElements) {
         for (const element of idElements) {
             $(element.id).prop('selectedIndex', 0);
         }

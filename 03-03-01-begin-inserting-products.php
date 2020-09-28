@@ -69,5 +69,5 @@
 </script>
 
 <?php
-include_once "03-03-02-sj-basic.php";
+include_once "03-03-02-sj-basic-new.php";
 ?>
