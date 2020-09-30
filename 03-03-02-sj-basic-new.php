@@ -48,15 +48,16 @@
     let pilihanSJBasicSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
     let arrayBahan = new Array();
     let arrayVariasi = new Array();
-    let arrayVariasiLG = [],
+    let arrayJenisLG = [],
         arrayGambarLGBludru = [],
         arrayGambarLGPolimas = [],
         arrayGambarLGSablon = [],
         arrayGambarLGBayang = [],
         arrayGambarLGStiker = [],
-        arrayJhtKepala = [];
+        arrayJht = [],
+        arrayJenisTato = [];
 
-    // ini nantinya untuk menampung id - id element yang mau di remove ata di reset
+    // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
     let idElementToRemove;
     let idElementToReset;
 
@@ -71,16 +72,16 @@
         fetch('json/products.json').then(response => response.json()).then(data => {
             console.log(data);
             for (const bahan of data[0].bahan) {
-                console.log(bahan.nama_bahan);
+                // console.log(bahan.nama_bahan);
                 arrayBahan.push(bahan.nama_bahan);
             }
             for (const variasi of data[0].variasi[0].jenis_variasi) {
-                console.log(variasi.nama);
+                // console.log(variasi.nama);
                 arrayVariasi.push(variasi.nama);
             }
-            for (const variasiLG of data[0].variasi[0].jenis_variasi[1].jenis_logo) {
-                console.log(variasiLG.nama);
-                arrayVariasiLG.push(variasiLG.nama);
+            for (const jenisLG of data[0].variasi[0].jenis_variasi[1].jenis_logo) {
+                // console.log(jenisLG.nama);
+                arrayJenisLG.push(jenisLG.nama);
             }
             for (const gambarLGBludru of data[0].variasi[0].jenis_variasi[1].jenis_logo[0].gambar) {
                 arrayGambarLGBludru.push(gambarLGBludru);
@@ -98,8 +99,11 @@
             for (const gambarLGStiker of data[0].variasi[0].jenis_variasi[1].jenis_logo[4].gambar) {
                 arrayGambarLGStiker.push(gambarLGStiker);
             }
-            for (const jhtKepala of data[0].jahit[0].tipe_jht) {
-                arrayJhtKepala.push(jhtKepala);
+            for (const jht of data[0].jahit[0].tipe_jht) {
+                arrayJht.push(jht);
+            }
+            for (const jenisTato of data[0].variasi[0].jenis_variasi[2].jenis_tato) {
+
             }
         });
 
@@ -119,10 +123,10 @@
         let elementsToAppend =
             `<div id="divSJBasic-${indexSJBasic}" class="divSJBasic b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
                 <div id='divInputBahan-${indexSJBasic}'></div>
-                <div id='divPolosLGTato-${indexSJBasic}' class="grid-1-auto mt-1em mb-0_5em"></div>
-                <div id='divJenisLGTato-${indexSJBasic}' class="grid-2-auto_10 mt-1em"></div>
+                <div id='divPolosLGTato-${indexSJBasic}'></div>
+                <div id='divJenisLGTato-${indexSJBasic}'></div>
                 <div id='divGambar-${indexSJBasic}'></div>
-                <div id='divJahitKepala-${indexSJBasic}'></div>
+                <div id='divJht-${indexSJBasic}'></div>
                 <div id='divJumlah-${indexSJBasic}'></div>
             </div>`;
 
@@ -132,14 +136,22 @@
     let indexElementSystem = 0;
     let elementSystem = [
         [`#divInputBahan-${indexSJBasic}`, `#inputBahan-${indexSJBasic}`],
-        [`#divPolosLGTato-${indexSJBasic}`, `#selectPolosLGTato-${indexSJBasic}`],
+        [`#divPolosLGTato-${indexSJBasic}`, `#divSelectPolosLGTato-${indexSJBasic}`],
         [
             [
                 [`#availableOptions`, `#boxJumlah`],
                 [`#availableOptions`, `#boxJht`]
             ],
-            [`#divJenisLGTato-${indexSJBasic}`, `#selectJenisLG-${indexSJBasic}`],
-            [`#divJenisLGTato-${indexSJBasic}`, `#selectJenisTato-${indexSJBasic}`]
+            [`#divJenisLGTato-${indexSJBasic}`, `#divSelectJenisLG-${indexSJBasic}`],
+            [`#divJenisLGTato-${indexSJBasic}`, `#divSelectJenisTato-${indexSJBasic}`]
+        ],
+        [
+            [
+                [`#divJumlah-${indexSJBasic}`, `#divInputJumlah-${indexSJBasic}`],
+                [`#divJht-${indexSJBasic}`, `#divSelectJht-${indexSJBasic}`]
+            ],
+            [``, ``],
+            [``, ``]
         ],
         ['', ['boxJumlah', 'boxJhtKepala'],
             ['selectTipeLG'],
@@ -151,39 +163,62 @@
         ]]
     ];
 
-    console.log(elementSystem);
+    // console.log(elementSystem);
     let removeElementSystem = [`#selectPolosLGTato-${indexSJBasic}`, 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
 
     let htmlBoxJumlah =
-        `<div id="boxJumlah" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='showOptionsOfVariasiLG("Jumlah");'>
+        `<div id="boxJumlah" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Jumlah");'>
         Jumlah
     </div>`;
 
     let htmlBoxJht =
-        `<div id="boxJht" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='showOptionsOfVariasiLG("Jumlah");'>
+        `<div id="boxJht" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Jht");'>
         + Jahit
     </div>`;
+
+    let htmlDivInputJumlah =
+        `<div id="divInputJumlah-${indexSJBasic}" class="mt-1em">
+            <input type="number" name="jumlah-${indexSJBasic}" id="inputJumlah-${indexSJBasic}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
+        </div>`;
+
+    let htmlDivSelectJht =
+        `<div id='divSelectJht-${indexSJBasic}' class="grid-2-auto_10 mt-1em">
+            <select name="selectJht-${indexSJBasic}" id="selectJht-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="cekLGAddJenisLG(this.value);">
+                <option value="" disabled selected>Pilih Jenis Jahit</option>
+            </select>
+            <span class="ui-icon ui-icon-closethick justify-self-center" onclick=></span>
+        </div>`;
 
     let elementHTML = [
         `<input id="inputBahan-${indexSJBasic}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">`,
 
-        `<select name="selectPolosLGTato-${indexSJBasic}" id="selectPolosLGTato-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="cekPolosLGTatoAddJenisLGTato(this.value);">
-            <option value="" disabled selected>Pilih Variasi</option>
-        </select>`,
+        `<div id='divSelectPolosLGTato-${indexSJBasic}' class="grid-1-auto mt-1em mb-0_5em">
+            <select name="selectPolosLGTato-${indexSJBasic}" id="selectPolosLGTato-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="cekPolosLGTatoAddJenisLGTato(this.value);">
+                <option value="" disabled selected>Pilih Variasi</option>
+            </select>
+        </div>`,
 
         [
             [htmlBoxJumlah, htmlBoxJht],
-            [
-                `<select name="selectVariasiLG-${indexSJBasic}" id="selectVariasiLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="cekLGAddJenisLG(this.value);">
-                    <option value="" disabled selected>Pilih Variasi LOGO</option>
-                </select>
-                <span class="ui-icon ui-icon-closethick justify-self-center" onclick=></span>`,
 
-                `<select name="selectVariasiTato-${indexSJBasic}" id="selectVariasiTato-${indexSJBasic}" class="pt-0_5em pb-0_5em">
-                    <option value="" disable selected>Pilih Variasi TATO</option>
+            `<div id='divSelectJenisLG-${indexSJBasic}' class="grid-2-auto_10 mt-1em">
+                <select name="selectJenisLG-${indexSJBasic}" id="selectJenisLG-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange="cekLGAddJenisLG(this.value);">
+                    <option value="" disabled selected>Pilih Jenis LOGO</option>
                 </select>
-                <span class="ui-icon ui-icon-closethick justify-self-center"></span>`
-            ]
+                <span class="ui-icon ui-icon-closethick justify-self-center" onclick=></span>
+                </div>`,
+
+            `<div id='divSelectJenisTato-${indexSJBasic}' class="grid-2-auto_10 mt-1em">
+                <select name="selectJenisTato-${indexSJBasic}" id="selectJenisTato-${indexSJBasic}" class="pt-0_5em pb-0_5em" onchange='cekTatoAddJenisTato(this.value);'>
+                    <option value="" disable selected>Pilih Jenis TATO</option>
+                </select>
+                <span class="ui-icon ui-icon-closethick justify-self-center"></span>
+                </div>`
+
+        ],
+        [
+            [htmlDivInputJumlah, htmlDivSelectJht],
+
         ]
 
     ];
@@ -219,15 +254,23 @@
                 }
             });
 
-        } else if (elementID === `#selectPolosLGTato-${indexSJBasic}`) {
+        } else if (elementID === `#divSelectPolosLGTato-${indexSJBasic}`) {
             arrayVariasi.forEach(variasi => {
                 $("#selectPolosLGTato-" + indexSJBasic).append('<option value="' + variasi + '">' + variasi + '</option>');
             });
+        } else if (elementID === `#divSelectJht-${indexSJBasic}`) {
+            arrayJht.forEach(tipeJht => {
+                $("#selectJht-" + indexSJBasic).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+            });
+        } else if (elementID === `#divSelectJenisLG-${indexSJBasic}`) {
+            arrayJenisLG.forEach(tipeJht => {
+                $("#selectJenisLG-" + indexSJBasic).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+            });
+        } else if (elementID === `#divSelectJenisTato-${indexSJBasic}`) {
+            arrayJenisTato.forEach(tipeJht => {
+                $("#selectJenisTato-" + indexSJBasic).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+            });
         }
-    }
-
-    function removeElement(divID, elementID, nothing) {
-        $(elementID).remove();
     }
 
     function resetElement(params) {
@@ -246,19 +289,16 @@
                 if (namaBahan === namaBahan2) {
                     console.log('namaBahan1:' + namaBahan);
                     console.log('namaBahan2:' + namaBahan2);
-                    // document.getElementById('divSelectVariasi').style.display = 'grid';
 
-                    // pilihFungsi(elementSystem[1][0], elementSystem[1][1], elementSystem[1][2], elementHTML[1]);
-                    if ($(`#selectPolosLGTato-${indexSJBasic}`).length === 0) {
+                    if ($(`#divSelectPolosLGTato-${indexSJBasic}`).length === 0) {
                         indexElementSystem = 1;
                         createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
                     }
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
                     console.log("Nama Bahan not found!")
-                    if ($(`#selectPolosLGTato-${indexSJBasic}`).length !== 0) {
-                        $('#selectPolosLGTato-' + indexSJBasic).remove();
-                    }
+                    indexElementSystem = 1;
+                    removeElement(indexElementSystem);
                 }
             });
         } catch (error) {
@@ -270,27 +310,30 @@
         console.log(variasi);
         indexElementSystem = 2;
         if (variasi === 'Polos') {
+            removeElement(indexElementSystem);
             for (let i = 0; i < elementSystem[indexElementSystem][0].length; i++) {
                 console.log('i: ' + i);
                 createElement(elementSystem[indexElementSystem][0][i][0], elementSystem[indexElementSystem][0][i][1], elementHTML[indexElementSystem][0][i]);
             }
         } else if (variasi === "LG") {
-
+            removeElement(indexElementSystem);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][1]);
         } else if (variasi === "TATO") {
-
+            removeElement(indexElementSystem);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][2]);
         }
 
-        sjBasic[indexSJBasic]['variasi'] = {
-            'nama': variasi
-        };
-        console.log(sjBasic);
+        // sjBasic[indexSJBasic]['variasi'] = {
+        //     'nama': variasi
+        // };
+        // console.log(sjBasic);
     }
 
     function showBoxAvailableOptions(value, text) {
         let divID = `box${value}`;
         let htmlBox =
             `<div id="${divID}" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"` +
-            `onclick='showOptionsOfVariasiLG("${value}");'>` +
+            `onclick='addLvl3ElementFromBox("${value}");'>` +
             `${text}` +
             '</div>';
 
@@ -308,66 +351,94 @@
 
     }
 
-    function showOptionsOfVariasiLG(value) {
-        let divID = `divSelectVariasiLG${value}-${indexSJBasic}`;
-        let selectID = `selectVariasiLG${value}-${indexSJBasic}`;
-        let selectName = selectID;
-        let text = `Pilih Gambar ${value}`;
-        let idBoxToRemove = `#choseVariasi${value}`;
-        let arrayToAppend = [];
-
-        idElementToRemove = [{
-            'id': `#${divID}`
-        }, {
-            'id': `#divJumlah-${indexSJBasic}`
-        }];
-        idElementToRemove = JSON.stringify(idElementToRemove);
-        idElementToReset = [{
-            'id': `#selectVariasiLG-${indexSJBasic}`
-        }];
-        idElementToReset = JSON.stringify(idElementToReset);
-
-        if (value === "Bludru") {
-            arrayToAppend = arrayGambarLGBludru;
-        } else if (value === "Polimas") {
-            arrayToAppend = arrayGambarLGPolimas;
-        } else if (value === "Sablon") {
-            arrayToAppend = arrayGambarLGSablon;
-        } else if (value === "Bayang") {
-            arrayToAppend = arrayGambarLGBayang;
-        } else if (value === "Stiker") {
-            arrayToAppend = arrayGambarLGStiker;
-        } else if (value === 'Jumlah') {
-            showInputJumlah('#boxJumlah');
-            return true;
-        } else if (value === 'JhtKepala') {
-            arrayToAppend = arrayJhtKepala
+    function addLvl3ElementFromBox(value) {
+        indexElementSystem = 3;
+        if (value === 'Jumlah') {
+            // removeElement(indexElementSystem);
+            $('#boxJumlah').remove();
+            createElement(elementSystem[indexElementSystem][0][0][0], elementSystem[indexElementSystem][0][0][1], elementHTML[indexElementSystem][0][0]);
+        } else if (value === 'Jht') {
+            // removeElement(indexElementSystem);
+            $('#boxJht').remove();
+            createElement(elementSystem[indexElementSystem][0][1][0], elementSystem[indexElementSystem][0][1][1], elementHTML[indexElementSystem][0][1]);
         }
+        // let divID = `divSelectVariasiLG${value}-${indexSJBasic}`;
+        // let selectID = `selectVariasiLG${value}-${indexSJBasic}`;
+        // let selectName = selectID;
+        // let text = `Pilih Gambar ${value}`;
+        // let idBoxToRemove = `#choseVariasi${value}`;
+        // let arrayToAppend = [];
 
-        let htmlToAppend =
-            `<div id="${divID}" class="grid-2-auto_10 mt-1em">
-                    <select name="${selectName}" id="${selectID}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('Jumlah')">
-                        <option value="" disabled selected>${text}</option>
-                    </select>
-                    <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + idElementToRemove + "); resetElement(" + idElementToReset + ");'></span>" +
-            "</div>";
+        // idElementToRemove = [{
+        //     'id': `#${divID}`
+        // }, {
+        //     'id': `#divJumlah-${indexSJBasic}`
+        // }];
+        // idElementToRemove = JSON.stringify(idElementToRemove);
+        // idElementToReset = [{
+        //     'id': `#selectVariasiLG-${indexSJBasic}`
+        // }];
+        // idElementToReset = JSON.stringify(idElementToReset);
 
-        $("#divGambar-" + indexSJBasic).html(htmlToAppend);
+        // if (value === "Bludru") {
+        //     arrayToAppend = arrayGambarLGBludru;
+        // } else if (value === "Polimas") {
+        //     arrayToAppend = arrayGambarLGPolimas;
+        // } else if (value === "Sablon") {
+        //     arrayToAppend = arrayGambarLGSablon;
+        // } else if (value === "Bayang") {
+        //     arrayToAppend = arrayGambarLGBayang;
+        // } else if (value === "Stiker") {
+        //     arrayToAppend = arrayGambarLGStiker;
+        // } else if (value === 'Jumlah') {
+        //     showInputJumlah('#boxJumlah');
+        //     return true;
+        // } else if (value === 'JhtKepala') {
+        //     arrayToAppend = arrayJhtKepala
+        // }
+
+        // let htmlToAppend =
+        //     `<div id="${divID}" class="grid-2-auto_10 mt-1em">
+        //             <select name="${selectName}" id="${selectID}" class="pt-0_5em pb-0_5em" onchange="showBoxAvailableOptions('Jumlah')">
+        //                 <option value="" disabled selected>${text}</option>
+        //             </select>
+        //             <span class="ui-icon ui-icon-closethick justify-self-center"` + "onclick='removeElement(" + idElementToRemove + "); resetElement(" + idElementToReset + ");'></span>" +
+        //     "</div>";
+
+        // $("#divGambar-" + indexSJBasic).html(htmlToAppend);
 
 
-        arrayToAppend.forEach(item => {
-            $(`#${selectID}`).append('<option value="' + item + '">' + item + '</option>');
-        });
+        // arrayToAppend.forEach(item => {
+        //     $(`#${selectID}`).append('<option value="' + item + '">' + item + '</option>');
+        // });
 
-        $(idBoxToRemove).remove();
+        // $(idBoxToRemove).remove();
     }
 
-    function removeElement2(idElements) {
-        idElements = JSON.parse(idElements);
-        console.log(idElements);
-        console.log(idElements[0].id);
-        for (const element of idElements) {
-            $(element.id).remove();
+    function removeElement2(idElement) {
+        if ($(idElement).length !== 0) {
+            console.log('removeElement: ' + idElement);
+            $(idElement).remove();
+        } else {
+            return;
+        }
+    }
+
+    function removeElement(pointerElementSystemNow) {
+        for (let i = pointerElementSystemNow; i < elementSystem.length; i++) {
+            if (i === 2 || i === 3) {
+                for (let j = 0; j < 3; j++) {
+                    if (j === 0) {
+                        for (let k = 0; k < 2; k++) {
+                            removeElement2(elementSystem[i][j][k][1]);
+                        }
+                    } else {
+                        removeElement2(elementSystem[i][j][1]);
+                    }
+                }
+            } else {
+                removeElement2(elementSystem[i][1]);
+            }
         }
     }
 
