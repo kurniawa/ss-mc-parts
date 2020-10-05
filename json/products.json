@@ -141,7 +141,7 @@
                         "nama": "Polos"
                     },
                     {
-                        "nama": "LG",
+                        "nama": "LG Bludru",
                         "jenis_logo": [
                             {
                                 "nama": "Bludru",
@@ -194,13 +194,34 @@
                         ]
                     },
                     {
-                        "nama": "TATO",
+                        "nama": "LG Polimas"
+                    },
+                    {
+                        "nama": "LG Sablon"
+                    },
+                    {
+                        "nama": "LG Bayang"
+                    },
+                    {
+                        "nama": "LG Stiker"
+                    },
+                    {
+                        "nama": "TATO Polimas",
                         "jenis_tato": [
                             "Polimas",
                             "Sablon",
                             "Bayang",
                             "Sixpack"
                         ]
+                    },
+                    {
+                        "nama": "TATO Sablon"
+                    },
+                    {
+                        "nama": "TATO Bayang"
+                    },
+                    {
+                        "nama": "TATO Sixpack"
                     }
                 ],
                 "harga_1": 500,
