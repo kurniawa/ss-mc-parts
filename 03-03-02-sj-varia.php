@@ -4,16 +4,16 @@
         <div>
             <h2>Tipe: Sarung Jok Variasi</h2>
         </div>
+
         <div id="divArraySJVaria">
 
         </div>
-
 
         <br><br>
 
         <div id="warning" class="d-none"></div>
 
-        <div id="divBtnKunciItem" class="grid-1-auto justify-items-center">
+        <!-- <div id="divBtnKunciItem" class="grid-1-auto justify-items-center">
             <div id="btnKunciItem" class="b-radius-50px bg-color-orange-1 pt-0_5em pb-0_5em pl-1em pr-1em">
                 <span class="ui-icon ui-icon-locked"></span>
                 <span class="font-weight-bold">kunci item</span>
@@ -23,7 +23,7 @@
         <div id="divPilihanTambahItemSejenis" class="grid-1-auto m-1em">
             <div id="divRadioPilihan" class="justify-self-center b-1px-solid-grey p-1em">
             </div>
-        </div>
+        </div> -->
 
         <div id="divAvailableOptions" class="position-absolute bottom-5em w-calc-100-1em">
             Available options:
@@ -123,6 +123,7 @@
                 <div id='divJenisLGTato-${indexSJVaria}'></div>
                 <div id='divGambar-${indexSJVaria}'></div>
                 <div id='divJht-${indexSJVaria}'></div>
+                <div id='divDesc-${indexSJVaria}'></div>
                 <div id='divJumlah-${indexSJVaria}'></div>
             </div>`;
 
@@ -134,23 +135,14 @@
         [`#divInputBahan-${indexSJVaria}`, `#inputBahan-${indexSJVaria}`],
         [`#divVaria-${indexSJVaria}`, `#divSelectVaria-${indexSJVaria}`],
         [
-            [
-                [`#availableOptions`, `#boxJumlah`],
-                [`#availableOptions`, `#boxJht`]
-            ],
-            [
-                [`#availableOptions`, `#boxJumlah`],
-                [`#availableOptions`, `#boxJht`],
-                [`#availableOptions`, `#boxDesc`]
-            ],
+            [`#availableOptions`, `#boxJumlah`],
+            [`#availableOptions`, `#boxJht`],
+            [`#availableOptions`, `#boxDesc`]
         ],
         [
-            [
-                [`#divJumlah-${indexSJVaria}`, `#divInputJumlah-${indexSJVaria}`],
-                [`#divJht-${indexSJVaria}`, `#divSelectJht-${indexSJVaria}`]
-            ],
-            [``, ``],
-            [``, ``]
+            [`#divJumlah-${indexSJVaria}`, `#divInputJumlah-${indexSJVaria}`],
+            [`#divJht-${indexSJVaria}`, `#divSelectJht-${indexSJVaria}`],
+            [`#divDesc-${indexSJVaria}`, `#divTADesc-${indexSJVaria}`]
         ],
         ['', ['boxJumlah', 'boxJhtKepala'],
             ['selectTipeLG'],
@@ -190,12 +182,13 @@
             <select name="selectJht-${indexSJVaria}" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange="cekLGAddJenisLG(this.value);">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
             </select>
-            <span class="ui-icon ui-icon-closethick justify-self-center" onclick=></span>
+            <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][1][1]}","${elementSystem[2][1][0]}","${elementSystem[2][1][1]}", 2, 1);'></span>
         </div>`;
 
     let htmlDivTADesc =
         `<div id="divTADesc-${indexSJVaria}" class="mt-1em">
-            <textarea class="pt-1em pl-1em text-area-mode-1" name="desc-${indexSJVaria}" id="desc-${indexSJVaria}" placeholder="Keterangan"></textarea>
+            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[3][2][1]}", "${elementSystem[2][2][0]}","${elementSystem[2][2][1]}", 2, 2);'></span></div>
+            <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc-${indexSJVaria}" id="taDesc-${indexSJVaria}" placeholder="Keterangan"></textarea>
         </div>`;
 
 
@@ -208,16 +201,9 @@
             </select>
         </div>`,
 
-        [
-            [htmlBoxJumlah, htmlBoxJht],
-            [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc]
+        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
 
-        ],
-        [
-            [htmlDivInputJumlah, htmlDivSelectJht],
-            [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
-
-        ]
+        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
 
     ];
 
@@ -304,47 +290,22 @@
         }
     }
 
-    function cekVariaAddBoxes(variasi) {
-        console.log(variasi);
+    function closeAndAddBox(elementToRemove, divID, divElementID, i, j) {
+        $(elementToRemove).remove();
+        createElement(divID, divElementID, elementHTML[i][j]);
+    }
+
+    function cekVariaAddBoxes(value) {
+        console.log(value);
+
         indexElementSystem = 2;
-        if (variasi === 'Polos') {
-            removeElement(indexElementSystem);
-            for (let i = 0; i < elementSystem[indexElementSystem][0].length; i++) {
-                console.log('i: ' + i);
-                createElement(elementSystem[indexElementSystem][0][i][0], elementSystem[indexElementSystem][0][i][1], elementHTML[indexElementSystem][0][i]);
+        removeElement(indexElementSystem);
+        for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+            console.log('i: ' + i);
+            if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
+                createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
             }
-        } else {
-            removeElement(indexElementSystem);
-            createElement(elementSystem[indexElementSystem][0][0][0], elementSystem[indexElementSystem][0][0][1], elementHTML[indexElementSystem][1][0]);
-            createElement(elementSystem[indexElementSystem][0][1][0], elementSystem[indexElementSystem][0][1][1], elementHTML[indexElementSystem][1][1]);
-            createElement(elementSystem[indexElementSystem][1][2][0], elementSystem[indexElementSystem][1][2][1], elementHTML[indexElementSystem][1][2]);
         }
-
-        // sjVaria[indexSJVaria]['variasi'] = {
-        //     'nama': variasi
-        // };
-        // console.log(sjVaria);
-    }
-
-    function showBoxAvailableOptions(value, text) {
-        let divID = `box${value}`;
-        let htmlBox =
-            `<div id="${divID}" class="d-inline-block pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red"` +
-            `onclick='addLvl3ElementFromBox("${value}");'>` +
-            `${text}` +
-            '</div>';
-
-        $('#availableOptions').append(htmlBox);
-    }
-
-    function showInputJumlah(idToRemove) {
-        let htmlInputJumlah =
-            `<div id="divInputJumlah-${indexSJVaria}" class="mt-1em">
-                    <input type="number" name="jumlah-${indexSJVaria}" id="inputJumlah-${indexSJVaria}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
-                </div>`;
-        $('#divJumlah-' + indexSJVaria).html(htmlInputJumlah);
-
-        $(idToRemove).remove();
 
     }
 
@@ -353,15 +314,15 @@
         if (value === 'Jumlah') {
             // removeElement(indexElementSystem);
             $('#boxJumlah').remove();
-            createElement(elementSystem[indexElementSystem][0][0][0], elementSystem[indexElementSystem][0][0][1], elementHTML[indexElementSystem][0][0]);
+            createElement(elementSystem[indexElementSystem][0][0], elementSystem[indexElementSystem][0][1], elementHTML[indexElementSystem][0]);
         } else if (value === 'Jht') {
             // removeElement(indexElementSystem);
             $('#boxJht').remove();
-            createElement(elementSystem[indexElementSystem][0][1][0], elementSystem[indexElementSystem][0][1][1], elementHTML[indexElementSystem][0][1]);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][1]);
         } else if (value === 'Desc') {
             // removeElement(indexElementSystem);
             $('#boxDesc').remove();
-            createElement(elementSystem[indexElementSystem][0][2][0], elementSystem[indexElementSystem][0][2][1], elementHTML[indexElementSystem][1][3]);
+            createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
         }
     }
 
@@ -378,11 +339,8 @@
         for (let i = pointerElementSystemNow; i < elementSystem.length; i++) {
             if (i === 2 || i === 3) {
                 for (let j = 0; j < elementSystem[i].length; j++) {
-                    for (let k = 0; k < elementSystem[i][j].length; k++) {
-                        console.log(i + ' ' + j + ' ' + k + ' ' + 1);
-                        removeElement2(elementSystem[i][j][k][1]);
-                    }
-
+                    removeElement2(elementSystem[i][j][1]);
+                    console.log(i + ' ' + j + ' ' + ' ' + 1);
                 }
             } else {
                 removeElement2(elementSystem[i][1]);
@@ -396,23 +354,39 @@
         }
     }
 
-    function toggleShowElement(idAll, time) {
-        idAll.forEach(id => {
-            if ($(id).css("display") === "none") {
-                $(id).toggle(time);
-            }
-        });
-    }
+    // document.getElementById('btnKunciItem').addEventListener('click', () => {
+    //     let htmlRadioToAppend = pilihanSJVariaSejenis[0] + pilihanSJVariaSejenis[1];
+    //     $('#divRadioPilihan').html(htmlRadioToAppend);
+    //     $('#divPilihanTambahItemSejenis').show();
 
-    document.getElementById('btnKunciItem').addEventListener('click', () => {
-        let htmlRadioToAppend = pilihanSJVariaSejenis[0] + pilihanSJVariaSejenis[1];
-        $('#divRadioPilihan').html(htmlRadioToAppend);
-        $('#divPilihanTambahItemSejenis').show();
-
-    });
+    // });
 
     function insertNewProduct() {
+        $bahan = $(`#inputBahan-${indexSJVaria}`).val();
+        $varia = $(`#selectVaria-${indexSJVaria}`).val();
+        $jht = '';
+        $desc = '';
+        $jumlah = 0;
 
+        if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
+            $jht = $(`#selectJht-${indexSJVaria}`).val();
+        }
+        if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
+            $desc = $(`#taDesc-${indexSJVaria}`).val();
+        }
+        if ($(`#divInputJumlah-${indexSJVaria}`).length !== 0) {
+            $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
+        }
+
+        if ($jumlah <= 0) {
+            $textWarningJumlah = '<span class="color-red">Jumlah barang masih belum diinput dengan benar.</span>'
+            $(`#warning`).html($textWarningJumlah);
+            return;
+        }
+
+        let itemObj = {
+            'bahan': $bahan,
+        }
     }
 </script>
 
