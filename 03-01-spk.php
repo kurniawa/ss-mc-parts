@@ -3,9 +3,9 @@ include_once "01-header.php";
 ?>
 
 <div class="header"></div>
-<a href="03-03-spk-baru.php" id="btn-spk-baru" class="btn-atas-kanan">
+<div id="btn-spk-baru" class="btn-atas-kanan" onclick="addNewSPK();">
     + Buat SPK Baru
-</a>
+</div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em bb-0_5px-solid-grey">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
@@ -34,6 +34,11 @@ include_once "01-header.php";
             console.log(data);
         }
     });
+
+    function addNewSPK() {
+        localStorage.setItem('SPKItems', '');
+        window.location.href = '03-03-spk-baru.php';
+    }
 </script>
 
 <style>

@@ -11,7 +11,7 @@
 
         <br><br>
 
-        <div id="warning" class="d-none"></div>
+        <div id="warningSJVaria" class="d-none"></div>
 
         <!-- <div id="divBtnKunciItem" class="grid-1-auto justify-items-center">
             <div id="btnKunciItem" class="b-radius-50px bg-color-orange-1 pt-0_5em pb-0_5em pl-1em pr-1em">
@@ -32,10 +32,10 @@
             </div>
 
         </div>
-        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em">
-            <div class="h-4em bg-color-orange-2 grid-1-auto" onclick="insertNewProduct();">
-                <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
-            </div>
+        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertNewProduct();">
+
+            <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
+
         </div>
 
     </div>
@@ -143,15 +143,7 @@
             [`#divJumlah-${indexSJVaria}`, `#divInputJumlah-${indexSJVaria}`],
             [`#divJht-${indexSJVaria}`, `#divSelectJht-${indexSJVaria}`],
             [`#divDesc-${indexSJVaria}`, `#divTADesc-${indexSJVaria}`]
-        ],
-        ['', ['boxJumlah', 'boxJhtKepala'],
-            ['selectTipeLG'],
-            ['selectTipeTato']
-        ],
-        ['', [
-            ['inputJumlah', 'removeBoxJumlah'],
-            ['selectTipeJahit', 'removeBoxJht']
-        ]]
+        ]
     ];
 
     // console.log(elementSystem);
@@ -362,11 +354,18 @@
     // });
 
     function insertNewProduct() {
+        // console.log('clicked');
         $bahan = $(`#inputBahan-${indexSJVaria}`).val();
         $varia = $(`#selectVaria-${indexSJVaria}`).val();
         $jht = '';
         $desc = '';
         $jumlah = 0;
+
+        console.log('$bahan: ' + $bahan);
+        console.log('$varia: ' + $varia);
+        console.log('$jht: ' + $jht);
+        console.log('$desc: ' + $desc);
+        console.log('$jumlah: ' + $jumlah);
 
         if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
             $jht = $(`#selectJht-${indexSJVaria}`).val();
@@ -378,15 +377,48 @@
             $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
         }
 
+        if ($bahan === '') {
+            $textWarning = '<span class="color-red">Bahan masih belum ditentukan!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
+            return;
+        }
+
+        if ($varia == undefined) {
+            console.log('warning untuk Select Variasi');
+            $textWarning = '<span class="color-red">Variasi Sarung Jok masih belum ditentukan!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
+            return;
+        }
+
         if ($jumlah <= 0) {
-            $textWarningJumlah = '<span class="color-red">Jumlah barang masih belum diinput dengan benar.</span>'
-            $(`#warning`).html($textWarningJumlah);
+            console.log('warning untuk jumlah');
+            $textWarning = '<span class="color-red">Jumlah barang masih belum diinput dengan benar!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
             return;
         }
 
         let itemObj = {
             'bahan': $bahan,
+            'varia': $varia,
+            'jht': $jht,
+            'desc': $desc,
+            'jumlah': $jumlah
         }
+        console.log(itemObj);
+        let SPKItems = localStorage.getItem('SPKItems');
+        console.log(SPKItems);
+        if (SPKItems === '') {
+            SPKItems = [];
+        } else {
+            SPKItems = JSON.parse(SPKItems);
+        }
+        SPKItems.push(itemObj);
+        console.log(SPKItems);
+        localStorage.setItem('SPKItems', JSON.stringify(SPKItems));
+        // console.log(JSON.stringify(SPKItems));
+        // SPKItems.push(itemObj);
+        // localStorage.setItem('SPKItems', JSON.stringify(SPKItems));
+        // console.log(localStorage.getItem('SPKItems'));
     }
 </script>
 

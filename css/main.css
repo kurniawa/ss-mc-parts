@@ -338,6 +338,9 @@ option{
 .position-absolute {
     position: absolute;
 }
+.pointer-events-none {
+    pointer-events: none;
+}
 .top-0 {
     top: 0;
 }
@@ -424,8 +427,14 @@ option{
     opacity: 1;
 }
 /* z-index */
+.z-index-1 {
+    z-index: 1;
+}
 .z-index-3 {
     z-index: 3;
+}
+.z-index-999 {
+    z-index: 999;
 }
 
 .box-sizing-border-box {

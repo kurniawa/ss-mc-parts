@@ -24,10 +24,10 @@
 
     <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em">Kirim Ke Biran Bangka</div>
 
-    <div class="divProductList"></div>
+    <div class="divItemList"></div>
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
-        <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJBasic();">
+        <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJVaria();">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
         </div>
         <div class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -53,6 +53,9 @@
 </div>
 
 <script>
+    history.pushState({
+        page: 'SPKBegin'
+    }, null);
     $(document).ready(function() {
         $(".productType").css("display", "none");
         $("#containerSJVaria").css("display", "none");
@@ -62,10 +65,29 @@
         $(".productType").toggle(500);
     }
 
-    function toggleSJBasic() {
+    function toggleSJVaria() {
+        history.pushState({
+            page: 'SJVaria'
+        }, 'test title');
+        $(".productType").hide();
         $("#containerSJVaria").toggle();
         $("#containerBeginSPK").toggle();
     }
+
+    window.addEventListener('popstate', (event) => {
+        console.log(event.state.page);
+        // console.log(event)
+        $('#SPKBaru').hide();
+        $("#containerBeginSPK").hide();
+        $('#containerSJVaria').hide();
+        if (event.state.page == 'SPKBegin') {
+            $('#containerBeginSPK').show();
+        } else if (event.state.page == 'SJVaria') {
+            $("#containerSJVaria").show();
+        } else if (event.state.page == 'newSPK') {
+            $('#SPKBaru').show();
+        }
+    });
 </script>
 
 <?php

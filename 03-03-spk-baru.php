@@ -52,6 +52,10 @@ include_once "01-header.php";
 
 
 <script>
+    history.pushState({
+        page: 'newSPK'
+    }, null);
+
     $(document).ready(function() {
         $("#containerBeginSPK").css("display", "none");
         let lastID = getLastID("spk");
