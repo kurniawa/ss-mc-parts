@@ -24,7 +24,7 @@
 
     <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em">Kirim Ke Biran Bangka</div>
 
-    <div class="divItemList"></div>
+    <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
         <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJVaria();">
@@ -50,9 +50,38 @@
 
     </div>
 
+    <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
+        <span class="justify-self-center font-weight-900">PROSES SPK</span>
+    </div>
+
 </div>
 
 <script>
+    $('#btnProsesSPK').hide();
+    let SPKItems = localStorage.getItem('SPKItems');
+    getSPKItems();
+
+    function getSPKItems() {
+        if (SPKItems === '') {
+            return false;
+        }
+        SPKItems = JSON.parse(SPKItems);
+        console.log(SPKItems);
+        let htmlItemList = '';
+        for (const item of SPKItems) {
+            htmlItemList = htmlItemList +
+                `<div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
+                <div class=''>${item.bahan} ${item.varia} ${item.jht}</div>
+                <div class='grid-1-auto'>
+                <div class='color-green justify-self-right font-size-1_2em'>${item.jumlah}</div>
+                <div class='color-grey justify-self-right'>Jumlah</div>
+                </div>
+                <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
+                </div>`;
+        }
+        $('#divItemList').html(htmlItemList);
+        $('#btnProsesSPK').show();
+    }
     history.pushState({
         page: 'SPKBegin'
     }, null);
@@ -75,19 +104,40 @@
     }
 
     window.addEventListener('popstate', (event) => {
-        console.log(event.state.page);
+        // console.log(event.state.page);
         // console.log(event)
         $('#SPKBaru').hide();
         $("#containerBeginSPK").hide();
         $('#containerSJVaria').hide();
-        if (event.state.page == 'SPKBegin') {
-            $('#containerBeginSPK').show();
+        if (event.state == null) {
+            history.go(-1);
         } else if (event.state.page == 'SJVaria') {
             $("#containerSJVaria").show();
         } else if (event.state.page == 'newSPK') {
             $('#SPKBaru').show();
+        } else if (event.state.page == 'SPKBegin') {
+            $('#containerBeginSPK').show();
         }
     });
+
+    function proceedSPK() {
+        for (const item of SPKItems) {
+            $.ajax({
+                type: 'POST',
+                url: '01-crud.php',
+                async: false,
+                data: {
+                    type: 'cek',
+                    table: 'produk',
+                    column: ['bahan', 'varia', 'ukuran', 'jahit'],
+                    value: [item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            });
+        }
+    }
 </script>
 
 <?php

@@ -25,6 +25,9 @@
 .b-1px-solid-grey {
     border: 1px solid #E4E4E4;
 }
+.bt-1px-solid-grey {
+    border-top: 1px solid #E4E4E4;
+}
 .bb-none {
     border-bottom: none;
 }

@@ -171,7 +171,7 @@
 
     let htmlDivSelectJht =
         `<div id='divSelectJht-${indexSJVaria}' class="grid-2-auto_10 mt-1em">
-            <select name="selectJht-${indexSJVaria}" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange="cekLGAddJenisLG(this.value);">
+            <select name="selectJht-${indexSJVaria}" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
             </select>
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][1][1]}","${elementSystem[2][1][0]}","${elementSystem[2][1][1]}", 2, 1);'></span>
@@ -236,7 +236,7 @@
             });
         } else if (elementID === `#divSelectJht-${indexSJVaria}`) {
             arrayJht.forEach(tipeJht => {
-                $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+                $("#selectJht-" + indexSJVaria).append('<option value="+ jht ' + tipeJht + '">' + tipeJht + '</option>');
             });
         } else if (elementID === `#divSelectJenisLG-${indexSJVaria}`) {
             arrayJenisLG.forEach(tipeJht => {
@@ -419,6 +419,13 @@
         // SPKItems.push(itemObj);
         // localStorage.setItem('SPKItems', JSON.stringify(SPKItems));
         // console.log(localStorage.getItem('SPKItems'));
+
+        // ketika ditekan seolah-olah kita kembali ke halaman sebelumnya,
+        // namun yang terjadi tidak demikian, yang kita lakukan adalah
+        // kita mnutup div dan memunculkan div yang lain
+        $('#containerSJVaria').hide();
+        $('#containerBeginSPK').show();
+        getSPKItems();
     }
 </script>
 
