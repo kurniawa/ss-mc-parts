@@ -29,7 +29,7 @@ include_once "01-header.php";
             </div>
         </div>
 
-        <input id="description" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
+        <input id="titleDesc" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
 
 
     </div>
@@ -56,19 +56,18 @@ include_once "01-header.php";
         page: 'newSPK'
     }, null);
 
-    $(document).ready(function() {
-        $("#containerBeginSPK").css("display", "none");
-        let lastID = getLastID("spk");
-        console.log(lastID);
-        lastID = JSON.parse(lastID);
-        console.log(lastID[1]);
+    // $(document).ready(function() {
+    let lastID = getLastID("spk");
+    console.log(lastID);
+    lastID = JSON.parse(lastID);
+    console.log(lastID[1]);
 
-        let SPKNo = parseFloat(lastID[1]) + 1;
+    let SPKNo = parseFloat(lastID[1]) + 1;
 
-        $("#SPKNo").val(SPKNo);
-        // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
-        $(".divSPKNumber").html(SPKNo);
-    });
+    $("#SPKNo").val(SPKNo);
+    // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
+    $(".divSPKNumber").html(SPKNo);
+    // });
 
     $i = 0;
 
@@ -123,7 +122,8 @@ include_once "01-header.php";
             for (const result of results) {
                 $htmlToAppend = $htmlToAppend +
                     "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $idResult + ")'>" +
-                    result.nama + "</div>";
+                    result.nama + "</div>" +
+                    `<input id='inputChosenValue-${$idResult}' type='hidden' value='${result.id}'>`;
                 $idResult++;
             }
 
@@ -137,6 +137,7 @@ include_once "01-header.php";
     function pickChoice($idResult) {
         $inputCustomerName = $("#inputCustomerName");
         $chosenValue = $("#chosenValue-" + $idResult);
+        $idChosenValue = $(`#inputChosenValue-${$idResult}`).val();
         $searchResults = $("#searchResults");
         $inputCustomerName.val($chosenValue.html());
         // $searchResults.remove();
@@ -144,6 +145,7 @@ include_once "01-header.php";
 
         // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
         $(".divSPKCustomer").html($chosenValue.html());
+        $('#inputIDCustomer').val($idChosenValue);
     }
 
     function beginInsertingProducts() {
@@ -153,8 +155,36 @@ include_once "01-header.php";
             let SPKDate = formatDate($("#date").val());
 
             $(".divSPKDate").html(SPKDate);
-            $(".divTitleDesc").html($("#description").val());
+            $(".divTitleDesc").html($("#titleDesc").val());
         }
+    }
+
+    async function insertNewSPK() {
+        console.log('SPKNo: ' + SPKNo);
+        let SPKDate = formatDate($('#date').val());
+        let customerName = $('#inputCustomerName').val();
+        let customerID = $('#inputIDCustomer').val();
+        let titleDesc = $('#titleDesc').val();
+
+        console.log('SPKDate: ' + SPKDate);
+        console.log('customerName: ' + customerName);
+        console.log('customerID: ' + customerID);
+        console.log('titleDesc: ' + titleDesc);
+
+        $.ajax({
+            type: "POST",
+            url: "01-crud.php",
+            async: false,
+            data: {
+                type: 'insertTest',
+                table: 'spk',
+                column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan'],
+                value: [SPKNo, SPKDate, titleDesc, customerID]
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        });
     }
 </script>
 

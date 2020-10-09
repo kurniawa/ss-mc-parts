@@ -14,6 +14,7 @@
             <div>Untuk</div>
             <div>:</div>
             <div class="divSPKCustomer font-weight-bold">Akong - Pluit</div>
+            <input id="inputIDCustomer" type="hidden" name="inputIDCustomer">
         </div>
         <div class="grid-1-auto justify-items-right m-0_5em">
             <div>
@@ -57,11 +58,13 @@
 </div>
 
 <script>
+    $("#containerBeginSPK").css("display", "none");
     $('#btnProsesSPK').hide();
     let SPKItems = localStorage.getItem('SPKItems');
     getSPKItems();
 
     function getSPKItems() {
+        SPKItems = localStorage.getItem('SPKItems');
         if (SPKItems === '') {
             return false;
         }
@@ -69,9 +72,13 @@
         console.log(SPKItems);
         let htmlItemList = '';
         for (const item of SPKItems) {
+            var textItemJht = item.jht;
+            if (textItemJht != '') {
+                textItemJht = '+ jht ' + textItemJht;
+            }
             htmlItemList = htmlItemList +
                 `<div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
-                <div class=''>${item.bahan} ${item.varia} ${item.jht}</div>
+                <div class=''>${item.bahan} ${item.varia} ${textItemJht}</div>
                 <div class='grid-1-auto'>
                 <div class='color-green justify-self-right font-size-1_2em'>${item.jumlah}</div>
                 <div class='color-grey justify-self-right'>Jumlah</div>
@@ -120,8 +127,33 @@
         }
     });
 
-    function proceedSPK() {
+    async function proceedSPK() {
+        // cek apakah produk sudah ada atau blm
+        let resInsertProduct = await insertNewProduct();
+        console.log(resInsertProduct);
+
+        if (resInsertProduct[0] === 'OK') {
+            // masukkan data SPK
+            console.log('proceedSPK()');
+            let resNewSPK = await insertNewSPK();
+            console.log(resNewSPK);
+        }
+    }
+
+    async function insertNewProduct() {
+        let result = [];
+        let status = '';
+        let listOfID = [];
         for (const item of SPKItems) {
+            let lastID = JSON.parse(getLastID('produk'));
+            let setID = '';
+            console.log(lastID);
+            if (lastID[1] === null) {
+                setID = 1;
+            } else {
+                setID = parseFloat(lastID[1]) + 1;
+            }
+            console.log(setID);
             $.ajax({
                 type: 'POST',
                 url: '01-crud.php',
@@ -129,14 +161,56 @@
                 data: {
                     type: 'cek',
                     table: 'produk',
-                    column: ['bahan', 'varia', 'ukuran', 'jahit'],
-                    value: [item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
+                    column: ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
+                    value: [item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
                 },
                 success: function(res) {
                     console.log(res);
+                    if (res === 'blm ada') {
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '01-crud.php',
+                            async: false,
+                            data: {
+                                type: 'insert',
+                                table: 'produk',
+                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
+                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
+                            },
+                            success: function(res) {
+                                console.log(res);
+                                if (res === 'INSERT OK') {
+                                    result.push('OK');
+                                    listOfID.push(setID);
+                                } else {
+                                    result.push('NOT OK');
+                                }
+                            }
+                        });
+                    } else {
+                        res = JSON.parse(res);
+                        console.log(res);
+                        listOfID.push(parseInt(res[1]));
+                        result.push('OK');
+                    }
                 }
             });
         }
+
+        try {
+            result.forEach(res => {
+                if (res != 'OK') {
+                    throw 'Ada Eror INSERT product atau cek product';
+                }
+                status = 'OK';
+            });
+        } catch (error) {
+            console.log(error);
+            status = 'NOT OK';
+        }
+        console.log(listOfID);
+        return [status, listOfID];
     }
 </script>
 

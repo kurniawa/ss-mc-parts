@@ -70,21 +70,59 @@ if ($type === 'cek') {
         }
     }
 
-    var_dump($sql);
+    // var_dump($sql);
 
     $res = mysqli_query($con, $sql);
 
     if (mysqli_num_rows($res) > 0) {
-        echo 'udah ada';
+        // echo 'udah ada';
+        $row = mysqli_fetch_assoc($res);
+        echo json_encode(array('udah ada', $row['id']));
     } else {
         echo 'blm ada';
-        insertToDB($table, $column, $value, $data_length);
+        // insertToDB($table, $column, $value, $data_length);
     }
 }
 
-function insertToDB($table, $column, $value, $data_length)
-{
-    global $con, $msg;
+if ($type === 'insert') {
+    $table = $_POST['table'];
+    $column = $_POST['column'];
+    $value = $_POST['value'];
+    $data_length = count($column);
+
+    $sql_part_1 = "INSERT INTO $table(";
+    $sql_part_2 = " VALUE(";
+
+    for ($i = 0; $i < $data_length; $i++) {
+        if ($i === ($data_length - 1)) {
+            $sql_part_1 = $sql_part_1 . "$column[$i])";
+            $sql_part_2 = $sql_part_2 . "'$value[$i]')";
+        } else {
+            $sql_part_1 = $sql_part_1 . "$column[$i], ";
+            $sql_part_2 = $sql_part_2 . "'$value[$i]', ";
+        }
+    }
+    $sql = $sql_part_1 . $sql_part_2;
+    // echo $sql;
+
+    $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
+    $res = mysqli_query($con, $sql);
+
+    if (!$res) {
+        echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
+        die;
+    } else {
+        // echo json_encode(array("insert", $msg));
+        echo "INSERT OK";
+    }
+}
+
+if ($type === 'insertTest') {
+    $table = $_POST['table'];
+    $column = $_POST['column'];
+    $value = $_POST['value'];
+    $data_length = count($column);
+
     $sql_part_1 = "INSERT INTO $table(";
     $sql_part_2 = " VALUE(";
 
@@ -101,14 +139,34 @@ function insertToDB($table, $column, $value, $data_length)
     echo $sql;
 
     $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
-    // $res = mysqli_query($con, $sql);
-
-    // if (!$res) {
-    //     echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
-    //     die;
-    // } else {
-    //     echo json_encode(array("insert", $msg));
-    //     die;
-    // }
 }
+
+// function insertToDB($table, $column, $value, $data_length)
+// {
+//     global $con, $msg;
+//     $sql_part_1 = "INSERT INTO $table(";
+//     $sql_part_2 = " VALUE(";
+
+//     for ($i = 0; $i < $data_length; $i++) {
+//         if ($i === ($data_length - 1)) {
+//             $sql_part_1 = $sql_part_1 . "$column[$i])";
+//             $sql_part_2 = $sql_part_2 . "'$value[$i]')";
+//         } else {
+//             $sql_part_1 = $sql_part_1 . "$column[$i], ";
+//             $sql_part_2 = $sql_part_2 . "'$value[$i]', ";
+//         }
+//     }
+//     $sql = $sql_part_1 . $sql_part_2;
+//     echo $sql;
+
+//     $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
+//     $res = mysqli_query($con, $sql);
+
+//     if (!$res) {
+//         echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
+//         die;
+//     } else {
+//         echo json_encode(array("insert", $msg));
+//     }
+// }
 die;

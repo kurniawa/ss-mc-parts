@@ -32,7 +32,7 @@
             </div>
 
         </div>
-        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertNewProduct();">
+        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertNewItem();">
 
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
@@ -236,7 +236,7 @@
             });
         } else if (elementID === `#divSelectJht-${indexSJVaria}`) {
             arrayJht.forEach(tipeJht => {
-                $("#selectJht-" + indexSJVaria).append('<option value="+ jht ' + tipeJht + '">' + tipeJht + '</option>');
+                $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
             });
         } else if (elementID === `#divSelectJenisLG-${indexSJVaria}`) {
             arrayJenisLG.forEach(tipeJht => {
@@ -353,8 +353,9 @@
 
     // });
 
-    function insertNewProduct() {
+    function insertNewItem() {
         // console.log('clicked');
+        $tipe = 'sj-varia'
         $bahan = $(`#inputBahan-${indexSJVaria}`).val();
         $varia = $(`#selectVaria-${indexSJVaria}`).val();
         $jht = '';
@@ -398,11 +399,12 @@
         }
 
         let itemObj = {
-            'bahan': $bahan,
-            'varia': $varia,
-            'jht': $jht,
-            'desc': $desc,
-            'jumlah': $jumlah
+            tipe: $tipe,
+            bahan: $bahan,
+            varia: $varia,
+            jht: $jht,
+            desc: $desc,
+            jumlah: $jumlah
         }
         console.log(itemObj);
         let SPKItems = localStorage.getItem('SPKItems');

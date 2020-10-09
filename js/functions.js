@@ -73,3 +73,30 @@ function formatDate (date) {
 
     return [day, month, year].join('-');
 }
+
+// function insertToDB (table, column, value, data_length) {
+//     let sqlPart1 = "INSERT INTO $table(";
+//     let sqlPart2 = " VALUE(";
+
+//     for (let i = 0; i < $data_length; i++) {
+//         if (i === ($data_length - 1)) {
+//             sqlPart1 = `${sqlPart1}${column[i]})`;
+//             sqlPart2 = `${sqlPart2}'${value[i]}')`;
+//         } else {
+//             sqlPart1 = `${sqlPart1}${column[i]}, `;
+//             sqlPart2 = `${sqlPart2}'${value[$i]}', `;
+//         }
+//     }
+//     let sql = sqlPart1 + sqlPart2;
+//     console.log(sql)
+
+    // $msg = "Query: ".$sql. " SUCCESSFULLY EXECUTED.";
+    // $res = mysqli_query($con, $sql);
+
+    // if (!$res) {
+    //     echo json_encode(array("error", "Error: ".$sql. "<br>".mysqli_error($con)));
+    //     die;
+    // } else {
+    //     echo json_encode(array("insert", $msg));
+    // }
+// }
