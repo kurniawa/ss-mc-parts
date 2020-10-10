@@ -90,6 +90,20 @@ if ($type === 'insert') {
     $value = $_POST['value'];
     $data_length = count($column);
 
+    if (isset($_POST['idToReturn'])) {
+        $idToReturn = $_POST['idToReturn'];
+    } else {
+        $idToReturn = null;
+    }
+    // var_dump($value);
+
+    if (isset($_POST['dateIndex'])) {
+        $dateIndex = $_POST['dateIndex'];
+        $value[$dateIndex] = date("Y-m-d", strtotime($value[$dateIndex]));
+        // var_dump($value[$dateIndex]);
+    }
+    // var_dump($value);
+
     $sql_part_1 = "INSERT INTO $table(";
     $sql_part_2 = " VALUE(";
 
@@ -112,8 +126,8 @@ if ($type === 'insert') {
         echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
         die;
     } else {
-        // echo json_encode(array("insert", $msg));
-        echo "INSERT OK";
+        echo json_encode(array("INSERT OK", $msg, $idToReturn));
+        // echo "INSERT OK";
     }
 }
 
@@ -121,6 +135,15 @@ if ($type === 'insertTest') {
     $table = $_POST['table'];
     $column = $_POST['column'];
     $value = $_POST['value'];
+    // var_dump($value);
+
+    if (isset($_POST['dateIndex'])) {
+        $dateIndex = $_POST['dateIndex'];
+        $value[$dateIndex] = date("Y-m-d", strtotime($value[$dateIndex]));
+        // var_dump($value[$dateIndex]);
+    }
+    // var_dump($value);
+
     $data_length = count($column);
 
     $sql_part_1 = "INSERT INTO $table(";
@@ -136,7 +159,7 @@ if ($type === 'insertTest') {
         }
     }
     $sql = $sql_part_1 . $sql_part_2;
-    echo $sql;
+    // echo json_encode(array($sql));
 
     $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
 }

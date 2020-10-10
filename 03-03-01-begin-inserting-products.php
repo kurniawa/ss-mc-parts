@@ -137,6 +137,28 @@
             console.log('proceedSPK()');
             let resNewSPK = await insertNewSPK();
             console.log(resNewSPK);
+            if (resNewSPK[0] === 'INSERT OK') {
+                $.ajax({
+                    type: 'POST',
+                    url: '01-crud.php',
+                    async: false,
+                    data: {
+                        type: 'insert',
+                        table: 'spk_contains_produk',
+                        column: ['id_spk', 'id_produk', 'jumlah'],
+                        value: [resNewSPK[2], resInsertProduct[1][i]]
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res === 'INSERT OK') {
+                            result.push('OK');
+                            listOfID.push(setID);
+                        } else {
+                            result.push('NOT OK');
+                        }
+                    }
+                });
+            }
         }
     }
 
@@ -144,6 +166,7 @@
         let result = [];
         let status = '';
         let listOfID = [];
+        let listOfJumlah = [];
         for (const item of SPKItems) {
             let lastID = JSON.parse(getLastID('produk'));
             let setID = '';

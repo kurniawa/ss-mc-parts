@@ -161,6 +161,7 @@ include_once "01-header.php";
 
     async function insertNewSPK() {
         console.log('SPKNo: ' + SPKNo);
+        let result = '';
         let SPKDate = formatDate($('#date').val());
         let customerName = $('#inputCustomerName').val();
         let customerID = $('#inputIDCustomer').val();
@@ -176,15 +177,25 @@ include_once "01-header.php";
             url: "01-crud.php",
             async: false,
             data: {
-                type: 'insertTest',
+                type: 'insert',
                 table: 'spk',
                 column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan'],
-                value: [SPKNo, SPKDate, titleDesc, customerID]
+                value: [SPKNo, SPKDate, titleDesc, customerID],
+                dateIndex: 1,
+                idToReturn: SPKNo
             },
             success: function(res) {
+                res = JSON.parse(res);
                 console.log(res);
+                if (res[0] === 'INSERT OK') {
+                    result = res[0];
+                } else {
+                    result = 'NOT OK';
+                }
             }
         });
+        console.log(result);
+        return result;
     }
 </script>
 
