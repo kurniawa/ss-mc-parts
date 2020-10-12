@@ -28,8 +28,13 @@ include_once "01-header.php";
 <script>
     $.ajax({
         type: "POST",
-        url: "03-02-get-spk.php",
+        url: "01-crud.php",
         async: false,
+        cache: false,
+        data: {
+            type: 'SELECT',
+            table: 'spk'
+        },
         success: function(data) {
             console.log(data);
         }

@@ -129,36 +129,57 @@
 
     async function proceedSPK() {
         // cek apakah produk sudah ada atau blm
+        let result = new Array();
+        let status = '';
         let resInsertProduct = await insertNewProduct();
-        console.log(resInsertProduct);
+        console.log('resInsertProduct: ' + resInsertProduct);
 
         if (resInsertProduct[0] === 'OK') {
             // masukkan data SPK
             console.log('proceedSPK()');
             let resNewSPK = await insertNewSPK();
-            console.log(resNewSPK);
+            console.log('resNewSPK: ' + resNewSPK);
             if (resNewSPK[0] === 'INSERT OK') {
-                $.ajax({
-                    type: 'POST',
-                    url: '01-crud.php',
-                    async: false,
-                    data: {
-                        type: 'insert',
-                        table: 'spk_contains_produk',
-                        column: ['id_spk', 'id_produk', 'jumlah'],
-                        value: [resNewSPK[2], resInsertProduct[1][i]]
-                    },
-                    success: function(res) {
-                        console.log(res);
-                        if (res === 'INSERT OK') {
-                            result.push('OK');
-                            listOfID.push(setID);
-                        } else {
-                            result.push('NOT OK');
+                for (let i = 0; i < resInsertProduct[1].length; i++) {
+                    let lastID = getLastID('spk_contains_produk');
+                    lastID = JSON.parse(lastID);
+                    console.log('lastID from spk_contains_produk: ' + lastID);
+                    let setID = lastID[1];
+                    $.ajax({
+                        type: 'POST',
+                        url: '01-crud.php',
+                        async: false,
+                        data: {
+                            type: 'insert',
+                            table: 'spk_contains_produk',
+                            column: ['id', 'id_spk', 'id_produk', 'ktrg', 'jumlah'],
+                            value: [setID, resNewSPK[2], resInsertProduct[1][i], resInsertProduct[2][i][0], resInsertProduct[2][i][1]]
+                        },
+                        success: function(res) {
+                            console.log(res);
+                            res = JSON.parse(res);
+                            if (res[0] === 'INSERT OK') {
+                                result.push('OK');
+                            } else {
+                                result.push('NOT OK');
+                            }
                         }
-                    }
-                });
+                    });
+                }
+            } else {
+                console.log('Ada kesalahan pada saat insert!');
             }
+        }
+        try {
+            result.forEach(res => {
+                if (res != 'OK') {
+                    throw 'Ada Eror INSERT spk_contains_produk';
+                }
+                status = 'OK';
+            });
+        } catch (error) {
+            console.log(error);
+            status = 'NOT OK';
         }
     }
 
@@ -166,16 +187,11 @@
         let result = [];
         let status = '';
         let listOfID = [];
-        let listOfJumlah = [];
+        let parameterToPass = [];
         for (const item of SPKItems) {
             let lastID = JSON.parse(getLastID('produk'));
-            let setID = '';
+            let setID = lastID[1];
             console.log(lastID);
-            if (lastID[1] === null) {
-                setID = 1;
-            } else {
-                setID = parseFloat(lastID[1]) + 1;
-            }
             console.log(setID);
             $.ajax({
                 type: 'POST',
@@ -185,7 +201,8 @@
                     type: 'cek',
                     table: 'produk',
                     column: ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
-                    value: [item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
+                    value: [item.tipe, item.bahan, item.varia, item.ukuran, item.jht],
+                    parameter: [item.desc, item.jumlah]
                 },
                 success: function(res) {
                     console.log(res);
@@ -199,13 +216,19 @@
                                 type: 'insert',
                                 table: 'produk',
                                 column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
-                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.jumlah, item.desc]
+                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht],
+                                parameter: [item.desc, item.jumlah]
                             },
                             success: function(res) {
                                 console.log(res);
-                                if (res === 'INSERT OK') {
+                                res = JSON.parse(res);
+                                if (res[0] === 'INSERT OK') {
                                     result.push('OK');
+                                    console.log('result: ' + result);
                                     listOfID.push(setID);
+                                    console.log('lisfOfID: ' + listOfID);
+                                    parameterToPass.push(res[3]);
+                                    console.log('parameterToPass: ' + parameterToPass);
                                 } else {
                                     result.push('NOT OK');
                                 }
@@ -215,6 +238,7 @@
                         res = JSON.parse(res);
                         console.log(res);
                         listOfID.push(parseInt(res[1]));
+                        parameterToPass.push(res[2]);
                         result.push('OK');
                     }
                 }
@@ -233,7 +257,7 @@
             status = 'NOT OK';
         }
         console.log(listOfID);
-        return [status, listOfID];
+        return [status, listOfID, parameterToPass];
     }
 </script>
 

@@ -60,9 +60,9 @@ include_once "01-header.php";
     let lastID = getLastID("spk");
     console.log(lastID);
     lastID = JSON.parse(lastID);
-    console.log(lastID[1]);
+    console.log('lastID for SPK Number: ' + lastID[1]);
 
-    let SPKNo = parseFloat(lastID[1]) + 1;
+    let SPKNo = lastID[1];
 
     $("#SPKNo").val(SPKNo);
     // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
@@ -161,7 +161,7 @@ include_once "01-header.php";
 
     async function insertNewSPK() {
         console.log('SPKNo: ' + SPKNo);
-        let result = '';
+        let result = [];
         let SPKDate = formatDate($('#date').val());
         let customerName = $('#inputCustomerName').val();
         let customerID = $('#inputIDCustomer').val();
@@ -187,14 +187,10 @@ include_once "01-header.php";
             success: function(res) {
                 res = JSON.parse(res);
                 console.log(res);
-                if (res[0] === 'INSERT OK') {
-                    result = res[0];
-                } else {
-                    result = 'NOT OK';
-                }
+                result = res;
             }
         });
-        console.log(result);
+        console.log('result insertNewSPK(): ' + result);
         return result;
     }
 </script>
