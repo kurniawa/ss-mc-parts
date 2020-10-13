@@ -85,6 +85,11 @@
     grid-template-columns: 8% auto auto 5%;
     align-items: center;
 }
+.grid-5-9_45_25_18_5 {
+    display: grid;
+    grid-template-columns: 9% 45% 25% 18% 5%;
+    align-items: center;
+}
 .grid-column-gap-0_5em {
     grid-column-gap: 0.5em;
 }

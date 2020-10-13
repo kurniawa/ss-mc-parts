@@ -359,7 +359,9 @@
         $bahan = $(`#inputBahan-${indexSJVaria}`).val();
         $varia = $(`#selectVaria-${indexSJVaria}`).val();
         $jht = '';
+        $plusJahit = '';
         $desc = '';
+        $namaLengkap = '';
         $jumlah = 0;
 
         console.log('$bahan: ' + $bahan);
@@ -398,13 +400,19 @@
             return;
         }
 
+        if ($jht !== '') {
+            $plusJahit = '+ jht ' + $jht;
+        }
+        $namaLengkap = $bahan + ' ' + $varia + ' ' + $plusJahit;
+
         let itemObj = {
             tipe: $tipe,
             bahan: $bahan,
             varia: $varia,
             jht: $jht,
             desc: $desc,
-            jumlah: $jumlah
+            jumlah: $jumlah,
+            namaLengkap: $namaLengkap
         }
         console.log(itemObj);
         let SPKItems = localStorage.getItem('SPKItems');

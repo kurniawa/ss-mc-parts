@@ -155,7 +155,46 @@ if ($type === "SELECT") {
 
     $res = mysqli_query($con, $sql);
 
-    while (mysqli_num_rows($res) > 0) {
+    if (mysqli_num_rows($res) > 0) {
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($res)) {
+            $rows[] = $row;
+        }
+        echo json_encode($rows);
+    } else {
+        echo "NOT FOUND!";
+        die;
+    }
+}
+
+if ($type === "SELECT ONE") {
+    $table = $_POST["table"];
+    $column = $_POST["column"];
+    $value = $_POST["value"];
+    $data_length = count($column);
+    $sql = "SELECT * FROM $table";
+
+    $sql = "SELECT * FROM $table WHERE ";
+
+    for ($i = 0; $i < $data_length; $i++) {
+        $sql = $sql . "$column[$i] = '$value[$i]'";
+        if ($data_length > 1) {
+            $sql = $sql . " AND ";
+        }
+    }
+    // echo $sql;
+
+    $res = mysqli_query($con, $sql);
+
+    if (mysqli_num_rows($res) > 0) {
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($res)) {
+            $rows[] = $row;
+        }
+        echo json_encode($rows);
+    } else {
+        echo "NOT FOUND!";
+        die;
     }
 }
 

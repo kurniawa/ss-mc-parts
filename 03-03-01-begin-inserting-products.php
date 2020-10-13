@@ -215,8 +215,8 @@
                             data: {
                                 type: 'insert',
                                 table: 'produk',
-                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
-                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht],
+                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap'],
+                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap],
                                 parameter: [item.desc, item.jumlah]
                             },
                             success: function(res) {

@@ -328,6 +328,9 @@ option{
 .bg-color-soft-red {
     background-color: #FF856A;
 }
+.bg-color-purple-blue {
+    background-color: #706DFF;
+}
 .border-solid-red {
     border: 1px solid red;
 }
