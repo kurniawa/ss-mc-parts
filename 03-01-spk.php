@@ -34,9 +34,9 @@ include_once "01-header.php";
     let daftarDaerahPelangganSPK = [];
     let daftarSingkatanPelangganSPK = [];
     let daftarJumlahItemSPK = [];
-    let daftarJumlahTotalSPK = [];
+    let daftarJumlahTotalSPK = new Array();
     let daftarDescEachItem = [];
-    let daftarNamaProdukEachSPK = [];
+    let daftarNamaProdukEachSPK = new Array();
 
     $.ajax({
         type: "POST",
@@ -94,80 +94,93 @@ include_once "01-header.php";
                         console.log('daftarDaerahPelangganSPK: ' + daftarDaerahPelangganSPK);
                         console.log('daftarSingkatanPelangganSPK: ' + daftarSingkatanPelangganSPK);
 
-                        daftarIDSPK.forEach(idSPK => {
-                            let jmlEachItem = [];
-                            let descEachItem = [];
-                            let jumlahTotalSPK = 0;
-                            $.ajax({
-                                url: '01-crud.php',
-                                type: 'POST',
-                                async: false,
-                                cache: false,
-                                data: {
-                                    type: 'SELECT ONE',
-                                    table: 'spk_contains_produk',
-                                    column: ['id_spk'],
-                                    value: [idSPK]
-                                },
-                                success: function(res) {
-                                    console.log('res spk_contains_produk: ' + res);
-                                    res = JSON.parse(res);
-                                    let daftarIDProdukEachSPK = [];
-                                    for (const SPKItem of res) {
-                                        jumlahTotalSPK = jumlahTotalSPK + parseFloat(SPKItem.jumlah);
-                                        jmlEachItem.push(SPKItem.jumlah);
-                                        descEachItem.push(SPKItem.ktrg);
-                                        console.log('SPKItem.ktrg: ' + SPKItem.ktrg);
-                                        daftarIDProdukEachSPK.push(SPKItem.id_produk);
-                                    }
-
-                                    console.log('jumlahTotalSPK: ' + jumlahTotalSPK);
-                                    console.log('jmlEachItem: ' + jmlEachItem);
-                                    console.log('descEachItem: ' + descEachItem);
-
-                                    daftarJumlahItemSPK.push(jmlEachItem);
-                                    daftarJumlahTotalSPK.push(jumlahTotalSPK);
-                                    daftarDescEachItem.push(descEachItem);
-
-                                    console.log('daftarJumlahItemSPK: ' + daftarJumlahItemSPK);
-                                    console.log('daftarJumlahTotalSPK: ' + daftarJumlahTotalSPK);
-                                    console.log('daftarDescEachItem: ' + daftarDescEachItem);
-                                    let namaProduk = [];
-                                    daftarIDProdukEachSPK.forEach(idProduk => {
-                                        $.ajax({
-                                            url: '01-crud.php',
-                                            type: 'POST',
-                                            async: false,
-                                            cache: false,
-                                            data: {
-                                                type: 'SELECT ONE',
-                                                table: 'produk',
-                                                column: ['id'],
-                                                value: [idProduk]
-                                            },
-                                            success: function(res) {
-                                                console.log('res produk: ' + res);
-                                                res = JSON.parse(res);
-                                                namaProduk.push(res[0].nama_lengkap);
-                                                console.log('res.nama_lengkap: ' + res[0].nama_lengkap);
-                                            }
-                                        });
-                                    });
-
-                                    daftarNamaProdukEachSPK.push(namaProduk);
-                                    console.log('daftarNamaProdukEachSPK: ' + daftarNamaProdukEachSPK);
-                                    daftarSPK();
-                                }
-                            });
-                        });
                     }
                 });
             });
+            let daftarIDProdukEachSPK = [];
+            let descEachItem = [];
+            daftarIDSPK.forEach(idSPK => {
+                let jumlahTotalSPK = 0;
+                let idProdukEachSPK = new Array();
+                let jmlEachItem = new Array();
+                $.ajax({
+                    url: '01-crud.php',
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    data: {
+                        type: 'SELECT ONE',
+                        table: 'spk_contains_produk',
+                        column: ['id_spk'],
+                        value: [idSPK]
+                    },
+                    success: function(res) {
+                        console.log('res spk_contains_produk: ' + res);
+                        res = JSON.parse(res);
+                        for (const SPKItem of res) {
+                            jumlahTotalSPK = jumlahTotalSPK + parseFloat(SPKItem.jumlah);
+                            let descEachItemObj = {
+                                desc: SPKItem.ktrg
+                            };
+                            jmlEachItem.push(SPKItem.jumlah);
+                            descEachItem.push(descEachItemObj);
+                            console.log('SPKItem.ktrg: ' + SPKItem.ktrg);
+                            idProdukEachSPK.push(SPKItem.id_produk);
+                        }
+                        daftarIDProdukEachSPK.push(idProdukEachSPK);
+                        console.log('jumlahTotalSPK: ' + jumlahTotalSPK);
+                        console.log('jmlEachItem: ' + jmlEachItem);
+                        console.log('descEachItem: ' + descEachItem);
+
+                        daftarJumlahItemSPK.push(jmlEachItem);
+                        daftarJumlahTotalSPK.push(jumlahTotalSPK);
+                    }
+                });
+            });
+            daftarDescEachItem.push(descEachItem);
+
+            console.log('daftarJumlahItemSPK');
+            console.log(daftarJumlahItemSPK);
+            console.log('daftarJumlahTotalSPK: ' + daftarJumlahTotalSPK);
+            console.log('daftarDescEachItem: ' + daftarDescEachItem);
+            console.log('daftarIDProdukEachSPK: ' + daftarIDProdukEachSPK);
+            console.log(daftarIDProdukEachSPK);
+            daftarIDProdukEachSPK.forEach(idProduk => {
+                let namaProduk = new Array();
+                idProduk.forEach(id => {
+                    $.ajax({
+                        url: '01-crud.php',
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        data: {
+                            type: 'SELECT ONE',
+                            table: 'produk',
+                            column: ['id'],
+                            value: [id]
+                        },
+                        success: function(res) {
+                            console.log('res produk: ' + res);
+                            res = JSON.parse(res);
+                            namaProduk.push(res[0].nama_lengkap);
+                            console.log('res.nama_lengkap: ' + res[0].nama_lengkap);
+                        }
+                    });
+
+                });
+                daftarNamaProdukEachSPK.push(namaProduk);
+            });
+
+            console.log('daftarNamaProdukEachSPK:');
+            console.log(daftarNamaProdukEachSPK);
+            daftarSPK();
         }
     });
 
     async function daftarSPK() {
         let i = 0;
+        console.log('function dafarSPK dijalankan.');
+        console.log('daftarIDSPK: ' + daftarIDSPK);
         daftarIDSPK.forEach(idSPK => {
             let arrayDate = daftarTglPembuatan[i].split('-');
             let getYear = arrayDate[0];
@@ -178,26 +191,70 @@ include_once "01-header.php";
             console.log('getDay: ' + getDay);
             let subGetYear = getYear.substr(2);
             console.log('subGetYear: ' + subGetYear);
+
+            console.log(`daftarNamaPelangganSPK[${i}]: ${daftarNamaPelangganSPK[i]}`);
+            console.log(`daftarJumlahTotalSPK[${i}]: ${daftarJumlahTotalSPK[i]}`);
+            console.log(`daftarNamaProdukEachSPK[${i}]: ${JSON.stringify(daftarNamaProdukEachSPK[i])}`);
+            let elementToToggle = [{
+                id: `#divSPKItems-${i}`,
+                time: 300
+            }];
+            console.log('elementToToggle:');
+            console.log(elementToToggle);
+            elementToToggle = JSON.stringify(elementToToggle);
+            console.log(elementToToggle);
+            let htmlItemsEachSPK = '';
+            let htmlHiddenInput =
+                `
+                <input type='hidden' name='SPKID' value='${daftarIDSPK[i]}'>
+                <input type='hidden' name='CustID' value='${daftarIDPelangganSPK[i]}'>
+                <input type='hidden' name='custName' value='${daftarNamaPelangganSPK[i]}'>
+                <input type='hidden' name='daerah' value='${daftarDaerahPelangganSPK[i]}'>
+                <input type='hidden' name='tglPembuatan' value='${daftarTglPembuatan[i]}'>
+                <input type='hidden' name='tglSelesai' value='${daftarTglSelesai[i]}'>
+            `;
+            for (let j = 0; j < daftarNamaProdukEachSPK[i].length; j++) {
+                htmlItemsEachSPK = htmlItemsEachSPK +
+                    `<div>${daftarNamaProdukEachSPK[i][j]}</div><div>${daftarJumlahItemSPK[i][j]}</div>`;
+                htmlHiddenInput = htmlHiddenInput +
+                    `
+                    <input type='hidden' name='SPKItem[]' value='${daftarNamaProdukEachSPK[i][j]}'>
+                    <input type='hidden' name='jmlItem[]' value='${daftarJumlahItemSPK[i][j]}'>
+                    `;
+            }
             let htmlDaftarSPK =
-                `<div class='pb-0_5em bb-1px-solid-grey pt-0_5em grid-5-9_45_25_18_5'>
+                `<form method='POST' action='03-04-detail-spk.php' class='pb-0_5em pt-0_5em bb-1px-solid-grey'>
+                    <div class='grid-5-9_45_25_18_5'>
                     <div class='circle-medium grid-1-auto justify-items-center font-weight-bold bg-color-orange-1'>${daftarSingkatanPelangganSPK[i]}</div>
                     <div>${daftarNamaPelangganSPK[i]} - ${daftarDaerahPelangganSPK[i]}</div>
                     <div class='grid-3-auto'>
-                    <div class='grid-1-auto justify-items-center bg-color-soft-red color-white b-radius-5px'>
+                    <div class='grid-1-auto justify-items-center bg-color-soft-red color-white b-radius-5px w-3_5em'>
                     <div class='font-size-2_5em'>${getDay}</div><div>${getMonth}-${subGetYear}</div>
                     </div>
                     -
                     <div>${daftarTglSelesai[i]}</div>
                     </div>
                     <div class='grid-1-auto'>
-                    <div class='color-green justify-self-right font-size-1_2em'>${daftarJumlahTotalSPK[i]}</div>
+                    <div class='color-green justify-self-right font-size-1_2em font-weight-bold'>${daftarJumlahTotalSPK[i]}</div>
                     <div class='color-grey justify-self-right'>Jumlah</div>
                     </div>
-                    <div class='justify-self-center'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>
-                </div>`;
+                    <div class='justify-self-center'><img class='w-0_7em' src='img/icons/dropdown.svg' onclick='elementToToggle(${elementToToggle});'></div>
+                    </div>` + htmlHiddenInput +
+                // DROPDOWN
+                `<div id='divSPKItems-${i}' class='p-0_5em b-1px-solid-grey' style='display: none'>
+                <div class='font-weight-bold color-grey'>No. ${daftarIDSPK[i]}</div>
+                <div class='grid-2-auto'>` + htmlItemsEachSPK + `</div>
+                <div class='text-right'>
+                <button type='submit' class="d-inline-block bg-color-orange-1 pl-1em pr-1em b-radius-50px" style='border: none'>
+                Lebih Detail >>
+                </button>
+                </div>
+                </div>
+                </form>`;
 
             $('#div-daftar-spk').append(htmlDaftarSPK);
             i++;
+            console.log('i: ' + i);
         });
     }
 

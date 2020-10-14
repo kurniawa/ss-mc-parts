@@ -20,6 +20,13 @@ function deleteItems (id, table, column) {
     return results;
 }
 
+function elementToToggle (elements) {
+    console.log(elements);
+    for (const element of elements) {
+        $(element.id).toggle(element.time);
+    }
+}
+
 function getLastID (table) {
     let results;
     $.ajax({
