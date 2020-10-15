@@ -30,6 +30,7 @@ include_once "01-header.php";
     let daftarIDPelangganSPK = [];
     let daftarTglPembuatan = [];
     let daftarTglSelesai = [];
+    let daftarKetSPK = new Array();
     let daftarNamaPelangganSPK = [];
     let daftarDaerahPelangganSPK = [];
     let daftarSingkatanPelangganSPK = [];
@@ -57,6 +58,7 @@ include_once "01-header.php";
                 daftarIDSPK.push(dataItem.id);
                 daftarIDPelangganSPK.push(dataItem.id_pelanggan);
                 daftarTglPembuatan.push(dataItem.tgl_pembuatan);
+                daftarKetSPK.push(dataItem.ket_judul);
                 if (dataItem.tgl_selesai == null) {
                     daftarTglSelesai.push('');
                 } else if (dataItem.tgl_selesai != null) {
@@ -68,6 +70,8 @@ include_once "01-header.php";
             console.log('daftarIDPelangganSPK: ' + daftarIDPelangganSPK);
             console.log('daftarTglPembuatan: ' + daftarTglPembuatan);
             console.log('daftarTglSelesai: ' + daftarTglSelesai);
+            console.log('daftarKetSPK:');
+            console.log(daftarKetSPK);
 
             daftarIDPelangganSPK.forEach(pelanggan => {
                 $.ajax({
@@ -98,8 +102,8 @@ include_once "01-header.php";
                 });
             });
             let daftarIDProdukEachSPK = [];
-            let descEachItem = [];
             daftarIDSPK.forEach(idSPK => {
+                let descEachItem = new Array();
                 let jumlahTotalSPK = 0;
                 let idProdukEachSPK = new Array();
                 let jmlEachItem = new Array();
@@ -119,11 +123,8 @@ include_once "01-header.php";
                         res = JSON.parse(res);
                         for (const SPKItem of res) {
                             jumlahTotalSPK = jumlahTotalSPK + parseFloat(SPKItem.jumlah);
-                            let descEachItemObj = {
-                                desc: SPKItem.ktrg
-                            };
                             jmlEachItem.push(SPKItem.jumlah);
-                            descEachItem.push(descEachItemObj);
+                            descEachItem.push(SPKItem.ktrg);
                             console.log('SPKItem.ktrg: ' + SPKItem.ktrg);
                             idProdukEachSPK.push(SPKItem.id_produk);
                         }
@@ -134,15 +135,16 @@ include_once "01-header.php";
 
                         daftarJumlahItemSPK.push(jmlEachItem);
                         daftarJumlahTotalSPK.push(jumlahTotalSPK);
+                        daftarDescEachItem.push(descEachItem);
                     }
                 });
             });
-            daftarDescEachItem.push(descEachItem);
 
             console.log('daftarJumlahItemSPK');
             console.log(daftarJumlahItemSPK);
             console.log('daftarJumlahTotalSPK: ' + daftarJumlahTotalSPK);
-            console.log('daftarDescEachItem: ' + daftarDescEachItem);
+            console.log('daftarDescEachItem:');
+            console.log(daftarDescEachItem);
             console.log('daftarIDProdukEachSPK: ' + daftarIDProdukEachSPK);
             console.log(daftarIDProdukEachSPK);
             daftarIDProdukEachSPK.forEach(idProduk => {
@@ -207,11 +209,13 @@ include_once "01-header.php";
             let htmlHiddenInput =
                 `
                 <input type='hidden' name='SPKID' value='${daftarIDSPK[i]}'>
-                <input type='hidden' name='CustID' value='${daftarIDPelangganSPK[i]}'>
+                <input type='hidden' name='custID' value='${daftarIDPelangganSPK[i]}'>
                 <input type='hidden' name='custName' value='${daftarNamaPelangganSPK[i]}'>
                 <input type='hidden' name='daerah' value='${daftarDaerahPelangganSPK[i]}'>
                 <input type='hidden' name='tglPembuatan' value='${daftarTglPembuatan[i]}'>
                 <input type='hidden' name='tglSelesai' value='${daftarTglSelesai[i]}'>
+                <input type='hidden' name='ketSPK' value='${daftarKetSPK[i]}'>
+                <input type='hidden' name='jmlTotal' value='${daftarJumlahTotalSPK[i]}'>
             `;
             for (let j = 0; j < daftarNamaProdukEachSPK[i].length; j++) {
                 htmlItemsEachSPK = htmlItemsEachSPK +
@@ -220,6 +224,7 @@ include_once "01-header.php";
                     `
                     <input type='hidden' name='SPKItem[]' value='${daftarNamaProdukEachSPK[i][j]}'>
                     <input type='hidden' name='jmlItem[]' value='${daftarJumlahItemSPK[i][j]}'>
+                    <input type='hidden' name='descEachItem[]' value='${daftarDescEachItem[i][j]}'>
                     `;
             }
             let htmlDaftarSPK =
