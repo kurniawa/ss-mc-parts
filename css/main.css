@@ -25,6 +25,10 @@ option{
     height: 4em;
     background-color: #ffb800;
 }
+.btn-1 {
+    padding: 0.5em 1em 0.5em 1em;
+    border-radius: 15px;
+}
 .input-1 {
     border: none;
     border-bottom: 1px solid #e4e4e4;

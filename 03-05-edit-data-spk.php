@@ -1,5 +1,6 @@
 <?php
 include_once "01-header.php";
+// echo date("Y-m-d");
 ?>
 
 <div class="header"></div>
@@ -11,39 +12,56 @@ include_once "01-header.php";
             <img class="w-2em" src="img/icons/pencil.svg" alt="">
         </div>
         <div class="font-weight-bold">
-            Untuk siapa SPK ini?
+            Form Edit Data SPK
         </div>
     </div>
 
     <div class="ml-0_5em mr-0_5em mt-2em">
 
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
-            <input id="SPKNo" class="input-1 pb-1em" type="text" placeholder="No." disabled>
-            <input type="date" class="input-select-option-1 pb-1em" name="date" id="date" value="<?php echo date('Y-m-d'); ?>">
+            <div class="pb-1em">
+                <label class="color-grey" for="SPKNo">No. SPK:</label>
+                <input id="SPKNo" class="input-1" type="text" placeholder="No." disabled>
+            </div>
+            <div class="pb-1em">
+                <label for="date" class="color-grey">Tgl.:</label>
+                <input type="date" class="input-select-option-1" name="date" id="date" value="<?php echo date('Y-m-d'); ?>">
+            </div>
         </div>
 
         <div id="divInputCustomerName" class="containerInputEkspedisi mt-1em mb-1em">
             <div class="bb-1px-solid-grey">
-                <input id="inputCustomerName" class="input-1 pb-1em bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
+                <div class=" pb-1em">
+                    <label class="color-grey" for="inputCustomerName">Nama Pelanggan:</label>
+                    <input id="inputCustomerName" class="input-1 bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
+                </div>
                 <div id="searchResults" class="d-none b-1px-solid-grey bb-none"></div>
             </div>
         </div>
 
-        <input id="titleDesc" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
+        <div class="mt-1em">
+            <label for="titleDesc" class="color-grey">Keterangan (opt.):</label>
+            <input id="titleDesc" class="input-1 pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
+        </div>
 
 
     </div>
 
+    <input id="idChosenCustName" type="hidden">
 
     <br><br>
+    <div class="text-center">
+        <div id="btnCancel" class="d-inline-block btn-1 bg-color-orange-1">Batalkan Perubahan</div>
+    </div>
 
     <div id="warning" class="d-none"></div>
 
     <div>
-        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="beginInsertingProducts();">
-            <span class="justify-self-center font-weight-bold">Mulai Proses SPK >></span>
+        <div id="btnEditSPK" class="m-1em h-4em bg-color-orange-2 grid-1-auto" style="display: none" onclick="editDataSPK();">
+            <span class="justify-self-center font-weight-bold">Edit Data SPK >></span>
         </div>
     </div>
+
 
     <div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
     </div>
@@ -56,25 +74,41 @@ include_once "01-header.php";
     console.log(dataSPK);
 
     // assign data-data yang ada ke html
+    // format tanggal dulu sebelum bisa assign
+    // var tglPembuatan = new Date(dataSPK.tglPembuatan);
+    // console.log(tglPembuatan);
+    $('#SPKNo').val(dataSPK.id);
+    $('#date').val(dataSPK.tglPembuatan);
+    $('#inputCustomerName').val(dataSPK.custName);
+    $('#titleDesc').val(dataSPK.ketSPK);
 
-    // history.pushState({
-    //     page: 'newSPK'
-    // }, null);
+    //cek apakah ada data yang diubah, apabila ada data yang diubah, maka akan muncul tombol edit
+    document.getElementById('titleDesc').addEventListener('keyup', (event) => {
+        // console.log(this);
+        // console.log(event);
+        console.log(event.target.value);
+        showHideBtnEditSPK(event.target.value, dataSPK.ketSPK);
+    });
 
-    // $(document).ready(function() {
-    // let lastID = getLastID("spk");
-    // console.log(lastID);
-    // lastID = JSON.parse(lastID);
-    // console.log('lastID for SPK Number: ' + lastID[1]);
+    document.getElementById('date').addEventListener('change', (event) => {
+        console.log(event.target.value);
+        showHideBtnEditSPK(event.target.value, dataSPK.tglPembuatan);
+    });
 
-    // let SPKNo = lastID[1];
+    function showHideBtnEditSPK(valueNew, valueOld) {
+        if (valueNew != valueOld) {
+            if ($('#btnEditSPK').css('display') == 'none') {
+                $('#btnEditSPK').show();
+            }
+        } else {
+            $('#btnEditSPK').css('display', 'none');
+        }
+    }
 
-    // $("#SPKNo").val(SPKNo);
-    // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
-    // $(".divSPKNumber").html(SPKNo);
-    // });
-
-    // $i = 0;
+    // Apabila ingin cancel perubahan
+    document.getElementById('btnCancel').addEventListener('click', () => {
+        window.history.back();
+    });
 
     function cekEkspedisi(params) {
         console.log(params);
@@ -149,20 +183,47 @@ include_once "01-header.php";
         $searchResults.removeClass("grid-1-auto").addClass("d-none");
 
         // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
-        $(".divSPKCustomer").html($chosenValue.html());
-        $('#inputIDCustomer').val($idChosenValue);
+        $("#idChosenCustName").val($idChosenValue);
+
+        showHideBtnEditSPK($inputCustomerName.val(), dataSPK.custName);
     }
 
-    // function beginInsertingProducts() {
-    //     if ($("#SPKBaru").css("display") === "block") {
-    //         $("#SPKBaru").toggle();
-    //         $("#containerBeginSPK").toggle();
-    //         let SPKDate = formatDate($("#date").val());
+    function editDataSPK() {
+        let idSPK = $('#SPKNo').val();
+        let tglPembuatan = $('#date').val();
+        let custName = $('#inputCustomerName').val();
+        let custID = $('#idChosenCustName').val();
+        let titleDesc = $('#titleDesc').val();
 
-    //         $(".divSPKDate").html(SPKDate);
-    //         $(".divTitleDesc").html($("#titleDesc").val());
-    //     }
-    // }
+        if (tglPembuatan != dataSPK.tglPembuatan || custName != dataSPK.custName || titleDesc != dataSPK.ketSPK) {
+            console.log('ada yang diubah');
+            dataSPK.tglPembuatan = tglPembuatan;
+            dataSPK.custName = custName;
+            dataSPK.ketSPK = titleDesc;
+
+            $.ajax({
+                url: '01-crud.php',
+                type: 'POST',
+                async: false,
+                cache: false,
+                data: {
+                    type: 'UPDATE',
+                    table: 'spk',
+                    column: ['tgl_pembuatan', 'ket_judul', 'id_pelanggan'],
+                    value: [tglPembuatan, titleDesc, custID],
+                    dateIndex: 0,
+                    key: 'id',
+                    keyValue: idSPK
+                },
+                success: function(res) {
+                    console.log(res);
+                }
+            });
+            return;
+        }
+        console.log('tidak ada yang diubah');
+        return;
+    }
 
     async function insertNewSPK() {
         console.log('SPKNo: ' + SPKNo);

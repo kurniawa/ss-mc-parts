@@ -198,4 +198,30 @@ if ($type === "SELECT ONE") {
     }
 }
 
+if ($type === "UPDATE") {
+    $table = $_POST["table"];
+    $column = $_POST["column"];
+    $value = $_POST["value"];
+    $key = $_POST["key"];
+    $keyValue = $_POST["keyValue"];
+    $data_length = count($column);
+
+    if (isset($_POST['dateIndex'])) {
+        $dateIndex = $_POST['dateIndex'];
+        $value[$dateIndex] = date("Y-m-d", strtotime($value[$dateIndex]));
+        // var_dump($value[$dateIndex]);
+    }
+
+    $sql = "UPDATE $table SET ";
+    for ($i = 0; $i < $data_length; $i++) {
+        if ($i === ($data_length - 1)) {
+            $sql = $sql . "$column[$i] = '$value[$i]' WHERE $key=$keyValue";
+        } else {
+            $sql = $sql . "$column[$i] = '$value[$i]', ";
+        }
+    }
+
+    echo ($sql);
+}
+
 die;
