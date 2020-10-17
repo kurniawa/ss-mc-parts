@@ -221,7 +221,13 @@ if ($type === "UPDATE") {
         }
     }
 
-    echo ($sql);
+    // echo ($sql);
+    $res = mysqli_query($con, $sql);
+    if (!$res) {
+        echo json_encode(array('Error updating: ' . mysqli_error($con)));
+    } else {
+        echo json_encode(array('UPDATE SUCCEED', $sql));
+    }
 }
 
 die;

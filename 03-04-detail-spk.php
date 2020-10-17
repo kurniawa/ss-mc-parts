@@ -3,6 +3,7 @@
 // var_dump($_POST);
 $SPKID = $_POST["SPKID"];
 $custName = $_POST["custName"];
+$custID = $_POST["custID"];
 $daerah = $_POST["daerah"];
 $tglPembuatan = date("d-m-Y", strtotime($_POST["tglPembuatan"]));
 $tglPembuatan2 = $_POST["tglPembuatan"];
@@ -97,15 +98,15 @@ include_once "01-header.php";
             <div class="divSPKNumber font-weight-bold"><?= $SPKID ?></div>
             <div>Tanggal</div>
             <div>:</div>
-            <div class="divSPKDate font-weight-bold"><?= $tglPembuatan ?></div>
+            <div id="divTglPembuatan" class="font-weight-bold"><?= $tglPembuatan ?></div>
             <div>Untuk</div>
             <div>:</div>
-            <div class="divSPKCustomer font-weight-bold"><?= $custName ?> - <?= $daerah ?></div>
+            <div id="divSPKCustomer" class="font-weight-bold"><?= $custName ?> - <?= $daerah ?></div>
             <input id="inputIDCustomer" type="hidden" name="inputIDCustomer">
         </div>
     </div>
 
-    <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em"><?= $ketSPK ?></div>
+    <div id="divTitleDesc" class="grid-1-auto justify-items-center mt-0_5em"><?= $ketSPK ?></div>
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
 
@@ -137,12 +138,54 @@ include_once "01-header.php";
         </div>
 
     </div>
+
+    <div class="text-center">
+        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white">Edit Item</div>
+    </div>
+
     <div class="position-absolute bottom-0_5em w-calc-100-1em">
-        <div id="btnProsesSPK" class="h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
+        <div id="btnProsesSPK" class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
             <span class="justify-self-center font-weight-900">SPK SELESAI</span>
         </div>
     </div>
 
+    <div id="closingGreyArea" class="closingGreyArea" style="display: none;"></div>
+    <div class="lightBox" style="display:none;">
+        <div class="grid-2-10_auto">
+            <div><img src="img/icons/speech-bubble.svg" alt="" style="width: 2em;"></div>
+            <div class="font-weight-bold">Tanggal Selesai / Pengiriman</div>
+        </div>
+        <br><br>
+        <div class="text-center">
+            <input id="inputTglSelesaiSPK" type="date" class="input-select-option-1 w-12em" name="date" value="<?php echo date('Y-m-d'); ?>">
+        </div>
+        <br><br>
+        <div class="text-center">
+            <div id="btnSPKSelesai" class="btn-tipis bg-color-orange-1 d-inline-block">Lanjutkan >></div>
+        </div>
+    </div>
+
+    <style>
+        .closingGreyArea {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: black;
+            opacity: 0.2;
+        }
+
+        .lightBox {
+            position: absolute;
+            top: 25vh;
+            left: 0.5em;
+            right: 0.5em;
+            height: 13em;
+            background-color: white;
+            padding: 1em;
+        }
+    </style>
 </div>
 
 <script>
@@ -153,6 +196,7 @@ include_once "01-header.php";
     // deklarasi awal variabel-variable yang di send melalui post
     let SPKID = <?= $SPKID ?>;
     let custName = <?= json_encode($custName) ?>;
+    let custID = <?= json_encode($custID) ?>;
     let daerah = <?= json_encode($daerah) ?>;
     let tglPembuatan = <?= json_encode($tglPembuatan2) ?>;
     let tglSelesai = <?= json_encode($tglSelesai) ?>;
@@ -166,16 +210,33 @@ include_once "01-header.php";
     console.log(descEachItem);
 
     // localStorage.setItem untuk mempermudah, apabila diperlukan pengeditan
-    let dataSPK = {
-        id: SPKID,
-        custName: custName,
-        daerah: daerah,
-        tglPembuatan: tglPembuatan,
-        ketSPK: ketSPK
-    };
-    console.log(dataSPK);
-    localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
-    console.log(localStorage.getItem('dataSPKToEdit'));
+    let dataSPK = localStorage.getItem('dataSPKToEdit');
+    if (dataSPK != null) {
+        dataSPK = JSON.parse(dataSPK);
+        custName = dataSPK.custName;
+        custID = dataSPK.custID;
+        tglPembuatan = dataSPK.tglPembuatan
+        daerah = dataSPK.daerah;
+        ketSPK = dataSPK.ketSPK;
+
+        $('#divTglPembuatan').html(tglPembuatan);
+        $('#divSPKCustomer').html(custName + ' - ' + daerah);
+        $('#divTitleDesc').html(ketSPK);
+
+    } else {
+        let dataSPK = {
+            id: SPKID,
+            custName: custName,
+            custID: custID,
+            daerah: daerah,
+            tglPembuatan: tglPembuatan,
+            ketSPK: ketSPK
+        };
+        console.log(dataSPK);
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+        console.log(localStorage.getItem('dataSPKToEdit'));
+
+    }
 
     let htmlSPKItem = '';
     for (let i = 0; i < SPKItem.length; i++) {
@@ -196,6 +257,39 @@ include_once "01-header.php";
     document.getElementById('editKopSPK').addEventListener('click', function() {
         console.log('clicked');
         window.location.href = '03-05-edit-data-spk.php';
+    });
+
+    function finishSPK() {
+        $('.closingGreyArea').show();
+        $('.lightBox').show();
+    }
+
+    document.querySelector('.closingGreyArea').addEventListener('click', (event) => {
+        $('.closingGreyArea').hide();
+        $('.lightBox').hide();
+    });
+
+    document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
+        let tglSelesai = $('#inputTglSelesaiSPK').val();
+        console.log(tglSelesai);
+        $.ajax({
+            type: 'POST',
+            url: '01-crud.php',
+            async: false,
+            cache: false,
+            data: {
+                type: 'UPDATE',
+                table: 'spk',
+                column: ['tgl_selesai'],
+                value: [tglSelesai],
+                dateIndex: 0,
+                key: 'id',
+                keyValue: SPKID
+            },
+            success: function(res) {
+                console.log(res);
+            }
+        });
     });
     // $("#containerBeginSPK").css("display", "none");
     // $('#btnProsesSPK').hide();

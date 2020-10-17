@@ -29,6 +29,10 @@ option{
     padding: 0.5em 1em 0.5em 1em;
     border-radius: 15px;
 }
+.btn-tipis {
+    padding: 0.2em 1.5em 0.2em 1.5em;
+    border-radius: 15px;
+}
 .input-1 {
     border: none;
     border-bottom: 1px solid #e4e4e4;
@@ -285,6 +289,9 @@ option{
 }
 .w-11em {
     width: 11em;
+}
+.w-12em {
+    width: 12em;
 }
 .w-15em {
     width: 15em;

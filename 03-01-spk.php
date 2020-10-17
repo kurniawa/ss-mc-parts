@@ -193,6 +193,30 @@ include_once "01-header.php";
             console.log('getDay: ' + getDay);
             let subGetYear = getYear.substr(2);
             console.log('subGetYear: ' + subGetYear);
+            let warnaTglPembuatan = 'bg-color-soft-red';
+
+            // apabila tanggal selesai telah ada
+            let arrayDateSls = '';
+            let getYearSls = '';
+            let getMonthSls = '';
+            let getDaySls = '';
+            let warnaTglSls = '';
+            let subGetYearSls = '';
+
+            if (daftarTglSelesai[i] != '') {
+                arrayDateSls = daftarTglSelesai[i].split('-');
+                getYearSls = arrayDateSls[0];
+                getMonthSls = arrayDateSls[1];
+                getDaySls = arrayDateSls[2];
+
+                console.log('getYearSls: ' + getYearSls);
+                console.log('getMonthSls: ' + getMonthSls);
+                console.log('getDaySls: ' + getDaySls);
+                subGetYearSls = getYearSls.substr(2);
+                console.log('subGetYearSls: ' + subGetYearSls);
+                warnaTglSls = 'bg-color-orange-2';
+                warnaTglPembuatan = 'bg-color-purple-blue';
+            }
 
             console.log(`daftarNamaPelangganSPK[${i}]: ${daftarNamaPelangganSPK[i]}`);
             console.log(`daftarJumlahTotalSPK[${i}]: ${daftarJumlahTotalSPK[i]}`);
@@ -233,11 +257,13 @@ include_once "01-header.php";
                     <div class='circle-medium grid-1-auto justify-items-center font-weight-bold bg-color-orange-1'>${daftarSingkatanPelangganSPK[i]}</div>
                     <div>${daftarNamaPelangganSPK[i]} - ${daftarDaerahPelangganSPK[i]}</div>
                     <div class='grid-3-auto'>
-                    <div class='grid-1-auto justify-items-center bg-color-soft-red color-white b-radius-5px w-3_5em'>
+                    <div class='grid-1-auto justify-items-center ${warnaTglPembuatan} color-white b-radius-5px w-3_5em'>
                     <div class='font-size-2_5em'>${getDay}</div><div>${getMonth}-${subGetYear}</div>
                     </div>
                     -
-                    <div>${daftarTglSelesai[i]}</div>
+                    <div class='grid-1-auto justify-items-center ${warnaTglSls} color-white b-radius-5px w-3_5em'>
+                    <div class='font-size-2_5em'>${getDaySls}</div><div>${getMonthSls}-${subGetYearSls}</div>
+                    </div>
                     </div>
                     <div class='grid-1-auto'>
                     <div class='color-green justify-self-right font-size-1_2em font-weight-bold'>${daftarJumlahTotalSPK[i]}</div>

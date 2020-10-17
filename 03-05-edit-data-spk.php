@@ -81,6 +81,7 @@ include_once "01-header.php";
     $('#date').val(dataSPK.tglPembuatan);
     $('#inputCustomerName').val(dataSPK.custName);
     $('#titleDesc').val(dataSPK.ketSPK);
+    $('#idChosenCustName').val(dataSPK.custID);
 
     //cek apakah ada data yang diubah, apabila ada data yang diubah, maka akan muncul tombol edit
     document.getElementById('titleDesc').addEventListener('keyup', (event) => {
@@ -217,6 +218,14 @@ include_once "01-header.php";
                 },
                 success: function(res) {
                     console.log(res);
+                    res = JSON.parse(res);
+                    if (res[0] === 'UPDATE SUCCEED') {
+                        console.log('change localStorage.setItem dari dataSPKToEdit');
+                        console.log(dataSPK);
+                        localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+                        console.log('pindah halaman');
+                        window.history.back();
+                    }
                 }
             });
             return;
