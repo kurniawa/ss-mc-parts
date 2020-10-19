@@ -14,7 +14,7 @@ include_once "01-header.php";
 
 
         <div class="gridMenuItem">
-            <a class="menuIcons" href="#">
+            <a class="menuIcons" href="07-01-nota.php">
                 <img src="img/icons/checklist.svg" alt="Icon SPK">
                 <div>
                     Nota

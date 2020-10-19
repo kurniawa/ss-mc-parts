@@ -151,7 +151,22 @@ if ($type === 'insert') {
 
 if ($type === "SELECT") {
     $table = $_POST["table"];
-    $sql = "SELECT * FROM $table";
+    if (isset($_POST["column"])) {
+        $column = $_POST["column"];
+        $value = $_POST["value"];
+        $data_length = count($column);
+
+        $sql = "SELECT * FROM $table WHERE ";
+
+        for ($i = 0; $i < $data_length; $i++) {
+            $sql = $sql . "$column[$i] = '$value[$i]'";
+            if ($data_length > 1) {
+                $sql = $sql . " AND ";
+            }
+        }
+    } else {
+        $sql = "SELECT * FROM $table";
+    }
 
     $res = mysqli_query($con, $sql);
 
@@ -208,8 +223,10 @@ if ($type === "UPDATE") {
 
     if (isset($_POST['dateIndex'])) {
         $dateIndex = $_POST['dateIndex'];
-        $value[$dateIndex] = date("Y-m-d", strtotime($value[$dateIndex]));
-        // var_dump($value[$dateIndex]);
+        for ($i = 0; $i < count($dateIndex); $i++) {
+            $value[$dateIndex[$i]] = date("Y-m-d", strtotime($value[$dateIndex[$i]]));
+            // var_dump($value[$dateIndex[$i]]);
+        }
     }
 
     $sql = "UPDATE $table SET ";

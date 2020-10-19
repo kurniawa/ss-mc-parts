@@ -271,6 +271,8 @@ include_once "01-header.php";
 
     document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
         let tglSelesai = $('#inputTglSelesaiSPK').val();
+        let noNota = `N${custID}-${SPKID}`;
+        let noSrjalan = `SJ${custID}-${SPKID}`;
         console.log(tglSelesai);
         $.ajax({
             type: 'POST',
@@ -280,14 +282,16 @@ include_once "01-header.php";
             data: {
                 type: 'UPDATE',
                 table: 'spk',
-                column: ['tgl_selesai'],
-                value: [tglSelesai],
-                dateIndex: 0,
+                column: ['tgl_selesai', 'no_nota', 'tgl_nota', 'no_surat_jalan', 'tgl_surat_jalan'],
+                value: [tglSelesai, noNota, tglSelesai, noSrjalan, tglSelesai],
+                dateIndex: [0, 2, 4],
                 key: 'id',
                 keyValue: SPKID
             },
             success: function(res) {
                 console.log(res);
+                res = JSON.parse(res);
+
             }
         });
     });

@@ -39,6 +39,12 @@ include_once "01-header.php";
     let daftarDescEachItem = [];
     let daftarNamaProdukEachSPK = new Array();
 
+    let daftarNoNota = new Array();
+    let daftarTglNota = new Array();
+    let daftarNoSrjalan = new Array();
+    let daftarTglSrjalan = new Array();
+    let daftarEkspedisi = new Array();
+
     $.ajax({
         type: "POST",
         url: "01-crud.php",
@@ -64,6 +70,10 @@ include_once "01-header.php";
                 } else if (dataItem.tgl_selesai != null) {
                     daftarTglSelesai.push(dataItem.tgl_selesai);
                 }
+                daftarNoNota.push(dataItem.no_nota);
+                daftarTglNota.push(dataItem.tgl_nota);
+                daftarNoSrjalan.push(dataItem.no_surat_jalan);
+                daftarTglSrjalan.push(dataItem.tgl_surat_jalan);
 
             }
             console.log('daftarIDSPK: ' + daftarIDSPK);
@@ -97,9 +107,73 @@ include_once "01-header.php";
                         console.log('daftarNamaPelangganSPK: ' + daftarNamaPelangganSPK);
                         console.log('daftarDaerahPelangganSPK: ' + daftarDaerahPelangganSPK);
                         console.log('daftarSingkatanPelangganSPK: ' + daftarSingkatanPelangganSPK);
-
                     }
                 });
+
+                let daftarIDEkspedisi = new Array();
+                let daftarEkspedisiTransit = new Array();
+                let daftarEkspedisiUtama = new Array();
+                $.ajax({
+                    url: '01-crud.php',
+                    type: 'POST',
+                    async: false,
+                    cache: false,
+                    data: {
+                        type: 'SELECT ONE',
+                        table: 'pelanggan_use_ekspedisi',
+                        column: ['id_pelanggan'],
+                        value: [pelanggan]
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        data = JSON.parse(data);
+                        console.log(data);
+                        for (const dataItem of data) {
+                            daftarIDEkspedisi.push(dataItem.id_ekspedisi);
+                            daftarEkspedisiTransit.push(dataItem.ekspedisi_transit);
+                            daftarEkspedisiUtama.push(dataItem.ekspedisi_utama);
+                        }
+                        console.log()
+                    }
+                });
+
+                let daftarNamaEkspedisi = new Array();
+                let daftarAlamatEkspedisi = new Array();
+                let daftarKontakEkspedisi = new Array();
+
+                daftarIDEkspedisi.forEach((idEkspedisi) => {
+                    $.ajax({
+                        url: '01-crud.php',
+                        type: 'POST',
+                        async: false,
+                        cache: false,
+                        data: {
+                            type: 'SELECT ONE',
+                            table: 'ekspedisi',
+                            column: ['id'],
+                            value: [idEkspedisi]
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            data = JSON.parse(data);
+                            console.log(data);
+                            for (const dataItem of data) {
+                                daftarNamaEkspedisi.push(dataItem.nama);
+                                daftarAlamatEkspedisi.push(dataItem.alamat);
+                                daftarKontakEkspedisi.push(dataItem.kontak);
+                            }
+                        }
+                    });
+                });
+
+                daftarEkspedisi.push({
+                    id: daftarIDEkspedisi,
+                    ketTransit: daftarEkspedisiTransit,
+                    ketUtama: daftarEkspedisiUtama,
+                    nama: daftarNamaEkspedisi,
+                    kontak: daftarKontakEkspedisi
+                });
+
             });
             let daftarIDProdukEachSPK = [];
             daftarIDSPK.forEach(idSPK => {
@@ -175,6 +249,38 @@ include_once "01-header.php";
 
             console.log('daftarNamaProdukEachSPK:');
             console.log(daftarNamaProdukEachSPK);
+            console.log(daftarEkspedisi);
+            let jsonSPK = new Array();
+            for (let k = 0; k < daftarIDSPK.length; k++) {
+                let itemSPK = new Array();
+                for (let l = 0; l < daftarNamaProdukEachSPK[k].length; l++) {
+                    itemSPK.push({
+                        nama: daftarNamaProdukEachSPK[k][l],
+                        desc: daftarDescEachItem[k][l],
+                        jumlah: daftarJumlahItemSPK[k][l]
+                    });
+                }
+
+                let jsonSPKItem = {
+                    id: daftarIDSPK[k],
+                    idCust: daftarIDPelangganSPK[k],
+                    namaCust: daftarNamaPelangganSPK[k],
+                    singkatanCust: daftarSingkatanPelangganSPK[k],
+                    daerah: daftarDaerahPelangganSPK[k],
+                    tglPembuatan: daftarTglPembuatan[k],
+                    tglSelesai: daftarTglSelesai[k],
+                    ketSPK: daftarKetSPK[k],
+                    jumlahTotal: daftarJumlahTotalSPK[k],
+                    noNota: daftarNoNota[k],
+                    tglNota: daftarTglNota[k],
+                    noSrjalan: daftarNoSrjalan[k],
+                    tglSrjalan: daftarTglSrjalan[k],
+                    itemSPK: itemSPK,
+                    ekspedisi: daftarEkspedisi[k]
+                }
+                jsonSPK.push(jsonSPKItem);
+            }
+            localStorage.setItem('daftarSPK', JSON.stringify(jsonSPK));
             daftarSPK();
         }
     });
