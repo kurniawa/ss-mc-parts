@@ -1,6 +1,6 @@
 [
     {
-        "tipe_produk": "sj-basic",
+        "tipe_produk": "sj-varia",
         "bahan": [
             {
                 "nama_bahan": "C38",
@@ -265,7 +265,7 @@
         ]
     },
     {
-        "tipe_produk": "sj-varia",
+        "tipe_produk": "sj-kombi",
         "varia": [
             {
                 "nama_varia": "Kombinasi List Miring (A)",

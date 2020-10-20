@@ -166,6 +166,7 @@ include_once "01-header.php";
         let customerName = $('#inputCustomerName').val();
         let customerID = $('#inputIDCustomer').val();
         let titleDesc = $('#titleDesc').val();
+        let totalHarga = $('#inputHargaTotalSPK').val();
 
         console.log('SPKDate: ' + SPKDate);
         console.log('customerName: ' + customerName);
@@ -179,8 +180,8 @@ include_once "01-header.php";
             data: {
                 type: 'insert',
                 table: 'spk',
-                column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan'],
-                value: [SPKNo, SPKDate, titleDesc, customerID],
+                column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
+                value: [SPKNo, SPKDate, titleDesc, customerID, totalHarga],
                 dateIndex: 1,
                 idToReturn: SPKNo
             },

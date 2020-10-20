@@ -45,6 +45,9 @@ include_once "01-header.php";
     let daftarTglSrjalan = new Array();
     let daftarEkspedisi = new Array();
 
+    let daftarHargaTotal = new Array();
+    let daftarHargaItemSPK = new Array();
+
     $.ajax({
         type: "POST",
         url: "01-crud.php",
@@ -74,6 +77,7 @@ include_once "01-header.php";
                 daftarTglNota.push(dataItem.tgl_nota);
                 daftarNoSrjalan.push(dataItem.no_surat_jalan);
                 daftarTglSrjalan.push(dataItem.tgl_surat_jalan);
+                daftarHargaTotal.push(dataItem.harga);
 
             }
             console.log('daftarIDSPK: ' + daftarIDSPK);
@@ -82,6 +86,8 @@ include_once "01-header.php";
             console.log('daftarTglSelesai: ' + daftarTglSelesai);
             console.log('daftarKetSPK:');
             console.log(daftarKetSPK);
+            console.log('daftarHargaTotal:');
+            console.log(daftarHargaTotal);
 
             daftarIDPelangganSPK.forEach(pelanggan => {
                 $.ajax({
@@ -181,6 +187,7 @@ include_once "01-header.php";
                 let jumlahTotalSPK = 0;
                 let idProdukEachSPK = new Array();
                 let jmlEachItem = new Array();
+                let hargaItemSPK = new Array();
                 $.ajax({
                     url: '01-crud.php',
                     type: 'POST',
@@ -201,6 +208,7 @@ include_once "01-header.php";
                             descEachItem.push(SPKItem.ktrg);
                             console.log('SPKItem.ktrg: ' + SPKItem.ktrg);
                             idProdukEachSPK.push(SPKItem.id_produk);
+                            hargaItemSPK.push(SPKItem.harga_item);
                         }
                         daftarIDProdukEachSPK.push(idProdukEachSPK);
                         console.log('jumlahTotalSPK: ' + jumlahTotalSPK);
@@ -210,6 +218,9 @@ include_once "01-header.php";
                         daftarJumlahItemSPK.push(jmlEachItem);
                         daftarJumlahTotalSPK.push(jumlahTotalSPK);
                         daftarDescEachItem.push(descEachItem);
+                        daftarHargaItemSPK.push(hargaItemSPK);
+                        console.log('daftarHargaItemSPK:');
+                        console.log(daftarHargaItemSPK);
                     }
                 });
             });
@@ -276,7 +287,9 @@ include_once "01-header.php";
                     noSrjalan: daftarNoSrjalan[k],
                     tglSrjalan: daftarTglSrjalan[k],
                     itemSPK: itemSPK,
-                    ekspedisi: daftarEkspedisi[k]
+                    ekspedisi: daftarEkspedisi[k],
+                    hargaTotalSPK: daftarHargaTotal[k],
+                    hargaItemSPK: daftarHargaItemSPK[k]
                 }
                 jsonSPK.push(jsonSPKItem);
             }

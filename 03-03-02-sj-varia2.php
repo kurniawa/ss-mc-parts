@@ -46,6 +46,7 @@
     let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
     let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
     let arrayBahan = new Array();
+    let arrayNamaBahan = new Array();
     let arrayVariasi = new Array();
     let arrayJenisLG = [],
         arrayGambarLGBludru = [],
@@ -76,7 +77,9 @@
                     bahan: bahan.nama_bahan,
                     harga: bahan.harga
                 });
+                arrayNamaBahan.push(bahan.nama_bahan);
             }
+            console.log(arrayBahan);
             for (const variasi of data[0].variasi[0].jenis_variasi) {
                 // console.log(variasi.nama);
                 arrayVariasi.push(variasi.nama);
@@ -221,7 +224,7 @@
 
         if (elementID === `#inputBahan-${indexSJVaria}`) {
             $("#inputBahan-" + indexSJVaria).autocomplete({
-                source: arrayBahan,
+                source: arrayNamaBahan,
                 select: function(event, ui) {
                     console.log(ui);
                     console.log(ui.item.value);
@@ -265,22 +268,27 @@
     function cekBahanAddSelectVariasi(namaBahan) {
         // console.log(namaBahan);
         try {
-            arrayBahan.forEach(namaBahan2 => {
-                if (namaBahan === namaBahan2) {
+            for (const bahan of arrayBahan) {
+                if (namaBahan === bahan.bahan) {
                     console.log('namaBahan1:' + namaBahan);
-                    console.log('namaBahan2:' + namaBahan2);
+                    console.log('namaBahan2:' + bahan.bahan);
+                    console.log('hargaBahan:' + bahan.harga);
 
                     if ($(`#divSelectVaria-${indexSJVaria}`).length === 0) {
                         indexElementSystem = 1;
                         createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
                     }
+                    $(`#inputHargaBahan-${indexSJVaria}`).val(bahan.harga);
+                    console.log('Harga Bahan:');
+                    console.log($(`#inputHargaBahan-${indexSJVaria}`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
                     console.log("Nama Bahan not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
-            });
+
+            }
         } catch (error) {
             console.log(error);
         }
@@ -369,6 +377,8 @@
         $jumlah = 0;
 
         $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
+        let hargaJht = 0;
+        let hargaItem = 0;
 
         console.log('$bahan: ' + $bahan);
         console.log('$varia: ' + $varia);
@@ -378,6 +388,7 @@
 
         if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
             $jht = $(`#selectJht-${indexSJVaria}`).val();
+            hargaJht = 1000;
         }
         if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
             $desc = $(`#taDesc-${indexSJVaria}`).val();
@@ -410,6 +421,8 @@
             $plusJahit = '+ jht ' + $jht;
         }
         $namaLengkap = $bahan + ' ' + $varia + ' ' + $plusJahit;
+        let hargaPriceList = parseFloat($hargaBahan) + hargaJht;
+        hargaItem = hargaPriceList * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
@@ -419,7 +432,10 @@
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
-            hargaItem: $hargaBahan
+            hargaBahan: $hargaBahan,
+            hargaJht: hargaJht,
+            hargaPriceList: hargaPriceList,
+            hargaItem: hargaItem
         }
         console.log(itemObj);
         let SPKItems = localStorage.getItem('SPKItems');

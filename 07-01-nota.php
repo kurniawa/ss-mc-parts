@@ -61,9 +61,9 @@ include_once "01-header.php";
                     <div>${nota.noNota}</div>
                     <div>${nota.namaCust}-${nota.daerah}</div>
                 </div>
-                <div>
-                    <div>Rp.</div>
-                    <div>Total</div>
+                <div class='justify-self-right grid-1-auto justify-items-right'>
+                    <div class='font-weight-bold color-green'>${nota.hargaTotalSPK}</div>
+                    <div class='font-weight-bold'>Rp.</div>
                 </div>
                 <div>
                     <div class='justify-self-center'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>

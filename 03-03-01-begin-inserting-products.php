@@ -26,6 +26,7 @@
     <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em">Kirim Ke Biran Bangka</div>
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
+    <input id="inputHargaTotalSPK" type="hidden">
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
         <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJVaria();">
@@ -71,6 +72,7 @@
         SPKItems = JSON.parse(SPKItems);
         console.log(SPKItems);
         let htmlItemList = '';
+        let totalHarga = 0;
         for (const item of SPKItems) {
             var textItemJht = item.jht;
             if (textItemJht != '') {
@@ -85,7 +87,11 @@
                 </div>
                 <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
                 </div>`;
+
+            // kita jumlah harga semua item untuk satu SPK
+            totalHarga = totalHarga + item.hargaItem;
         }
+        $('#inputHargaTotalSPK').val(totalHarga);
         $('#divItemList').html(htmlItemList);
         $('#btnProsesSPK').show();
     }
@@ -132,7 +138,8 @@
         let result = new Array();
         let status = '';
         let resInsertProduct = await insertNewProduct();
-        console.log('resInsertProduct: ' + resInsertProduct);
+        console.log('resInsertProduct:');
+        console.log(resInsertProduct);
 
         if (resInsertProduct[0] === 'OK') {
             // masukkan data SPK
@@ -152,8 +159,8 @@
                         data: {
                             type: 'insert',
                             table: 'spk_contains_produk',
-                            column: ['id', 'id_spk', 'id_produk', 'ktrg', 'jumlah'],
-                            value: [setID, resNewSPK[2], resInsertProduct[1][i], resInsertProduct[2][i][0], resInsertProduct[2][i][1]]
+                            column: ['id', 'id_spk', 'id_produk', 'ktrg', 'jumlah', 'harga_item'],
+                            value: [setID, resNewSPK[2], resInsertProduct[1][i], resInsertProduct[2][i][0], resInsertProduct[2][i][1], resInsertProduct[2][i][2]]
                         },
                         success: function(res) {
                             console.log(res);
@@ -193,6 +200,8 @@
             let setID = lastID[1];
             console.log(lastID);
             console.log(setID);
+            console.log('item:');
+            console.log(item);
             $.ajax({
                 type: 'POST',
                 url: '01-crud.php',
@@ -202,7 +211,7 @@
                     table: 'produk',
                     column: ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
                     value: [item.tipe, item.bahan, item.varia, item.ukuran, item.jht],
-                    parameter: [item.desc, item.jumlah]
+                    parameter: [item.desc, item.jumlah, item.hargaItem]
                 },
                 success: function(res) {
                     console.log(res);
@@ -215,9 +224,9 @@
                             data: {
                                 type: 'insert',
                                 table: 'produk',
-                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap'],
-                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap],
-                                parameter: [item.desc, item.jumlah]
+                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap', 'harga_price_list'],
+                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap, item.hargaPriceList],
+                                parameter: [item.desc, item.jumlah, item.hargaItem]
                             },
                             success: function(res) {
                                 console.log(res);
@@ -262,5 +271,5 @@
 </script>
 
 <?php
-include_once "03-03-02-sj-varia.php";
+include_once "03-03-02-sj-varia2.php";
 ?>
