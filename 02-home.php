@@ -22,11 +22,12 @@ include_once "01-header.php";
             </a>
         </div>
         <div class="gridMenuItem">
-            <div class="menuIcons">
+            <a class="menuIcons" href="08-01-surat-jalan.php">
                 <img src="img/icons/email.svg" alt="Icon SPK">
-            </div>
-            Surat<br>
-            Jalan
+                <div>
+                    Surat<br>Jalan
+                </div>
+            </a>
         </div>
         <div class="gridMenuItem">
             <a href="05-01-ekspedisi.php" class="menuIcons">

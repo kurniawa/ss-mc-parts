@@ -47,6 +47,10 @@ include_once "01-header.php";
 
     let daftarHargaTotal = new Array();
     let daftarHargaItemSPK = new Array();
+    let daftarHargaPerPcs = new Array();
+
+    let daftarKoliSPK = new Array();
+    let daftarAlamatCust = new Array();
 
     $.ajax({
         type: "POST",
@@ -78,6 +82,7 @@ include_once "01-header.php";
                 daftarNoSrjalan.push(dataItem.no_surat_jalan);
                 daftarTglSrjalan.push(dataItem.tgl_surat_jalan);
                 daftarHargaTotal.push(dataItem.harga);
+                daftarKoliSPK.push(dataItem.koli);
 
             }
             console.log('daftarIDSPK: ' + daftarIDSPK);
@@ -109,6 +114,7 @@ include_once "01-header.php";
                             daftarNamaPelangganSPK.push(dataItem.nama);
                             daftarDaerahPelangganSPK.push(dataItem.daerah);
                             daftarSingkatanPelangganSPK.push(dataItem.singkatan);
+                            daftarAlamatCust.push(dataItem.alamat);
                         }
                         console.log('daftarNamaPelangganSPK: ' + daftarNamaPelangganSPK);
                         console.log('daftarDaerahPelangganSPK: ' + daftarDaerahPelangganSPK);
@@ -177,7 +183,8 @@ include_once "01-header.php";
                     ketTransit: daftarEkspedisiTransit,
                     ketUtama: daftarEkspedisiUtama,
                     nama: daftarNamaEkspedisi,
-                    kontak: daftarKontakEkspedisi
+                    kontak: daftarKontakEkspedisi,
+                    alamat: daftarAlamatEkspedisi
                 });
 
             });
@@ -233,6 +240,7 @@ include_once "01-header.php";
             console.log('daftarIDProdukEachSPK: ' + daftarIDProdukEachSPK);
             console.log(daftarIDProdukEachSPK);
             daftarIDProdukEachSPK.forEach(idProduk => {
+                let hrgPerPcsPerSPK = new Array();
                 let namaProduk = new Array();
                 idProduk.forEach(id => {
                     $.ajax({
@@ -251,11 +259,13 @@ include_once "01-header.php";
                             res = JSON.parse(res);
                             namaProduk.push(res[0].nama_lengkap);
                             console.log('res.nama_lengkap: ' + res[0].nama_lengkap);
+                            hrgPerPcsPerSPK.push(res[0].harga_price_list);
                         }
                     });
 
                 });
                 daftarNamaProdukEachSPK.push(namaProduk);
+                daftarHargaPerPcs.push(hrgPerPcsPerSPK);
             });
 
             console.log('daftarNamaProdukEachSPK:');
@@ -268,7 +278,8 @@ include_once "01-header.php";
                     itemSPK.push({
                         nama: daftarNamaProdukEachSPK[k][l],
                         desc: daftarDescEachItem[k][l],
-                        jumlah: daftarJumlahItemSPK[k][l]
+                        jumlah: daftarJumlahItemSPK[k][l],
+                        harga: daftarHargaPerPcs[k][l]
                     });
                 }
 
@@ -276,6 +287,7 @@ include_once "01-header.php";
                     id: daftarIDSPK[k],
                     idCust: daftarIDPelangganSPK[k],
                     namaCust: daftarNamaPelangganSPK[k],
+                    alamatCust: daftarAlamatCust[k],
                     singkatanCust: daftarSingkatanPelangganSPK[k],
                     daerah: daftarDaerahPelangganSPK[k],
                     tglPembuatan: daftarTglPembuatan[k],
@@ -289,7 +301,8 @@ include_once "01-header.php";
                     itemSPK: itemSPK,
                     ekspedisi: daftarEkspedisi[k],
                     hargaTotalSPK: daftarHargaTotal[k],
-                    hargaItemSPK: daftarHargaItemSPK[k]
+                    hargaItemSPK: daftarHargaItemSPK[k],
+                    koli: daftarKoliSPK[k]
                 }
                 jsonSPK.push(jsonSPKItem);
             }

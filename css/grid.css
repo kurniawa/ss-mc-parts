@@ -65,6 +65,11 @@
     grid-template-columns: 10% 40% 50%;
     align-items: center;
 }
+.grid-3-13_62_25 {
+    display: grid;
+    grid-template-columns: 13% 62% 25%;
+    align-items: center;
+}
 .grid-3-10_80_10 {
     display: grid;
     grid-template-columns: 10% 80% 10%;
@@ -83,6 +88,11 @@
 .grid-4-8-auto-auto-5 {
     display: grid;
     grid-template-columns: 8% auto auto 5%;
+    align-items: center;
+}
+.grid-4-12_50_18_20 {
+    display: grid;
+    grid-template-columns: 12% 50% 18% 20%;
     align-items: center;
 }
 .grid-4-13_auto_auto_5 {
