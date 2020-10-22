@@ -26,6 +26,8 @@ include_once "01-header.php";
             <div class="bb-1px-solid-grey">
                 <input id="inputCustomerName" class="input-1 pb-1em bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
                 <div id="searchResults" class="d-none b-1px-solid-grey bb-none"></div>
+                <input id="daerahCust" type="hidden" name="daerahCust">
+                <input id="inputIDCust" type="hidden" name="">
             </div>
         </div>
 
@@ -123,7 +125,8 @@ include_once "01-header.php";
                 $htmlToAppend = $htmlToAppend +
                     "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $idResult + ")'>" +
                     result.nama + "</div>" +
-                    `<input id='inputChosenValue-${$idResult}' type='hidden' value='${result.id}'>`;
+                    `<input id='inputChosenValue-${$idResult}' type='hidden' value='${result.id}'>
+                    <input id='inputChosenValueDaerah-${$idResult}' type='hidden' value='${result.daerah}'>`;
                 $idResult++;
             }
 
@@ -138,6 +141,7 @@ include_once "01-header.php";
         $inputCustomerName = $("#inputCustomerName");
         $chosenValue = $("#chosenValue-" + $idResult);
         $idChosenValue = $(`#inputChosenValue-${$idResult}`).val();
+        $custDaerah = $(`#inputChosenValueDaerah-${$idResult}`).val();
         $searchResults = $("#searchResults");
         $inputCustomerName.val($chosenValue.html());
         // $searchResults.remove();
@@ -145,54 +149,34 @@ include_once "01-header.php";
 
         // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
         $(".divSPKCustomer").html($chosenValue.html());
-        $('#inputIDCustomer').val($idChosenValue);
+        $('#inputIDCust').val($idChosenValue);
+        $('#daerahCust').val($custDaerah);
     }
+
+    // function beginInsertingProducts() {
+    //     if ($("#SPKBaru").css("display") === "block") {
+    //         $("#SPKBaru").toggle();
+    //         $("#containerBeginSPK").toggle();
+    //         let SPKDate = formatDate($("#date").val());
+
+    //         $(".divSPKDate").html(SPKDate);
+    //         $(".divTitleDesc").html($("#titleDesc").val());
+    //     }
+    // }
 
     function beginInsertingProducts() {
-        if ($("#SPKBaru").css("display") === "block") {
-            $("#SPKBaru").toggle();
-            $("#containerBeginSPK").toggle();
-            let SPKDate = formatDate($("#date").val());
-
-            $(".divSPKDate").html(SPKDate);
-            $(".divTitleDesc").html($("#titleDesc").val());
+        let dataSPK = {
+            id: $('#SPKNo').val(),
+            date: formatDate($('#date').val()),
+            custName: $('#inputCustomerName').val(),
+            custID: $('#inputIDCust').val(),
+            daerah: $('#daerahCust').val(),
+            desc: $('#titleDesc').val(),
+            item: new Array()
         }
-    }
+        localStorage.setItem('newSPK', JSON.stringify(dataSPK));
 
-    async function insertNewSPK() {
-        console.log('SPKNo: ' + SPKNo);
-        let result = [];
-        let SPKDate = formatDate($('#date').val());
-        let customerName = $('#inputCustomerName').val();
-        let customerID = $('#inputIDCustomer').val();
-        let titleDesc = $('#titleDesc').val();
-        let totalHarga = $('#inputHargaTotalSPK').val();
-
-        console.log('SPKDate: ' + SPKDate);
-        console.log('customerName: ' + customerName);
-        console.log('customerID: ' + customerID);
-        console.log('titleDesc: ' + titleDesc);
-
-        $.ajax({
-            type: "POST",
-            url: "01-crud.php",
-            async: false,
-            data: {
-                type: 'insert',
-                table: 'spk',
-                column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
-                value: [SPKNo, SPKDate, titleDesc, customerID, totalHarga],
-                dateIndex: 1,
-                idToReturn: SPKNo
-            },
-            success: function(res) {
-                res = JSON.parse(res);
-                console.log(res);
-                result = res;
-            }
-        });
-        console.log('result insertNewSPK(): ' + result);
-        return result;
+        location.href = '03-03-01-inserting-items.php';
     }
 </script>
 
@@ -201,6 +185,6 @@ include_once "01-header.php";
 </style>
 
 <?php
-include_once "03-03-01-begin-inserting-products.php";
+// include_once "03-03-01-begin-inserting-products.php";
 include_once "01-footer.php";
 ?>
