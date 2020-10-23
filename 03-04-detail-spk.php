@@ -289,11 +289,43 @@ include_once "01-header.php";
                 keyValue: SPKID
             },
             success: function(res) {
-                console.log(res);
                 res = JSON.parse(res);
+                console.log(res);
+                console.log(res[0]);
+                if (res[0] === 'UPDATE SUCCEED') {
+                    console.log('goToMainMenu');
+                    window.history.go(1 - (history.length));
+                }
 
             }
         });
+    });
+
+    document.getElementById('downloadExcel').addEventListener('click', (event) => {
+        console.log(event);
+        let itemToPrint = new Array();
+
+        for (let i = 0; i < SPKItem.length; i++) {
+            itemToPrint.push({
+                namaLengkap: SPKItem[i],
+                desc: descEachItem[i],
+                jumlah: jmlItem[i]
+            });
+        }
+
+        let spkToPrint = {
+            custID: custID,
+            custName: custName,
+            daerah: daerah,
+            date: tglPembuatan,
+            desc: ketSPK,
+            id: SPKID,
+            item: itemToPrint
+        }
+
+        localStorage.setItem('spkToPrint', JSON.stringify(spkToPrint));
+
+        location.href = '03-06-print-out-spk.php';
     });
     // $("#containerBeginSPK").css("display", "none");
     // $('#btnProsesSPK').hide();
