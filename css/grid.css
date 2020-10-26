@@ -44,7 +44,11 @@
     grid-template-columns: 10% auto auto;
     align-items: center;
 }
-
+.grid-2-50_50-2 {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    /* align-items: center; */
+}
 .grid-3-auto {
     display: grid;
     grid-template-columns: auto auto auto;
@@ -83,6 +87,16 @@
 .grid-3-25_10_auto {
     display: grid;
     grid-template-columns: 25% 10% auto;
+    align-items: center;
+}
+.grid-3-30_5_65 {
+    display: grid;
+    grid-template-columns: 20% 5% 75%;
+    /* align-items: center; */
+}
+.grid-3-30_30_40 {
+    display: grid;
+    grid-template-columns: 25% 25% 50%;
     align-items: center;
 }
 .grid-4-8-auto-auto-5 {
