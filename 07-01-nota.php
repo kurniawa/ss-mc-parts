@@ -190,20 +190,44 @@ include_once "01-header.php";
         console.log(i);
         let SPKItems = new Array();
 
-        for (const item of daftarNota[i].itemSPK) {
+        for (let k = 0; k < daftarNota[i].itemSPK.length; k++) {
             SPKItems.push({
-                nama: item.nama,
-                desc: item.desc,
-                jumlah: item.jumlah,
-                hargaPcs: item.harga,
-                harga: daftarNota[i].hargaItemSPK
+                nama: daftarNota[i].itemSPK[k].nama,
+                desc: daftarNota[i].itemSPK[k].desc,
+                jumlah: daftarNota[i].itemSPK[k].jumlah,
+                hargaPcs: daftarNota[i].itemSPK[k].harga,
+                harga: daftarNota[i].hargaItemSPK[k]
             });
         }
+        let ekspedisiUtama;
+        // console.log(srjl.ekspedisi.id);
+        // console.log(srjl.ekspedisi.ketUtama);
+        // console.log(srjl.ekspedisi.nama);
+        for (let j = 0; j < daftarNota[i].ekspedisi.id.length; j++) {
+            if (daftarNota[i].ekspedisi.ketUtama[j] === 'y') {
+                ekspedisiUtama = {
+                    nama: daftarNota[i].ekspedisi.nama[j],
+                    alamat: daftarNota[i].ekspedisi.alamat[j],
+                    kontak: daftarNota[i].ekspedisi.kontak[j]
+                };
+            }
+        }
+
+        // for (const item of daftarNota[i].itemSPK) {
+        //     SPKItems.push({
+        //         nama: item.nama,
+        //         desc: item.desc,
+        //         jumlah: item.jumlah,
+        //         hargaPcs: item.harga,
+        //         harga: daftarNota[i].hargaItemSPK[i]
+        //     });
+        // }
 
         let notaToPrint = {
             alamatCust: daftarNota[i].alamatCust,
             daerah: daftarNota[i].daerah,
             ekspedisi: daftarNota[i].ekspedisi,
+            ekspedisiUtama: ekspedisiUtama,
             hargaTotalSPK: daftarNota[i].hargaTotalSPK,
             id: daftarNota[i].id,
             idCust: daftarNota[i].idCust,

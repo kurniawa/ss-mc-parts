@@ -115,7 +115,7 @@ include_once "01-header.php";
             </div>
 
             <div class='text-center'>
-                <div class='d-inline-block btn-stipis bg-color-orange-1'>Detail Surat Jalan >></div>
+                <a href='08-02-detail-surat-jalan.php' class='d-inline-block btn-stipis bg-color-orange-1'>Detail Surat Jalan >></a>
             </div>
 
             </div>

@@ -5,9 +5,9 @@ include_once "01-header.php";
 <header class="header"></header>
 
 <div id="containerDetailNota">
-    <div class="grid-3-30_30_40">
-        <div><img width="160em" src="img/images/logo-mc.jpg" alt=""></div>
-        <div>CV. MC-Parts<br>Jl. Raya Kranggan No. 96<br>Kec. Gn. Putri/Kab. Bogor<br>0812 9335 218<br>0812 8655 6500</div>
+    <div class="grid-3-25_25_50">
+        <div><img width="200em" src="img/images/logo-mc.jpg" alt=""></div>
+        <div><span class="font-weight-bold font-size-1_5em" style="font-family: Georgia, 'Times New Roman', Times, serif; color:darkblue;">NOTA</span><br>CV. MC-Parts<br>Jl. Raya Kranggan No. 96<br>Kec. Gn. Putri/Kab. Bogor<br>0812 9335 218<br>0812 8655 6500</div>
         <div class='grid-3-30_5_65'>
             <div>No. Nota</div>
             <div>:</div>
@@ -41,6 +41,15 @@ include_once "01-header.php";
             <th>Harga</th>
         </tr>
     </table>
+
+    <br>
+    <div class="grid-1-auto justify-items-right">
+        <div class="grid-1-auto justify-items-center">
+            <div class="">Hormat Kami,</div>
+            <br><br><br>
+            <div>(....................)</div>
+        </div>
+    </div>
 </div>
 
 <style>
@@ -79,6 +88,9 @@ include_once "01-header.php";
     .blrb-total {
         border-left: 1px solid black;
         border-right: 1px solid black;
+        border-bottom: 3px solid black;
+        padding-top: 1em;
+        padding-bottom: 1em;
     }
 
     @media print {
@@ -132,7 +144,7 @@ include_once "01-header.php";
     let htmlTotalHarga =
         `
         <tr><td></td><td></td>
-        <td class='blrb-total'>Total Harga</td>
+        <th class='blrb-total'>Total Harga</th>
         <td class='blrb-total'>${notaToPrint.hargaTotalSPK}</td>
         </tr>
         `;
