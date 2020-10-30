@@ -29,13 +29,14 @@ include_once "01-header.php";
         let htmlDaftarSrjalan = '';
         let daftarSPK = localStorage.getItem('daftarSPK');
         daftarSPK = JSON.parse(daftarSPK);
-        let daftarSrjalan = new Array();
 
         for (const spk of daftarSPK) {
             if (spk.tglSrjalan != null) {
                 daftarSrjalan.push(spk);
             }
         }
+        console.log('daftarSrjalan');
+        console.log(daftarSrjalan);
         let i = 0;
         for (const srjl of daftarSrjalan) {
             console.log(srjl);
@@ -115,7 +116,7 @@ include_once "01-header.php";
             </div>
 
             <div class='text-center'>
-                <a href='08-02-detail-surat-jalan.php' class='d-inline-block btn-stipis bg-color-orange-1'>Detail Surat Jalan >></a>
+                <div class='d-inline-block btn-stipis bg-color-orange-1' onclick='goToDetailSuratJalan(${i});'>Detail Surat Jalan >></div>
             </div>
 
             </div>
@@ -125,6 +126,61 @@ include_once "01-header.php";
         }
 
         $('#divDaftarNota').html(htmlDaftarSrjalan);
+        console.log('daftarSrjalan');
+        console.log(daftarSrjalan);
+    }
+
+    function goToDetailSuratJalan(i) {
+        console.log(i);
+        console.log(daftarSrjalan);
+        console.log(daftarSrjalan[i]);
+        let SPKItems = new Array();
+
+        for (let k = 0; k < daftarSrjalan[i].itemSPK.length; k++) {
+            SPKItems.push({
+                nama: daftarSrjalan[i].itemSPK[k].nama,
+                desc: daftarSrjalan[i].itemSPK[k].desc,
+                jumlah: daftarSrjalan[i].itemSPK[k].jumlah,
+                hargaPcs: daftarSrjalan[i].itemSPK[k].harga,
+                harga: daftarSrjalan[i].hargaItemSPK[k]
+            });
+        }
+        let ekspedisiUtama;
+
+        for (let j = 0; j < daftarSrjalan[i].ekspedisi.id.length; j++) {
+            if (daftarSrjalan[i].ekspedisi.ketUtama[j] === 'y') {
+                ekspedisiUtama = {
+                    nama: daftarSrjalan[i].ekspedisi.nama[j],
+                    alamat: daftarSrjalan[i].ekspedisi.alamat[j],
+                    kontak: daftarSrjalan[i].ekspedisi.kontak[j]
+                };
+            }
+        }
+
+        let srjlnToPrint = {
+            alamatCust: daftarSrjalan[i].alamatCust,
+            daerah: daftarSrjalan[i].daerah,
+            ekspedisi: daftarSrjalan[i].ekspedisi,
+            ekspedisiUtama: ekspedisiUtama,
+            hargaTotalSPK: daftarSrjalan[i].hargaTotalSPK,
+            id: daftarSrjalan[i].id,
+            idCust: daftarSrjalan[i].idCust,
+            itemSPK: SPKItems,
+            jumlahTotal: daftarSrjalan[i].jumlahTotal,
+            ketSPK: daftarSrjalan[i].ketSPK,
+            koli: daftarSrjalan[i].koli,
+            namaCust: daftarSrjalan[i].namaCust,
+            noNota: daftarSrjalan[i].noNota,
+            noSrjalan: daftarSrjalan[i].noSrjalan,
+            singkatanCust: daftarSrjalan[i].singkatanCust,
+            tglNota: daftarSrjalan[i].tglNota,
+            tglPembuatan: daftarSrjalan[i].tglPembuatan,
+            tglSelesai: daftarSrjalan[i].tglSelesai,
+            tglSrjalan: daftarSrjalan[i].tglSrjalan
+        }
+
+        localStorage.setItem('notaToPrint', JSON.stringify(srjlnToPrint));
+        location.href = '08-02-detail-surat-jalan.php';
     }
 </script>
 <?php

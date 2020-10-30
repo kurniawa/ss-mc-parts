@@ -88,6 +88,17 @@ include_once '01-header.php';
     });
 </script>
 
+<style>
+    table {
+        border-collapse: collapse;
+        border: 1px solid black;
+    }
+
+    table td {
+        border: 1px solid black;
+    }
+</style>
+
 <?php
 include_once '01-footer.php';
 ?>

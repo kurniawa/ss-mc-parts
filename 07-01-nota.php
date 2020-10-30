@@ -67,13 +67,15 @@ include_once "01-header.php";
             idNotaItems = JSON.stringify(idNotaItems);
             // html nota yang menampung item2 diatas
             for (let j = 0; j < daftarNota[i].itemSPK.length; j++) {
+                let hargaItem = formatHarga(daftarNota[i].hargaItemSPK[j]);
+                console.log(hargaItem);
 
                 htmlItemNota = htmlItemNota +
                     `
                     <div>${daftarNota[i].itemSPK[j].jumlah}</div>
                     <div>${daftarNota[i].itemSPK[j].nama}</div>
-                    <div>${daftarNota[i].itemSPK[j].harga}</div>
-                    <div>${daftarNota[i].hargaItemSPK[j]}</div>
+                    <div>${formatHarga(daftarNota[i].itemSPK[j].harga)}</div>
+                    <div>${hargaItem}</div>
                 `
             }
             htmlItemNota = htmlItemNota +
@@ -97,7 +99,7 @@ include_once "01-header.php";
                     <div>${daftarNota[i].namaCust}-${daftarNota[i].daerah}</div>
                 </div>
                 <div class='justify-self-right grid-1-auto justify-items-right'>
-                    <div class='font-weight-bold color-green'>${daftarNota[i].hargaTotalSPK}</div>
+                    <div class='font-weight-bold color-green'>${formatHarga(daftarNota[i].hargaTotalSPK)}</div>
                     <div class='font-weight-bold'>Rp.</div>
                 </div>
                 <div>

@@ -64,9 +64,13 @@ include_once "01-header.php";
         </tr>
         <tr>
             <td class="tdTableItemSrjalan font-size-2em font-weight-bold">Sarung Jok Motor</td>
-            <td class="tdTableItemSrjalan font-size-2em font-weight-bold">
+            <td class="tdTableItemSrjalan font-weight-bold" style="font-size: xx-large;">
                 <div class="grid-2-auto grid-column-gap-0_5em">
-                    <span class="justify-self-right" id="jmlKoli"></span>
+                    <div id="divJmlKoli" class="justify-self-right">
+                        <div id="closingArea" onclick="closeInputEditKoli();"></div>
+                        <span id="jmlKoli" ondblclick="editKoliValue();"></span>
+                        <input id="inputEditKoli" type="number" step="1" min="1">
+                    </div>
                     <img style="width: 2em;" class="d-inline-block" src="img/icons/koli.svg" alt="">
                 </div>
             </td>
@@ -91,6 +95,22 @@ include_once "01-header.php";
 </div>
 
 <style>
+    #closingArea {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+
+    #inputEditKoli {
+        width: 2em;
+        font-size: xx-large;
+        position: relative;
+        z-index: 3;
+    }
+
     #containerDetailSrjalan {
         font-family: 'Roboto';
         font-weight: normal;
@@ -128,6 +148,8 @@ include_once "01-header.php";
 </style>
 
 <script>
+    $('#inputEditKoli').hide();
+    $('#closingArea').hide();
     let srjlnToPrint = localStorage.getItem('notaToPrint');
     srjlnToPrint = JSON.parse(srjlnToPrint);
 
@@ -141,6 +163,8 @@ include_once "01-header.php";
     let jmlKoli;
     if (srjlnToPrint.koli === null) {
         jmlKoli = 'null';
+    } else {
+        jmlKoli = srjlnToPrint.koli;
     }
     $('#noSrjalan').html(srjlnToPrint.noSrjalan);
     $('#tglSrjalan').html(srjlnToPrint.tglNota);
@@ -148,6 +172,49 @@ include_once "01-header.php";
     $('#alamatCust').html(srjlnToPrint.alamatCust.replace(new RegExp('\r?\n', 'g'), '<br>'));
     $('#ekspedisi').html(htmlEkspedisi);
     $('#jmlKoli').html(jmlKoli);
+
+    function editKoliValue() {
+        console.log('running edit koli value');
+        $('#jmlKoli').hide();
+        $('#inputEditKoli').show();
+        $('#closingArea').show();
+    }
+
+    function closeInputEditKoli() {
+        console.log('closing Input Edit Koli');
+        console.log($('#inputEditKoli').val());
+        // console.log(typeof($('#inputEditKoli').val()));
+        if ($('#inputEditKoli').val() !== '') {
+            srjlnToPrint.koli = $('#inputEditKoli').val();
+            $.ajax({
+                url: '01-crud.php',
+                type: 'POST',
+                async: false,
+                cache: false,
+                data: {
+                    type: 'UPDATE',
+                    table: 'spk',
+                    column: ['koli'],
+                    value: [$('#inputEditKoli').val()],
+                    key: 'id',
+                    keyValue: srjlnToPrint.id
+                },
+                success: function(res) {
+                    console.log(res);
+                    res = JSON.parse(res);
+                    if (res[0] == 'UPDATE SUCCEED') {
+                        localStorage.setItem('notaToPrint', JSON.stringify(srjlnToPrint));
+                        location.reload();
+                    }
+                }
+            });
+        }
+        console.log(srjlnToPrint.koli);
+        $('#inputEditKoli').hide();
+        $('#closingArea').hide();
+        $('#jmlKoli').show();
+
+    }
 </script>
 <?php
 include_once "01-footer.php";

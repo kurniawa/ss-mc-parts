@@ -81,6 +81,23 @@ function formatDate (date) {
     return [day, month, year].join('-');
 }
 
+
+function formatHarga (harga) {
+    console.log(harga);
+    let hargaRP = '';
+    let akhir = harga.length;
+    let posisi = akhir - 3;
+    let jmlTitik = Math.ceil((harga.length / 3) - 1);
+    console.log(jmlTitik);
+    for (let i = 0; i < jmlTitik; i++) {
+        hargaRP = '.' + harga.slice(posisi, akhir) + hargaRP;
+        console.log(hargaRP);
+        akhir = posisi;
+        posisi = akhir - 3;
+    }
+    hargaRP = harga.slice(0, akhir) + hargaRP;
+    return hargaRP;
+}
 // function insertToDB (table, column, value, data_length) {
 //     let sqlPart1 = "INSERT INTO $table(";
 //     let sqlPart2 = " VALUE(";
