@@ -425,6 +425,11 @@ include_once "01-header.php";
         localStorage.setItem('SPKItems', '');
         window.location.href = '03-03-spk-baru.php';
     }
+
+    // set keadaan awal dimana JSON SPKToEdit dihilangkan
+    if (localStorage.getItem('dataSPKToEdit') != null) {
+        localStorage.removeItem('dataSPKToEdit');
+    }
 </script>
 
 <style>

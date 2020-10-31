@@ -1,5 +1,10 @@
 <?php
 include_once "01-header.php";
+if (isset($_GET['i'])) {
+    $m = $_GET['i'];
+} else {
+    $m = 'undefined';
+}
 ?>
 
 <div id="containerSJVaria">
@@ -46,6 +51,13 @@ include_once "01-header.php";
 </div>
 
 <script>
+    // codingan untuk antisipasi editing item
+    let m = <?php echo $m ?>;
+    console.log(m);
+    if (m !== undefined) {
+        editMode();
+    }
+
     let sjVaria = [{}];
     let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
     let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
@@ -450,6 +462,10 @@ include_once "01-header.php";
         console.log(newSPK);
         localStorage.setItem('newSPK', JSON.stringify(newSPK));
         location.href = '03-03-01-inserting-items.php';
+    }
+
+    function editMode() {
+        console.log('edit mode');
     }
 </script>
 

@@ -35,6 +35,11 @@
     grid-template-columns: 15% auto;
     align-items: center;
 }
+.grid-2-15_auto {
+    display: grid;
+    grid-template-columns: 15% auto;
+    align-items: center;
+}
 .grid-2-25_auto {
     display: grid;
     grid-template-columns: 25% auto;
@@ -74,7 +79,17 @@
     grid-template-columns: auto auto 10%;
     align-items: center;
 }
+.grid-3-auto_auto_10 {
+    display: grid;
+    grid-template-columns: auto auto 10%;
+    align-items: center;
+}
 .grid-3-auto-auto-5 {
+    display: grid;
+    grid-template-columns: auto auto 5%;
+    align-items: center;
+}
+.grid-3-auto_auto_5 {
     display: grid;
     grid-template-columns: auto auto 5%;
     align-items: center;

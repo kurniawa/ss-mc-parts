@@ -212,7 +212,7 @@ include_once "01-header.php";
                     table: 'spk',
                     column: ['tgl_pembuatan', 'ket_judul', 'id_pelanggan'],
                     value: [tglPembuatan, titleDesc, custID],
-                    dateIndex: 0,
+                    dateIndex: [0],
                     key: 'id',
                     keyValue: idSPK
                 },

@@ -190,6 +190,7 @@ include_once "01-header.php";
 
 <script>
     // keadaan awal apa aja yang di hide
+    $('.divThreeDotMenuContent').hide();
     $('.productType').hide();
     // -- END --
 
@@ -210,6 +211,18 @@ include_once "01-header.php";
     console.log(descEachItem);
 
     // localStorage.setItem untuk mempermudah, apabila diperlukan pengeditan
+    // let dataSPK = {
+    //     id: SPKID,
+    //     custName: custName,
+    //     custID: custID,
+    //     daerah: daerah,
+    //     tglPembuatan: tglPembuatan,
+    //     ketSPK: ketSPK
+    // };
+    // console.log(dataSPK);
+    // localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+    // console.log(localStorage.getItem('dataSPKToEdit'));
+
     let dataSPK = localStorage.getItem('dataSPKToEdit');
     if (dataSPK != null) {
         dataSPK = JSON.parse(dataSPK);
@@ -219,7 +232,7 @@ include_once "01-header.php";
         daerah = dataSPK.daerah;
         ketSPK = dataSPK.ketSPK;
 
-        $('#divTglPembuatan').html(tglPembuatan);
+        $('#divTglPembuatan').html(formatDate(tglPembuatan));
         $('#divSPKCustomer').html(custName + ' - ' + daerah);
         $('#divTitleDesc').html(ketSPK);
 
@@ -326,6 +339,14 @@ include_once "01-header.php";
         localStorage.setItem('spkToPrint', JSON.stringify(spkToPrint));
 
         location.href = '03-06-print-out-spk.php';
+    });
+
+    document.querySelector('.threeDot').addEventListener('click', function() {
+        let element = [{
+            id: '.divThreeDotMenuContent',
+            time: 300
+        }];
+        elementToToggle(element);
     });
     // $("#containerBeginSPK").css("display", "none");
     // $('#btnProsesSPK').hide();

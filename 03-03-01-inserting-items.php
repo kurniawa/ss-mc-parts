@@ -58,6 +58,13 @@ include_once "01-header.php";
 
     </div>
 
+    <div id="divBtnShowEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
+    </div>
+    <div id="divBtnHideEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="hideEditOptItemSPK();">Finish Editing</div>
+    </div>
+
     <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
@@ -80,28 +87,37 @@ include_once "01-header.php";
 
         if (newSPK.item === new Array()) {
             console.log('return');
+            $('#divBtnEditItem').hide();
             return;
         }
         console.log(newSPK);
         let htmlItemList = '';
         let totalHarga = 0;
+        let i = 0;
         for (const item of newSPK.item) {
             var textItemJht = item.jht;
             if (textItemJht != '') {
                 textItemJht = '+ jht ' + textItemJht;
             }
             htmlItemList = htmlItemList +
-                `<div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
-                <div class=''>${item.bahan} ${item.varia} ${textItemJht}</div>
+                `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+                <div class='divItemName grid-2-15_auto'>
+                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                    ${item.bahan} ${item.varia} ${textItemJht}
+                </div>
                 <div class='grid-1-auto'>
-                <div class='color-green justify-self-right font-size-1_2em'>${item.jumlah}</div>
+                <div class='color-green justify-self-right font-size-1_2em'>
+                ${item.jumlah}
+                </div>
                 <div class='color-grey justify-self-right'>Jumlah</div>
                 </div>
+                <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
                 <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
                 </div>`;
 
             // kita jumlah harga semua item untuk satu SPK
             totalHarga = totalHarga + item.hargaItem;
+            i++;
         }
         $('#inputHargaTotalSPK').val(totalHarga);
         $('#divItemList').html(htmlItemList);
@@ -291,6 +307,38 @@ include_once "01-header.php";
         }
         console.log(listOfID);
         return [status, listOfID, parameterToPass];
+    }
+
+    function showEditOptItemSPK() {
+        $('.divItem').removeClass('grid-2-auto').addClass('grid-3-auto_auto_10');
+        $('.divItemName').addClass('grid-2-15_auto');
+        $('.btnRemoveItem').show();
+        $('.btnEditItem').show();
+        $('#divBtnShowEditOptItemSPK').hide();
+        $('#divBtnHideEditOptItemSPK').show();
+    }
+
+    function hideEditOptItemSPK() {
+        $('.divItem').removeClass('grid-3-auto_auto_10').addClass('grid-2-auto');
+        $('.divItemName').removeClass('grid-2-15_auto');
+        $('.btnRemoveItem').hide();
+        $('.btnEditItem').hide();
+        $('#divBtnShowEditOptItemSPK').show();
+        $('#divBtnHideEditOptItemSPK').hide();
+    }
+
+    hideEditOptItemSPK();
+
+    function removeSPKItem(i) {
+        console.log(i);
+    }
+
+    function editSPKItem(i) {
+        console.log(i);
+        if (newSPK.item[i].tipe === 'sj-varia') {
+            console.log(newSPK.item[i].tipe);
+            location.href = '03-03-02-sj-varia3.php?i=' + i;
+        }
     }
 </script>
 
