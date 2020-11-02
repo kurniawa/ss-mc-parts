@@ -46,20 +46,20 @@ if (isset($_GET['i'])) {
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
         </div>
+        <div id="bottomDiv2" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
+
+            <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
+
+        </div>
 
     </div>
 </div>
 
 <script>
     // codingan untuk antisipasi editing item
-    let m = <?php echo $m ?>;
-    console.log(m);
-    if (m !== undefined) {
-        editMode();
-    }
 
-    let sjVaria = [{}];
     let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
+    let sjVaria = [{}];
     let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
     let arrayBahan = new Array();
     let arrayNamaBahan = new Array();
@@ -76,7 +76,6 @@ if (isset($_GET['i'])) {
     // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
     let idElementToRemove;
     let idElementToReset;
-
 
     // console.log('Length divSJVaria: ' + $('div.divSJVaria').length);
 
@@ -464,8 +463,160 @@ if (isset($_GET['i'])) {
         location.href = '03-03-01-inserting-items.php';
     }
 
+    let m = <?php echo $m ?>;
+    console.log(m);
+    $('#bottomDiv2').hide()
+    setTimeout(() => {
+
+        if (m !== undefined) {
+            editMode();
+            $('#bottomDiv2').show();
+            $('#bottomDiv').hide();
+        }
+
+    }, 300);
+
     function editMode() {
         console.log('edit mode');
+        let newSPK = localStorage.getItem('newSPK');
+        newSPK = JSON.parse(newSPK);
+
+        if (newSPK.item[m].bahan !== '') {
+            console.log(newSPK.item[m].bahan);
+            $(`#inputBahan-${indexSJVaria}`).val(newSPK.item[m].bahan);
+        }
+
+        if (newSPK.item[m].varia !== '') {
+            console.log(elementSystem[1][1]);
+            cekBahanAddSelectVariasi(newSPK.item[m].bahan);
+            $(`#selectVaria-${indexSJVaria}`).val(newSPK.item[m].varia);
+        }
+
+        console.log(newSPK.item[m].jht);
+        // if (newSPK.item[m].jht !== '' || newSPK.item[m].desc !== '' || newSPK.item[m].jumlah !== '') {
+        //     if (newSPK.item[m].jht !== '') {
+        //         addLvl3ElementFromBox('Jht');
+        //         $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jht);
+
+        //     }
+        //     if (newSPK.item[m].desc !== '') {
+        //         addLvl3ElementFromBox('Desc');
+        //         $(`#taDesc-${indexSJVaria}`).val(newSPK.item[m].desc);
+        //     }
+        //     if (newSPK.item[m].jumlah !== '') {
+        //         addLvl3ElementFromBox('Jumlah');
+        //         $(`#inputJumlah-${indexSJVaria}`).val(newSPK.item[m].jumlah);
+        //     }
+        // }
+
+        if (newSPK.item[m].jht !== '') {
+            addLvl3ElementFromBox('Jht');
+            $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jht);
+        }
+        if (newSPK.item[m].desc !== '') {
+            addLvl3ElementFromBox('Desc');
+            $(`#taDesc-${indexSJVaria}`).val(newSPK.item[m].desc);
+        }
+
+        if (newSPK.item[m].jumlah !== '') {
+            addLvl3ElementFromBox('Jumlah');
+            $(`#inputJumlah-${indexSJVaria}`).val(newSPK.item[m].jumlah);
+        }
+
+        cekVariaAddBoxes2();
+    }
+
+    function cekVariaAddBoxes2() {
+        indexElementSystem = 2;
+        for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+            console.log('i: ' + i);
+            if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
+                createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
+            }
+        }
+    }
+
+    function confirmEditItemSPK() {
+        console.log('confirm edit item SPK');
+        $tipe = 'sj-varia'
+        $bahan = $(`#inputBahan-${indexSJVaria}`).val();
+        $varia = $(`#selectVaria-${indexSJVaria}`).val();
+        $jht = '';
+        $plusJahit = '';
+        $desc = '';
+        $namaLengkap = '';
+        $jumlah = 0;
+
+        $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
+        let hargaJht = 0;
+        let hargaItem = 0;
+
+        console.log('$bahan: ' + $bahan);
+        console.log('$varia: ' + $varia);
+        console.log('$jht: ' + $jht);
+        console.log('$desc: ' + $desc);
+        console.log('$jumlah: ' + $jumlah);
+
+        if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
+            $jht = $(`#selectJht-${indexSJVaria}`).val();
+            hargaJht = 1000;
+        }
+        if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
+            $desc = $(`#taDesc-${indexSJVaria}`).val();
+        }
+        if ($(`#divInputJumlah-${indexSJVaria}`).length !== 0) {
+            $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
+        }
+
+        if ($bahan === '') {
+            $textWarning = '<span class="color-red">Bahan masih belum ditentukan!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
+            return;
+        }
+
+        if ($varia == undefined) {
+            console.log('warning untuk Select Variasi');
+            $textWarning = '<span class="color-red">Variasi Sarung Jok masih belum ditentukan!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
+            return;
+        }
+
+        if ($jumlah <= 0) {
+            console.log('warning untuk jumlah');
+            $textWarning = '<span class="color-red">Jumlah barang masih belum diinput dengan benar!</span>';
+            $('#warningSJVaria').html($textWarning).removeClass('d-none');
+            return;
+        }
+
+        if ($jht !== '') {
+            $plusJahit = '+ jht ' + $jht;
+        }
+        $namaLengkap = $bahan + ' ' + $varia + ' ' + $plusJahit;
+        let hargaPriceList = parseFloat($hargaBahan) + hargaJht;
+        hargaItem = hargaPriceList * $jumlah;
+
+        let itemObj = {
+            tipe: $tipe,
+            bahan: $bahan,
+            varia: $varia,
+            jht: $jht,
+            desc: $desc,
+            jumlah: $jumlah,
+            namaLengkap: $namaLengkap,
+            hargaBahan: $hargaBahan,
+            hargaJht: hargaJht,
+            hargaPriceList: hargaPriceList,
+            hargaItem: hargaItem
+        }
+        console.log(itemObj);
+        let newSPK = localStorage.getItem('newSPK');
+        newSPK = JSON.parse(newSPK);
+        console.log(newSPK);
+
+        newSPK.item[m] = itemObj;
+        console.log(newSPK);
+        localStorage.setItem('newSPK', JSON.stringify(newSPK));
+        location.href = '03-03-01-inserting-items.php';
     }
 </script>
 

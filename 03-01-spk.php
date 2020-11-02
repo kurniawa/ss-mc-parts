@@ -59,7 +59,8 @@ include_once "01-header.php";
         cache: false,
         data: {
             type: 'SELECT',
-            table: 'spk'
+            table: 'spk',
+            order: 'tgl_pembuatan'
         },
         success: function(data) {
             console.log(data);

@@ -62,7 +62,7 @@ include_once "01-header.php";
         <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
     </div>
     <div id="divBtnHideEditOptItemSPK" class="text-center">
-        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="hideEditOptItemSPK();">Finish Editing</div>
+        <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
     </div>
 
     <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
@@ -75,6 +75,7 @@ include_once "01-header.php";
     $('.productType').hide();
     $('#btnProsesSPK').hide();
     let newSPK = localStorage.getItem('newSPK');
+
     getSPKItems();
 
     function getSPKItems() {
@@ -85,9 +86,12 @@ include_once "01-header.php";
         $('#divSPKCustomer').html(newSPK.custName + '-' + newSPK.daerah);
         $('#divTitleDesc').html(newSPK.desc);
 
-        if (newSPK.item === new Array()) {
+        console.log(newSPK.item);
+        if (newSPK.item === undefined || newSPK.item.length == 0) {
             console.log('return');
-            $('#divBtnEditItem').hide();
+            // $('#divBtnEditItem').hide();
+            $('#divBtnShowEditOptItemSPK div').hide();
+            $('#divBtnShowEditOptItemSPK').hide();
             return;
         }
         console.log(newSPK);
