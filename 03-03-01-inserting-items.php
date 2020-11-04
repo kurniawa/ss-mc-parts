@@ -38,9 +38,9 @@ include_once "01-header.php";
         <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
         </a>
-        <div class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
-        </div>
+        </a>
         <div class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
         </div>
@@ -107,7 +107,7 @@ include_once "01-header.php";
                 `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
                 <div class='divItemName grid-2-15_auto'>
                     <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
-                    ${item.bahan} ${item.varia} ${textItemJht}
+                    ${item.namaLengkap}
                 </div>
                 <div class='grid-1-auto'>
                 <div class='color-green justify-self-right font-size-1_2em'>
@@ -342,6 +342,9 @@ include_once "01-header.php";
         if (newSPK.item[i].tipe === 'sj-varia') {
             console.log(newSPK.item[i].tipe);
             location.href = '03-03-02-sj-varia3.php?i=' + i;
+        } else if (newSPK.item[i].tipe === 'sj-kombi') {
+            console.log(newSPK.item[i].tipe);
+            location.href = '03-03-03-sj-kombi.php?i=' + i;
         }
     }
 </script>
