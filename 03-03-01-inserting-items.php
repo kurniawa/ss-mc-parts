@@ -41,9 +41,9 @@ include_once "01-header.php";
         <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
         </a>
-        <div class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
-        </div>
+        </a>
         <div class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
         </div>
@@ -246,6 +246,15 @@ include_once "01-header.php";
             console.log(setID);
             console.log('item:');
             console.log(item);
+            let column = new Array();
+            let value = new Array();
+            if (item.tipe === 'sj-varia') {
+                column = ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'];
+                value = [item.tipe, item.bahan, item.varia, item.ukuran, item.jht];
+            } else if (item.tipe === 'sj-kombi') {
+                column = ['tipe', 'jahit', 'nama_lengkap'];
+                value = [item.tipe, item.jht, item.namaLengkap];
+            }
             $.ajax({
                 type: 'POST',
                 url: '01-crud.php',
@@ -253,14 +262,20 @@ include_once "01-header.php";
                 data: {
                     type: 'cek',
                     table: 'produk',
-                    column: ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'],
-                    value: [item.tipe, item.bahan, item.varia, item.ukuran, item.jht],
+                    column: column,
+                    value: value,
                     parameter: [item.desc, item.jumlah, item.hargaItem]
                 },
                 success: function(res) {
                     console.log(res);
                     if (res === 'blm ada') {
-
+                        if (item.tipe === 'sj-varia') {
+                            column = ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap', 'harga_price_list'];
+                            value = [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap, item.hargaPriceList];
+                        } else if (item.tipe === 'sj-kombi') {
+                            column = ['id', 'tipe', 'jahit', 'nama_lengkap', 'harga_price_list'];
+                            value = [setID, item.tipe, item.jht, item.namaLengkap, item.hargaPriceList];
+                        }
                         $.ajax({
                             type: 'POST',
                             url: '01-crud.php',
@@ -268,8 +283,8 @@ include_once "01-header.php";
                             data: {
                                 type: 'insert',
                                 table: 'produk',
-                                column: ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap', 'harga_price_list'],
-                                value: [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap, item.hargaPriceList],
+                                column: column,
+                                value: value,
                                 parameter: [item.desc, item.jumlah, item.hargaItem]
                             },
                             success: function(res) {
