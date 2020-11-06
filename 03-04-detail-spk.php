@@ -139,8 +139,11 @@ include_once "01-header.php";
 
     </div>
 
-    <div class="text-center">
-        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white">Edit Item</div>
+    <div id="divBtnShowEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
+    </div>
+    <div id="divBtnHideEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
     </div>
 
     <div class="position-absolute bottom-0_5em w-calc-100-1em">
@@ -192,6 +195,7 @@ include_once "01-header.php";
     // keadaan awal apa aja yang di hide
     $('.divThreeDotMenuContent').hide();
     $('.productType').hide();
+    $('#btnProsesSPK').hide();
     // -- END --
 
     // deklarasi awal variabel-variable yang di send melalui post

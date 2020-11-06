@@ -15,6 +15,7 @@
     <script src="js/jquery-3.5.1.js"></script>
     <script src="js/jquery-ui-1.12.1/jquery-ui.js"></script>
     <script src="js/functions.js"></script>
+    <script src="js/initSPK.js"></script>
 
     <title>MC-Parts Smart System</title>
 </head>

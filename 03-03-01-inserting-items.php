@@ -1,8 +1,109 @@
 <?php
+
+if (isset($_POST['SPKID'])) {
+    // var_dump($_POST);
+    // echo ('POST isset');
+    $mode = 'EDIT SPK';
+    $SPKID = $_POST["SPKID"];
+    $custName = $_POST["custName"];
+    $custID = $_POST["custID"];
+    $daerah = $_POST["daerah"];
+    $tglPembuatan = date("d-m-Y", strtotime($_POST["tglPembuatan"]));
+    $tglPembuatan2 = $_POST["tglPembuatan"];
+    // echo $_POST["tglPembuatan"];
+    $tglSelesai = $_POST["tglSelesai"];
+    $ketSPK = $_POST["ketSPK"];
+    $jmlTotal = $_POST["jmlTotal"];
+    $SPKItem = [];
+    $jmlItem = array();
+    $descEachItem = array();
+    foreach ($_POST["SPKItem"] as $key) {
+        array_push($SPKItem, $key);
+    }
+    foreach ($_POST["jmlItem"] as $key) {
+        array_push($jmlItem, $key);
+    }
+    foreach ($_POST["descEachItem"] as $key) {
+        array_push($descEachItem, $key);
+    }
+    // var_dump($SPKItem);
+} else {
+    $mode = 'NEW SPK';
+    $SPKID = 'none';
+    $custName = 'none';
+    $custID = 'none';
+    $daerah = 'none';
+    $tglPembuatan = 'none';
+    $tglPembuatan2 = 'none';
+    $tglSelesai = 'none';
+    $ketSPK = 'none';
+    $SPKItem = 'none';
+    $jmlItem = 'none';
+    $descEachItem = 'none';
+}
+
 include_once "01-header.php";
 ?>
 
 <div class="header"></div>
+
+<div class="threeDotMenu">
+    <div class="threeDot">
+        <div class="dot"></div>
+        <div class="dot"></div>
+        <div class="dot"></div>
+    </div>
+    <div class="divThreeDotMenuContent">
+        <div id="editKopSPK" class="threeDotMenuItem">
+            <img src="img/icons/edit.svg" alt=""><span>Edit Data SPK</span>
+        </div>
+        <div id="downloadExcel" class="threeDotMenuItem">
+            <img src="img/icons/download.svg" alt=""><span>Download Excel</span>
+        </div>
+    </div>
+</div>
+<style>
+    .threeDotMenu {
+        position: absolute;
+        top: 1em;
+        right: 1.5em;
+    }
+
+    .threeDot {
+        display: grid;
+        grid-template-columns: auto;
+        grid-row-gap: 0.3em;
+        justify-items: end;
+    }
+
+    .dot {
+        border-radius: 100%;
+        width: 0.5em;
+        height: 0.5em;
+        background-color: white;
+    }
+
+    .divThreeDotMenuContent {
+        background-color: white;
+        border: 1px solid #C4C4C4;
+    }
+
+    .threeDotMenuItem {
+        padding: 1em;
+        display: grid;
+        grid-template-columns: 15% 85%;
+        grid-column-gap: 0.5em;
+        align-items: center;
+    }
+
+    .threeDotMenuItem:hover {
+        background-color: #C4C4C4;
+    }
+
+    .threeDotMenuItem img {
+        width: 1em;
+    }
+</style>
 
 <div id="containerBeginSPK" class="m-0_5em">
 
@@ -33,6 +134,11 @@ include_once "01-header.php";
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
     <input id="inputHargaTotalSPK" type="hidden">
+
+    <div id="divJmlTotal" class="text-right">
+        <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
+        <div class="font-weight-bold color-red font-size-1_5em">Total</div>
+    </div>
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
         <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -69,14 +175,235 @@ include_once "01-header.php";
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
 
+    <div class="position-absolute bottom-0_5em w-calc-100-1em">
+        <div id="btnSPKSelesai" class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
+            <span class="justify-self-center font-weight-900">SPK SELESAI</span>
+        </div>
+    </div>
+
+    <div id="closingGreyArea" class="closingGreyArea" style="display: none;"></div>
+    <div class="lightBox" style="display:none;">
+        <div class="grid-2-10_auto">
+            <div><img src="img/icons/speech-bubble.svg" alt="" style="width: 2em;"></div>
+            <div class="font-weight-bold">Tanggal Selesai / Pengiriman</div>
+        </div>
+        <br><br>
+        <div class="text-center">
+            <input id="inputTglSelesaiSPK" type="date" class="input-select-option-1 w-12em" name="date" value="<?php echo date('Y-m-d'); ?>">
+        </div>
+        <br><br>
+        <div class="text-center">
+            <div id="btnSPKSelesai" class="btn-tipis bg-color-orange-1 d-inline-block">Lanjutkan >></div>
+        </div>
+    </div>
+
+    <style>
+        .closingGreyArea {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: black;
+            opacity: 0.2;
+        }
+
+        .lightBox {
+            position: absolute;
+            top: 25vh;
+            left: 0.5em;
+            right: 0.5em;
+            height: 13em;
+            background-color: white;
+            padding: 1em;
+        }
+    </style>
+
 </div>
 
 <script>
+    // keadaan awal apa aja yang di hide
+    $('.divThreeDotMenuContent').hide();
+    $('.threeDotMenu').css('display', 'none'); // -> untuk new SPK
     $('.productType').hide();
     $('#btnProsesSPK').hide();
-    let newSPK = localStorage.getItem('newSPK');
+    $('#divJmlTotal').hide();
+    $('#btnProsesSPK').hide();
 
-    getSPKItems();
+    let mode = '<?= $mode; ?>';
+    let SPKID = 'none';
+    let custName = 'none';
+    let custID = 'none';
+    let daerah = 'none';
+    let tglPembuatan = 'none';
+    let tglSelesai = 'none';
+    let ketSPK = 'none';
+    let SPKItem = 'none';
+    let jmlItem = 'none';
+    let descEachItem = 'none';
+
+    let newSPK;
+
+    if (mode == 'EDIT SPK') {
+        console.log('masuk ke mode edit');
+        // Apa yang dimunculkan dalam mode edit ini dan apa yang dihide
+        // deklarasi awal variabel-variable yang di send melalui post
+        $('#btnProsesSPK').hide();
+        $('#btnSPKSelesai').show();
+        $('.threeDotMenu').css('display', 'grid');
+        SPKID = <?= $SPKID ?>;
+        custName = <?= json_encode($custName) ?>;
+        custID = <?= json_encode($custID) ?>;
+        daerah = <?= json_encode($daerah) ?>;
+        tglPembuatan = <?= json_encode($tglPembuatan2) ?>;
+        tglSelesai = <?= json_encode($tglSelesai) ?>;
+        ketSPK = <?= json_encode($ketSPK) ?>;
+        SPKItem = <?= json_encode($SPKItem); ?>;
+        jmlItem = <?= json_encode($jmlItem); ?>;
+        descEachItem = <?= json_encode($descEachItem); ?>;
+
+        console.log(SPKItem);
+        console.log(jmlItem);
+        console.log(descEachItem);
+
+        $('#divSPKNumber').html(SPKID);
+        $('#divTglPembuatan').html(tglPembuatan);
+        $('#divSPKCustomer').html(`${custName} - ${daerah}`);
+        $('#divTitleDesc').html(ketSPK);
+
+        let dataSPK = localStorage.getItem('dataSPKToEdit');
+        if (dataSPK != null) {
+            dataSPK = JSON.parse(dataSPK);
+            custName = dataSPK.custName;
+            custID = dataSPK.custID;
+            tglPembuatan = dataSPK.tglPembuatan
+            daerah = dataSPK.daerah;
+            ketSPK = dataSPK.ketSPK;
+
+            $('#divTglPembuatan').html(formatDate(tglPembuatan));
+            $('#divSPKCustomer').html(custName + ' - ' + daerah);
+            $('#divTitleDesc').html(ketSPK);
+
+        } else {
+            let dataSPK = {
+                id: SPKID,
+                custName: custName,
+                custID: custID,
+                daerah: daerah,
+                date: tglPembuatan,
+                desc: ketSPK
+            };
+            console.log(dataSPK);
+            localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+            console.log(localStorage.getItem('dataSPKToEdit'));
+
+        }
+
+        let htmlSPKItem = '';
+        for (let i = 0; i < SPKItem.length; i++) {
+            let items = {
+
+            }
+            htmlSPKItem = htmlSPKItem +
+                `
+            <div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
+                <div class=''>${SPKItem[i]}</div>
+                <div class='grid-1-auto'>
+                <div class='color-green justify-self-right font-size-1_2em'>${jmlItem[i]}</div>
+                <div class='color-grey justify-self-right'>Jumlah</div>
+                </div>
+                <div class='pl-0_5em color-blue-purple'>${descEachItem[i]}</div>
+                </div>
+            `;
+        }
+        $('#divItemList').html(htmlSPKItem);
+    } else {
+        // IF MODE === 'NEW SPK'
+        newSPK = localStorage.getItem('newSPK');
+        getSPKItems();
+    }
+
+    document.getElementById('editKopSPK').addEventListener('click', function() {
+        console.log('clicked');
+        window.location.href = '03-05-edit-data-spk.php';
+    });
+
+    function finishSPK() {
+        $('.closingGreyArea').show();
+        $('.lightBox').show();
+    }
+
+    document.querySelector('.closingGreyArea').addEventListener('click', (event) => {
+        $('.closingGreyArea').hide();
+        $('.lightBox').hide();
+    });
+
+    document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
+        let tglSelesai = $('#inputTglSelesaiSPK').val();
+        let noNota = `N${custID}-${SPKID}`;
+        let noSrjalan = `SJ${custID}-${SPKID}`;
+        console.log(tglSelesai);
+        $.ajax({
+            type: 'POST',
+            url: '01-crud.php',
+            async: false,
+            cache: false,
+            data: {
+                type: 'UPDATE',
+                table: 'spk',
+                column: ['tgl_selesai', 'no_nota', 'tgl_nota', 'no_surat_jalan', 'tgl_surat_jalan'],
+                value: [tglSelesai, noNota, tglSelesai, noSrjalan, tglSelesai],
+                dateIndex: [0, 2, 4],
+                key: 'id',
+                keyValue: SPKID
+            },
+            success: function(res) {
+                res = JSON.parse(res);
+                console.log(res);
+                console.log(res[0]);
+                if (res[0] === 'UPDATE SUCCEED') {
+                    console.log('goToMainMenu');
+                    window.history.go(1 - (history.length));
+                }
+
+            }
+        });
+    });
+
+    document.getElementById('downloadExcel').addEventListener('click', (event) => {
+        console.log(event);
+        let itemToPrint = new Array();
+
+        for (let i = 0; i < SPKItem.length; i++) {
+            itemToPrint.push({
+                namaLengkap: SPKItem[i],
+                desc: descEachItem[i],
+                jumlah: jmlItem[i]
+            });
+        }
+
+        let spkToPrint = {
+            custID: custID,
+            custName: custName,
+            daerah: daerah,
+            date: tglPembuatan,
+            desc: ketSPK,
+            id: SPKID,
+            item: itemToPrint
+        }
+
+        localStorage.setItem('spkToPrint', JSON.stringify(spkToPrint));
+
+        location.href = '03-06-print-out-spk.php';
+    });
+
+    document.querySelector('.threeDot').addEventListener('click', function() {
+        let element = [{
+            id: '.divThreeDotMenuContent',
+            time: 300
+        }];
+        elementToToggle(element);
+    });
 
     function getSPKItems() {
         newSPK = localStorage.getItem('newSPK');
@@ -96,6 +423,7 @@ include_once "01-header.php";
         }
         console.log(newSPK);
         let htmlItemList = '';
+        let totalJumlahItem = 0;
         let totalHarga = 0;
         let i = 0;
         for (const item of newSPK.item) {
@@ -251,7 +579,7 @@ include_once "01-header.php";
             if (item.tipe === 'sj-varia') {
                 column = ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'];
                 value = [item.tipe, item.bahan, item.varia, item.ukuran, item.jht];
-            } else if (item.tipe === 'sj-kombi') {
+            } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                 column = ['tipe', 'jahit', 'nama_lengkap'];
                 value = [item.tipe, item.jht, item.namaLengkap];
             }
@@ -272,7 +600,7 @@ include_once "01-header.php";
                         if (item.tipe === 'sj-varia') {
                             column = ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap', 'harga_price_list'];
                             value = [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap, item.hargaPriceList];
-                        } else if (item.tipe === 'sj-kombi') {
+                        } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                             column = ['id', 'tipe', 'jahit', 'nama_lengkap', 'harga_price_list'];
                             value = [setID, item.tipe, item.jht, item.namaLengkap, item.hargaPriceList];
                         }
@@ -350,6 +678,10 @@ include_once "01-header.php";
 
     function removeSPKItem(i) {
         console.log(i);
+        newSPK.item.splice(i, 1);
+        console.log(newSPK.item);
+        localStorage.setItem('newSPK', JSON.stringify(newSPK));
+        location.reload();
     }
 
     function editSPKItem(i) {
@@ -360,6 +692,9 @@ include_once "01-header.php";
         } else if (newSPK.item[i].tipe === 'sj-kombi') {
             console.log(newSPK.item[i].tipe);
             location.href = '03-03-03-sj-kombi.php?i=' + i;
+        } else if (newSPK.item[i].tipe === 'sj-std') {
+            console.log(newSPK.item[i].tipe);
+            location.href = '03-03-04-sj-std.php?i=' + i;
         }
     }
 </script>

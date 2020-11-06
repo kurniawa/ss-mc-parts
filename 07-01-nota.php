@@ -46,9 +46,6 @@ include_once "01-header.php";
             let getDay = arrayDate[2];
             let subGetYear = getYear.substr(2);
 
-            $arrayBgColors = ["#FFB08E", "#DEDEDE", "#D1FFCA", "#FFB800", '#706DFF'];
-            $randomIndex = Math.floor(Math.random() * 5);
-
             // html item-item yang ada di nota
 
             let htmlItemNota = `
@@ -90,7 +87,7 @@ include_once "01-header.php";
             <div class=' bb-1px-solid-grey'>
             <div class='pt-0_5em pb-0_5em grid-4-13_auto_auto_5'>
                 <div>
-                    <div class='grid-1-auto justify-items-center color-white b-radius-5px w-3_5em' style='background-color: ${$arrayBgColors[$randomIndex]}'>
+                    <div class='grid-1-auto justify-items-center color-white b-radius-5px w-3_5em' style='background-color: ${randomColor()}'>
                         <div class='font-size-2_5em'>${getDay}</div><div>${getMonth}-${subGetYear}</div>
                     </div>
                 </div>

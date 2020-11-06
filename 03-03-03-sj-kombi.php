@@ -354,6 +354,7 @@ if (isset($_GET['i'])) {
             $plusJahit = '+ jht ' + $jht;
         }
         $namaLengkap = $kombi + ' ' + $plusJahit;
+        $namaLengkap = $namaLengkap.trim();
         let hargaPriceList = parseFloat($hargaKombi) + hargaJht;
         hargaItem = hargaPriceList * $jumlah;
 
@@ -370,13 +371,13 @@ if (isset($_GET['i'])) {
             hargaItem: hargaItem
         }
         console.log(itemObj);
-        let newSPK = localStorage.getItem('newSPK');
+        let newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         console.log(newSPK);
 
         newSPK.item.push(itemObj);
         console.log(newSPK);
-        localStorage.setItem('newSPK', JSON.stringify(newSPK));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
         location.href = '03-03-01-inserting-items.php';
     }
 
@@ -395,7 +396,7 @@ if (isset($_GET['i'])) {
 
     function editMode() {
         console.log('edit mode');
-        let newSPK = localStorage.getItem('newSPK');
+        let newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
 
         if (newSPK.item[m].kombi !== '') {
@@ -507,6 +508,7 @@ if (isset($_GET['i'])) {
             $plusJahit = '+ jht ' + $jht;
         }
         $namaLengkap = $kombi + ' ' + $plusJahit;
+        $namaLengkap = $namaLengkap.trim();
         let hargaPriceList = parseFloat($hargaKombi) + hargaJht;
         hargaItem = hargaPriceList * $jumlah;
 
@@ -523,13 +525,13 @@ if (isset($_GET['i'])) {
             hargaItem: hargaItem
         }
         console.log(itemObj);
-        let newSPK = localStorage.getItem('newSPK');
+        let newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         console.log(newSPK);
 
         newSPK.item[m] = itemObj;
         console.log(newSPK);
-        localStorage.setItem('newSPK', JSON.stringify(newSPK));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
         location.href = '03-03-01-inserting-items.php';
     }
 </script>

@@ -114,13 +114,19 @@ function formatHarga (harga) {
 //     let sql = sqlPart1 + sqlPart2;
 //     console.log(sql)
 
-    // $msg = "Query: ".$sql. " SUCCESSFULLY EXECUTED.";
-    // $res = mysqli_query($con, $sql);
+// $msg = "Query: ".$sql. " SUCCESSFULLY EXECUTED.";
+// $res = mysqli_query($con, $sql);
 
-    // if (!$res) {
-    //     echo json_encode(array("error", "Error: ".$sql. "<br>".mysqli_error($con)));
-    //     die;
-    // } else {
-    //     echo json_encode(array("insert", $msg));
-    // }
+// if (!$res) {
+//     echo json_encode(array("error", "Error: ".$sql. "<br>".mysqli_error($con)));
+//     die;
+// } else {
+//     echo json_encode(array("insert", $msg));
 // }
+// }
+
+function randomColor () {
+    let arrayColor = ["#FFB08E", "#DEDEDE", "#D1FFCA", "#FFB800", '#706DFF'];
+    let randomIndex = Math.floor(Math.random() * arrayColor.length);
+    return arrayColor[randomIndex];
+}
