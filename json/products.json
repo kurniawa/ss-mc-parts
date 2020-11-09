@@ -360,9 +360,120 @@
         "variasi_2": "Press + Alas"
     },
     {
-        "tipe_produk": "busa-stang"
+        "tipe_produk": "tankpad",
+        "lini_produk": [
+            {
+                "nama": "Bull Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Bull Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "Dainese Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Dainese Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "Fox Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Fox Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "Garuda Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Garuda Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "Harley Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Harley Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "KITACO Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "KITACO Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "MC Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "MC Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "MC Hitam Kecil",
+                "harga": 3000
+            },
+            {
+                "nama": "MC Logo Timbul",
+                "harga": 4500
+            },
+            {
+                "nama": "Monster Hitam",
+                "harga": 4000
+            },
+            {
+                "nama": "Monster Mika-Sablon",
+                "harga": 5000
+            },
+            {
+                "nama": "Racing Besar Hitam",
+                "harga": 4500
+            },
+            {
+                "nama": "Racing Besar Mika-Sablon",
+                "harga": 5500
+            },
+            {
+                "nama": "Racing Kecil Hitam",
+                "harga": 3500
+            },
+            {
+                "nama": "Racing Kecil Mika-Sablon",
+                "harga": 4500
+            },
+            {
+                "nama": "Stiker API",
+                "harga": 4000
+            },
+            {
+                "nama": "Stiker MU",
+                "harga": 2500
+            },
+            {
+                "nama": "Stiker PSM",
+                "harga": 2500
+            },
+            {
+                "nama": "Yakuza Dimensi",
+                "harga": 5000
+            },
+            {
+                "nama": "Yakuza Hitam",
+                "harga": 4000
+            }
+        ]
     },
     {
-        "tipe_produk": "tank-pad"
+        "tipe_produk": "busa-stang",
+        "harga": 7500
     }
 ]

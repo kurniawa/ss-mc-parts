@@ -11,7 +11,7 @@ if (isset($_GET['i'])) {
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
-            <h2>Tipe: Sarung Jok Variasi</h2>
+            <h2>Tipe: Sarung Jok Kombinasi</h2>
         </div>
 
         <div id="divArraySJKombi">
@@ -179,7 +179,7 @@ if (isset($_GET['i'])) {
                 select: function(event, ui) {
                     console.log(ui);
                     console.log(ui.item.value);
-                    cekKombiAddBoxes(ui.item.valu);
+                    cekKombiAddBoxes(ui.item.value);
                     // sjVaria.push({
                     //     'nama_bahan': ui.item.value
                     // });
@@ -205,11 +205,11 @@ if (isset($_GET['i'])) {
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
     function cekKombiAddBoxes(tipeKombi) {
+        console.log('namaKombi1:' + tipeKombi);
         try {
             for (const kombi of arrayKombi) {
-                if (tipeKombi === kombi.nama_varia) {
-                    console.log('namaKombi1:' + tipeKombi);
-                    console.log('namaKombi2:' + kombi.nama_varia);
+                if (tipeKombi === kombi.nama) {
+                    console.log('namaKombi2:' + kombi.nama);
                     console.log('hargaKombi:' + kombi.harga);
 
                     indexElementSystem = 1;

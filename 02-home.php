@@ -93,6 +93,10 @@ include_once "01-header.php";
         width: 3em;
     }
 </style>
+
+<script>
+    initSPK();
+</script>
 <?php
 include_once "01-footer.php";
 ?>

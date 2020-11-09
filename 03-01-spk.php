@@ -99,6 +99,14 @@ include_once "01-header.php";
                     <input type='hidden' name='SPKItem[]' value='${daftarNamaProdukEachSPK[i][j]}'>
                     <input type='hidden' name='jmlItem[]' value='${daftarJumlahItemSPK[i][j]}'>
                     <input type='hidden' name='descEachItem[]' value='${daftarDescEachItem[i][j]}'>
+                    <input type='hidden' name='hargaPcs[]' value='${daftarHargaPerPcs[i][j]}'>
+                    <input type='hidden' name='bahan[]' value='${daftarBahan[i][j]}'>
+                    <input type='hidden' name='varia[]' value='${daftarVaria[i][j]}'>
+                    <input type='hidden' name='ukuran[]' value='${daftarUkuran[i][j]}'>
+                    <input type='hidden' name='logo[]' value='${daftarLogo[i][j]}'>
+                    <input type='hidden' name='tato[]' value='${daftarTato[i][j]}'>
+                    <input type='hidden' name='jahit[]' value='${daftarJahit[i][j]}'>
+                    <input type='hidden' name='japstyle[]' value='${daftarJapstyle[i][j]}'>
                     `;
             }
             let htmlDaftarSPK =

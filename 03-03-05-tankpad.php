@@ -7,14 +7,14 @@ if (isset($_GET['i'])) {
 }
 ?>
 
-<div id="containerSJStd">
+<div id="containerTankPad">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
-            <h2>Tipe: Sarung Jok Standard</h2>
+            <h2>Tipe: Tankpad</h2>
         </div>
 
-        <div id="divArraySJStd">
+        <div id="divArrayTankpad">
 
         </div>
 
@@ -49,9 +49,9 @@ if (isset($_GET['i'])) {
     let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
     let sjVaria = [{}];
     let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
-    let arrayStd = new Array();
-    let arrayTipeStd = new Array();
-    let arrayJht = new Array();
+    let arrayTankpad = new Array();
+    let arrayTipeTankpad = new Array();
+    // let arrayJht = new Array();
 
     // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
     let idElementToRemove;
@@ -62,48 +62,45 @@ if (isset($_GET['i'])) {
         fetch('json/products.json').then(response => response.json()).then(data => {
             console.log(data);
 
-            for (const std of data[2].variasi_1) {
-                arrayStd.push({
-                    nama: std.nama_variasi,
-                    harga: std.harga
+            for (const tankpad of data[3].lini_produk) {
+                arrayTankpad.push({
+                    nama: tankpad.nama,
+                    harga: tankpad.harga
                 });
-                arrayTipeStd.push(std.nama_variasi);
+                arrayTipeTankpad.push(tankpad.nama);
             }
 
-            console.log(arrayStd);
+            console.log(arrayTankpad);
 
-            for (const jht of data[0].jahit[0].tipe_jht) {
-                arrayJht.push(jht);
-            }
-            console.log(arrayJht);
+            // for (const jht of data[0].jahit[0].tipe_jht) {
+            //     arrayJht.push(jht);
+            // }
+            // console.log(arrayJht);
         });
 
 
     });
 
-    function addSJStd() {
+    function addTankpad() {
         let elementsToAppend =
-            `<div id="divSJStd" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
-                <div id='divStd'></div>
-                <div id='divJht'></div>
+            `<div id="divTankpad" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
+                <div id='divTankpad2'></div>
                 <div id='divDesc'></div>
                 <div id='divJumlah'></div>
             </div>`;
 
-        $('#divArraySJStd').append(elementsToAppend);
+        $('#divArrayTankpad').append(elementsToAppend);
     }
 
     let indexElementSystem = 0;
     let elementSystem = [
-        [`#divStd`, `#inputStd`],
+        [`#divTankpad2`, `#inputTankpad`],
         [
             [`#availableOptions`, `#boxJumlah`],
-            [`#availableOptions`, `#boxJht`],
             [`#availableOptions`, `#boxDesc`]
         ],
         [
             [`#divJumlah`, `#divInputJumlah`],
-            [`#divJht`, `#divSelectJht`],
             [`#divDesc`, `#divTADesc`]
         ]
     ];
@@ -140,19 +137,19 @@ if (isset($_GET['i'])) {
 
     let htmlDivTADesc =
         `<div id="divTADesc" class="mt-1em">
-            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][2][1]}", "${elementSystem[1][2][0]}","${elementSystem[1][2][1]}", 1, 2);'></span></div>
+            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][1][1]}", "${elementSystem[1][1][0]}","${elementSystem[1][1][1]}", 1, 1);'></span></div>
             <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc" id="taDesc" placeholder="Keterangan"></textarea>
         </div>`;
 
 
     let elementHTML = [
-        `<input id="inputStd" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Standard" onkeyup="cekStdAddBoxes(this.value);">
-        <input id='inputHargaStd' type='hidden'>
+        `<input id="inputTankpad" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Tankpad" onkeyup="cekTankpadAddBoxes(this.value);">
+        <input id='inputHargaTankpad' type='hidden'>
         `,
 
-        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
+        [htmlBoxJumlah, htmlBoxDesc],
 
-        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
+        [htmlDivInputJumlah, htmlDivTADesc]
 
     ];
 
@@ -167,13 +164,13 @@ if (isset($_GET['i'])) {
         }
         $(divID).html(elementHTML);
 
-        if (elementID === `#inputStd`) {
-            $("#inputStd").autocomplete({
-                source: arrayTipeStd,
+        if (elementID === `#inputTankpad`) {
+            $("#inputTankpad").autocomplete({
+                source: arrayTipeTankpad,
                 select: function(event, ui) {
                     console.log(ui);
                     console.log(ui.item.value);
-                    cekStdAddBoxes(ui.item.value);
+                    cekTankpadAddBoxes(ui.item.value);
                     // sjVaria.push({
                     //     'nama_bahan': ui.item.value
                     // });
@@ -193,18 +190,18 @@ if (isset($_GET['i'])) {
         }
     }
 
-    addSJStd();
+    addTankpad();
     createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
 
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
-    function cekStdAddBoxes(tipeStd) {
+    function cekTankpadAddBoxes(tipeTankpad) {
         try {
-            for (const std of arrayStd) {
-                if (tipeStd === std.nama) {
-                    console.log('namaStd1:' + tipeStd);
-                    console.log('namaStd2:' + std.nama);
-                    console.log('hargaStd:' + std.harga);
+            for (const tankpad of arrayTankpad) {
+                if (tipeTankpad === tankpad.nama) {
+                    console.log('namaTankpad1:' + tipeTankpad);
+                    console.log('namaTankpad2:' + tankpad.nama);
+                    console.log('hargaTankpad:' + tankpad.harga);
 
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
@@ -214,12 +211,12 @@ if (isset($_GET['i'])) {
                             createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
                         }
                     }
-                    $(`#inputHargaStd`).val(std.harga);
-                    console.log('Harga Std:');
-                    console.log($(`#inputHargaStd`).val());
+                    $(`#inputHargaTankpad`).val(tankpad.harga);
+                    console.log('Harga Tankpad:');
+                    console.log($(`#inputHargaTankpad`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Std not found!")
+                    console.log("Nama Tankpad not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
@@ -262,7 +259,7 @@ if (isset($_GET['i'])) {
         } else if (value === 'Desc') {
             // removeElement(indexElementSystem);
             $('#boxDesc').remove();
-            createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][1]);
         }
     }
 
@@ -303,27 +300,28 @@ if (isset($_GET['i'])) {
 
     function insertItemToLocal() {
         // console.log('clicked');
-        $tipe = 'sj-std'
-        $std = $(`#inputStd`).val();
-        $jht = '';
-        $plusJahit = '';
+        $tipe = 'tankpad'
+        $tankpad = $(`#inputTankpad`).val();
+        // $jht = '';
+        // $plusJahit = '';
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
 
-        $hargaStd = $(`#inputHargaStd`).val();
+        $hargaTankpad = $(`#inputHargaTankpad`).val();
         let hargaJht = 0;
         let hargaItem = 0;
 
-        console.log('$std: ' + $std);
-        console.log('$jht: ' + $jht);
+        console.log('$tankpad: ' + $tankpad);
+        // console.log('$jht: ' + $jht);
         console.log('$desc: ' + $desc);
         console.log('$jumlah: ' + $jumlah);
 
-        if ($(`#divSelectJht`).length !== 0) {
-            $jht = $(`#selectJht`).val();
-            hargaJht = 1000;
-        }
+        // if ($(`#divSelectJht`).length !== 0) {
+        //     $jht = $(`#selectJht`).val();
+        //     hargaJht = 1000;
+        // }
+
         if ($(`#divTADesc`).length !== 0) {
             $desc = $(`#taDesc`).val();
         }
@@ -331,7 +329,7 @@ if (isset($_GET['i'])) {
             $jumlah = $(`#inputJumlah`).val();
         }
 
-        if ($std === '') {
+        if ($tankpad === '') {
             $textWarning = '<span class="color-red">Kombinasi masih belum ditentukan!</span>';
             $('#divWarning').html($textWarning).removeClass('d-none');
             return;
@@ -344,23 +342,21 @@ if (isset($_GET['i'])) {
             return;
         }
 
-        if ($jht !== '') {
-            $plusJahit = '+ jht ' + $jht;
-        }
-        $namaLengkap = $std + ' ' + $plusJahit;
+        // if ($jht !== '') {
+        //     $plusJahit = '+ jht ' + $jht;
+        // }
+        $namaLengkap = 'Tankpad ' + $tankpad;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPriceList = parseFloat($hargaStd) + hargaJht;
+        let hargaPriceList = parseFloat($hargaTankpad)
         hargaItem = hargaPriceList * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
-            std: $std,
-            jht: $jht,
+            tankpad: $tankpad,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
-            hargaStd: $hargaStd,
-            hargaJht: hargaJht,
+            hargaTankpad: $hargaTankpad,
             hargaPriceList: hargaPriceList,
             hargaItem: hargaItem
         }
@@ -393,18 +389,18 @@ if (isset($_GET['i'])) {
         let newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
 
-        if (newSPK.item[m].std !== '') {
-            console.log(newSPK.item[m].std);
-            $(`#inputStd`).val(newSPK.item[m].std);
+        if (newSPK.item[m].tankpad !== '') {
+            console.log(newSPK.item[m].tankpad);
+            $(`#inputTankpad`).val(newSPK.item[m].tankpad);
         }
 
         // if (newSPK.item[m].varia !== '') {
         //     console.log(elementSystem[1][1]);
-        //     cekStdAddBoxes(newSPK.item[m].kombi);
+        //     cekTankpadAddBoxes(newSPK.item[m].kombi);
         //     $(`#selectVaria`).val(newSPK.item[m].varia);
         // }
 
-        console.log(newSPK.item[m].jht);
+        // console.log(newSPK.item[m].jht);
         // if (newSPK.item[m].jht !== '' || newSPK.item[m].desc !== '' || newSPK.item[m].jumlah !== '') {
         //     if (newSPK.item[m].jht !== '') {
         //         addLvl2ElementFromBox('Jht');
@@ -421,10 +417,10 @@ if (isset($_GET['i'])) {
         //     }
         // }
 
-        if (newSPK.item[m].jht !== '') {
-            addLvl2ElementFromBox('Jht');
-            $(`#selectJht`).val(newSPK.item[m].jht);
-        }
+        // if (newSPK.item[m].jht !== '') {
+        //     addLvl2ElementFromBox('Jht');
+        //     $(`#selectJht`).val(newSPK.item[m].jht);
+        // }
         if (newSPK.item[m].desc !== '') {
             addLvl2ElementFromBox('Desc');
             $(`#taDesc`).val(newSPK.item[m].desc);
@@ -435,10 +431,10 @@ if (isset($_GET['i'])) {
             $(`#inputJumlah`).val(newSPK.item[m].jumlah);
         }
 
-        cekStdAddBoxes2();
+        cekTankpadAddBoxes2();
     }
 
-    function cekStdAddBoxes2() {
+    function cekTankpadAddBoxes2() {
         indexElementSystem = 1;
         for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);
@@ -450,27 +446,27 @@ if (isset($_GET['i'])) {
 
     function confirmEditItemSPK() {
         console.log('confirm edit item SPK');
-        $tipe = 'sj-std'
-        $std = $(`#inputStd`).val();
-        $jht = '';
-        $plusJahit = '';
+        $tipe = 'tankpad'
+        $tankpad = $(`#inputTankpad`).val();
+        // $jht = '';
+        // $plusJahit = '';
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
 
-        $hargaStd = $(`#inputHargaStd`).val();
+        $hargaTankpad = $(`#inputHargaTankpad`).val();
         let hargaJht = 0;
         let hargaItem = 0;
 
-        console.log('$std: ' + $std);
-        console.log('$jht: ' + $jht);
+        console.log('$tankpad: ' + $tankpad);
+        // console.log('$jht: ' + $jht);
         console.log('$desc: ' + $desc);
         console.log('$jumlah: ' + $jumlah);
 
-        if ($(`#divSelectJht`).length !== 0) {
-            $jht = $(`#selectJht`).val();
-            hargaJht = 1000;
-        }
+        // if ($(`#divSelectJht`).length !== 0) {
+        //     $jht = $(`#selectJht`).val();
+        //     hargaJht = 1000;
+        // }
         if ($(`#divTADesc`).length !== 0) {
             $desc = $(`#taDesc`).val();
         }
@@ -478,7 +474,7 @@ if (isset($_GET['i'])) {
             $jumlah = $(`#inputJumlah`).val();
         }
 
-        if ($std === '') {
+        if ($tankpad === '') {
             $textWarning = '<span class="color-red">Kombinasi masih belum ditentukan!</span>';
             $('#divWarning').html($textWarning).removeClass('d-none');
             return;
@@ -498,23 +494,22 @@ if (isset($_GET['i'])) {
             return;
         }
 
-        if ($jht !== '') {
-            $plusJahit = '+ jht ' + $jht;
-        }
-        $namaLengkap = $std + ' ' + $plusJahit;
+        // if ($jht !== '') {
+        //     $plusJahit = '+ jht ' + $jht;
+        // }
+        $namaLengkap = 'Tankpad ' + $tankpad;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPriceList = parseFloat($hargaStd) + hargaJht;
+        let hargaPriceList = parseFloat($hargaTankpad);
         hargaItem = hargaPriceList * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
-            std: $std,
+            tankpad: $tankpad,
             jht: $jht,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
-            hargaStd: $hargaStd,
-            hargaJht: hargaJht,
+            hargaTankpad: $hargaTankpad,
             hargaPriceList: hargaPriceList,
             hargaItem: hargaItem
         }

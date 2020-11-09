@@ -54,9 +54,9 @@ include_once "01-header.php";
 
 
 <script>
-    history.pushState({
-        page: 'newSPK'
-    }, null);
+    // history.pushState({
+    //     page: 'newSPK'
+    // }, null);
 
     // $(document).ready(function() {
     let lastID = getLastID("spk");
@@ -174,7 +174,7 @@ include_once "01-header.php";
             desc: $('#titleDesc').val(),
             item: new Array()
         }
-        localStorage.setItem('newSPK', JSON.stringify(dataSPK));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
 
         location.href = '03-03-01-inserting-items.php';
     }

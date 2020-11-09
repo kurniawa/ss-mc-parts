@@ -14,6 +14,14 @@ $jmlTotal = $_POST["jmlTotal"];
 $SPKItem = [];
 $jmlItem = array();
 $descEachItem = array();
+$hargaPcs = $_POST["hargaPcs"];
+$bahan = $_POST["bahan"];
+$varia = $_POST["varia"];
+$ukuran = $_POST["ukuran"];
+$logo = $_POST["logo"];
+$tato = $_POST["tato"];
+$jahit = $_POST["jahit"];
+$japstyle = $_POST["japstyle"];
 foreach ($_POST["SPKItem"] as $key) {
     array_push($SPKItem, $key);
 }
@@ -210,6 +218,8 @@ include_once "01-header.php";
     let jmlItem = <?= json_encode($jmlItem); ?>;
     let descEachItem = <?= json_encode($descEachItem); ?>;
 
+    let jmlTotal = <?= json_encode($jmlTotal) ?>;
+
     console.log(SPKItem);
     console.log(jmlItem);
     console.log(descEachItem);
@@ -326,7 +336,8 @@ include_once "01-header.php";
             itemToPrint.push({
                 namaLengkap: SPKItem[i],
                 desc: descEachItem[i],
-                jumlah: jmlItem[i]
+                jumlah: jmlItem[i],
+                jmlTotal: jmlTotal[i]
             });
         }
 

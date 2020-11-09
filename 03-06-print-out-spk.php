@@ -18,8 +18,8 @@ include_once '01-header.php';
 
 <script>
     let spkToPrint;
-    if (localStorage.getItem('newSPK') != null) {
-        spkToPrint = localStorage.getItem('newSPK');
+    if (localStorage.getItem('spkToPrint') != null) {
+        spkToPrint = localStorage.getItem('spkToPrint');
         spkToPrint = JSON.parse(spkToPrint);
         console.log(spkToPrint);
     } else {

@@ -150,9 +150,9 @@ include_once "01-header.php";
         <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
         </a>
-        <div class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
+        <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
-        </div>
+        </a>
         <div class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Busa<br>Stang</span>
         </div>
@@ -175,7 +175,7 @@ include_once "01-header.php";
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
 
-    <div class="position-absolute bottom-0_5em w-calc-100-1em">
+    <div id="divBtnSPKSelesai" class="position-absolute bottom-0_5em w-calc-100-1em">
         <div id="btnSPKSelesai" class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
             <span class="justify-self-center font-weight-900">SPK SELESAI</span>
         </div>
@@ -228,7 +228,7 @@ include_once "01-header.php";
     $('.productType').hide();
     $('#btnProsesSPK').hide();
     $('#divJmlTotal').hide();
-    $('#btnProsesSPK').hide();
+    $('#divBtnSPKSelesai').hide();
 
     let mode = '<?= $mode; ?>';
     let SPKID = 'none';
@@ -319,7 +319,7 @@ include_once "01-header.php";
         $('#divItemList').html(htmlSPKItem);
     } else {
         // IF MODE === 'NEW SPK'
-        newSPK = localStorage.getItem('newSPK');
+        newSPK = localStorage.getItem('dataSPKToEdit');
         getSPKItems();
     }
 
@@ -406,7 +406,7 @@ include_once "01-header.php";
     });
 
     function getSPKItems() {
-        newSPK = localStorage.getItem('newSPK');
+        newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         $('#divSPKNumber').html(newSPK.id);
         $('#divSPKDate').html(newSPK.date);
@@ -680,7 +680,7 @@ include_once "01-header.php";
         console.log(i);
         newSPK.item.splice(i, 1);
         console.log(newSPK.item);
-        localStorage.setItem('newSPK', JSON.stringify(newSPK));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
         location.reload();
     }
 
