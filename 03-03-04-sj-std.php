@@ -347,7 +347,7 @@ if (isset($_GET['i'])) {
         if ($jht !== '') {
             $plusJahit = '+ jht ' + $jht;
         }
-        $namaLengkap = $std + ' ' + $plusJahit;
+        $namaLengkap = 'SJ std ' + $std + ' ' + $plusJahit;
         $namaLengkap = $namaLengkap.trim();
         let hargaPriceList = parseFloat($hargaStd) + hargaJht;
         hargaItem = hargaPriceList * $jumlah;

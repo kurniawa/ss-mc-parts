@@ -362,6 +362,9 @@ option{
 .position-absolute {
     position: absolute;
 }
+.position-fixed {
+    position: fixed;
+}
 .pointer-events-none {
     pointer-events: none;
 }
@@ -433,6 +436,9 @@ option{
 }
 .bottom-0_5em {
     bottom: 0.5em;
+}
+.bottom-4_5em {
+    bottom: 4.5em;
 }
 .bottom-5em {
     bottom: 5em;

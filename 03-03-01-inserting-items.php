@@ -171,14 +171,22 @@ include_once "01-header.php";
         <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
     </div>
 
-    <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
+    <div id="btnProsesSPK" class="position-fixed bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
 
-    <div id="divBtnSPKSelesai" class="position-absolute bottom-0_5em w-calc-100-1em">
+    <div id="btnEditSPKItem" class="position-fixed bottom-0_5em w-calc-100-1em h-4em bg-color-orange-1 grid-1-auto" onclick="updateSPK();">
+        <span class="justify-self-center font-weight-900">Konfirmasi Perubahan</span>
+    </div>
+
+    <div id="divBtnSPKSelesai" class="position-fixed bottom-0_5em w-calc-100-1em">
         <div id="btnSPKSelesai" class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
             <span class="justify-self-center font-weight-900">SPK SELESAI</span>
         </div>
+    </div>
+
+    <div id="divMarginBottom" style="height: 20vh;">
+
     </div>
 
     <div id="closingGreyArea" class="closingGreyArea" style="display: none;"></div>
@@ -229,6 +237,7 @@ include_once "01-header.php";
     $('#btnProsesSPK').hide();
     $('#divJmlTotal').hide();
     $('#divBtnSPKSelesai').hide();
+    $('#btnEditSPKItem').hide();
 
     let mode = '<?= $mode; ?>';
     let SPKID = 'none';
@@ -243,15 +252,50 @@ include_once "01-header.php";
     let descEachItem = 'none';
 
     let newSPK;
+    let SPKBefore;
+
 
     if (mode == 'EDIT SPK') {
+        SPKBefore = localStorage.getItem('dataSPKBefore');
+        if (SPKBefore != null) {
+            SPKBefore = JSON.parse(SPKBefore);
+        }
+        runningModeEdit();
+    } else {
+        // IF MODE === 'NEW SPK'
+        let statusCekMode = cekMode();
+        console.log(statusCekMode);
+        if (statusCekMode == false) {
+            newSPK = localStorage.getItem('dataSPKToEdit');
+            getSPKItems();
+        }
+    }
+
+    function cekMode() {
+        console.log('menjalankan cek mode');
+        let cekMode = localStorage.getItem('dataSPKToEdit');
+        cekMode = JSON.parse(cekMode);
+        SPKBefore = localStorage.getItem('dataSPKBefore');
+        SPKBefore = JSON.parse(SPKBefore);
+
+        if (cekMode.hasOwnProperty('mode')) {
+            if (cekMode.mode === 'edit') {
+                runningModeEdit();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    function runningModeEdit() {
         console.log('masuk ke mode edit');
         // Apa yang dimunculkan dalam mode edit ini dan apa yang dihide
         // deklarasi awal variabel-variable yang di send melalui post
         $('#btnProsesSPK').hide();
-        $('#btnSPKSelesai').show();
+        $('#divBtnSPKSelesai').show();
         $('.threeDotMenu').css('display', 'grid');
-        SPKID = <?= $SPKID ?>;
+        SPKID = <?= json_encode($SPKID) ?>;
         custName = <?= json_encode($custName) ?>;
         custID = <?= json_encode($custID) ?>;
         daerah = <?= json_encode($daerah) ?>;
@@ -272,6 +316,9 @@ include_once "01-header.php";
         $('#divTitleDesc').html(ketSPK);
 
         let dataSPK = localStorage.getItem('dataSPKToEdit');
+        console.log(dataSPK);
+        console.log('dataSPK is defined!!');
+
         if (dataSPK != null) {
             dataSPK = JSON.parse(dataSPK);
             custName = dataSPK.custName;
@@ -284,6 +331,20 @@ include_once "01-header.php";
             $('#divSPKCustomer').html(custName + ' - ' + daerah);
             $('#divTitleDesc').html(ketSPK);
 
+            if (dataSPK.item.length === SPKBefore.item.length) {
+                dataSPK.mode = 'edit';
+                localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+                localStorage.setItem('dataSPKBefore', JSON.stringify(dataSPK));
+                console.log('key mode = edit, added!');
+
+            } else {
+                console.log('masuk ke mode perubahan item SPK');
+                for (let indexAwal = SPKBefore.item.length; indexAwal < dataSPK.item.length; indexAwal++) {
+                    SPKBefore.item.push(dataSPK.item[indexAwal]);
+                }
+            }
+
+
         } else {
             let dataSPK = {
                 id: SPKID,
@@ -293,19 +354,46 @@ include_once "01-header.php";
                 date: tglPembuatan,
                 desc: ketSPK
             };
+
+            let SPKItems = new Array();
+            for (let i = 0; i < SPKItem.length; i++) {
+                SPKItems.push({
+                    namaLengkap: SPKItem[i],
+                    desc: descEachItem[i],
+                    jumlah: jmlItem[i]
+                });
+            }
+            dataSPK.item = SPKItems;
             console.log(dataSPK);
             localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+            localStorage.setItem('dataSPKBefore', JSON.stringify(dataSPK));
             console.log(localStorage.getItem('dataSPKToEdit'));
 
         }
 
         let htmlSPKItem = '';
-        for (let i = 0; i < SPKItem.length; i++) {
-            let items = {
-
+        if (dataSPK) {
+            for (let i = 0; i < dataSPK.item.length; i++) {
+                htmlSPKItem = htmlSPKItem +
+                    `
+            <div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
+                <div class=''>${dataSPK.item[i].namaLengkap}</div>
+                <div class='grid-1-auto'>
+                <div class='color-green justify-self-right font-size-1_2em'>${dataSPK.item[i].jumlah}</div>
+                <div class='color-grey justify-self-right'>Jumlah</div>
+                </div>
+                <div class='pl-0_5em color-blue-purple'>${dataSPK.item[i].desc}</div>
+                </div>
+            `;
             }
-            htmlSPKItem = htmlSPKItem +
-                `
+
+            $('#divSPKNumber').html(dataSPK.id);
+            $('#divTitleDesc').html(dataSPK.desc);
+
+        } else {
+            for (let i = 0; i < SPKItem.length; i++) {
+                htmlSPKItem = htmlSPKItem +
+                    `
             <div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
                 <div class=''>${SPKItem[i]}</div>
                 <div class='grid-1-auto'>
@@ -315,13 +403,14 @@ include_once "01-header.php";
                 <div class='pl-0_5em color-blue-purple'>${descEachItem[i]}</div>
                 </div>
             `;
+            }
         }
         $('#divItemList').html(htmlSPKItem);
-    } else {
-        // IF MODE === 'NEW SPK'
-        newSPK = localStorage.getItem('dataSPKToEdit');
-        getSPKItems();
+        $('#btnEditSPKItem').show();
+        $('#divBtnSPKSelesai').hide();
     }
+
+
 
     document.getElementById('editKopSPK').addEventListener('click', function() {
         console.log('clicked');
@@ -392,7 +481,7 @@ include_once "01-header.php";
             item: itemToPrint
         }
 
-        localStorage.setItem('spkToPrint', JSON.stringify(spkToPrint));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(spkToPrint));
 
         location.href = '03-06-print-out-spk.php';
     });
@@ -696,6 +785,10 @@ include_once "01-header.php";
             console.log(newSPK.item[i].tipe);
             location.href = '03-03-04-sj-std.php?i=' + i;
         }
+    }
+
+    function updateSPK() {
+        console.log('Running Update SPK!');
     }
 </script>
 

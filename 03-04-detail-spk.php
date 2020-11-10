@@ -351,9 +351,9 @@ include_once "01-header.php";
             item: itemToPrint
         }
 
-        localStorage.setItem('spkToPrint', JSON.stringify(spkToPrint));
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(spkToPrint));
 
-        location.href = '03-06-print-out-spk.php';
+        // location.href = '03-06-print-out-spk.php';
     });
 
     document.querySelector('.threeDot').addEventListener('click', function() {
