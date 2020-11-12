@@ -76,6 +76,7 @@ if ($type === 'cek') {
 
     $sql = "SELECT * FROM $table WHERE ";
     for ($i = 0; $i < $data_length; $i++) {
+        // $value[$i] = mysqli_real_escape_string($con, $value[$i]);
         if ($i === ($data_length - 1)) {
             $sql = $sql . "$column[$i]='$value[$i]'";
         } else {
@@ -84,16 +85,24 @@ if ($type === 'cek') {
     }
 
     // var_dump($sql);
-
+    // echo $sql;
     $res = mysqli_query($con, $sql);
 
-    if (mysqli_num_rows($res) > 0) {
-        // echo 'udah ada';
+    // if (mysqli_num_rows($res) > 0) {
+    //     // echo 'udah ada';
+    //     $row = mysqli_fetch_assoc($res);
+    //     echo json_encode(array('udah ada', $row['id'], $parameter));
+    // } else {
+    //     echo 'blm ada';
+    //     // insertToDB($table, $column, $value, $data_length);
+    // }
+    // var_dump(mysqli_num_rows($res));
+    if (mysqli_num_rows($res) == 0) {
+        # code...
+        echo 'blm ada';
+    } else {
         $row = mysqli_fetch_assoc($res);
         echo json_encode(array('udah ada', $row['id'], $parameter));
-    } else {
-        echo 'blm ada';
-        // insertToDB($table, $column, $value, $data_length);
     }
 }
 
@@ -251,6 +260,23 @@ if ($type === "UPDATE") {
     } else {
         echo json_encode(array('UPDATE SUCCEED', $sql));
     }
+}
+
+if ($type === "DELETE") {
+    $table = $_POST["table"];
+    $column = $_POST["column"];
+    $value = $_POST["value"];
+    $sql = "DELETE FROM $table WHERE $column=$value";
+    $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
+    $res = mysqli_query($con, $sql);
+    if (!$res) {
+        echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
+        die;
+    } else {
+        echo json_encode(array("DELETED", $msg));
+        die;
+    }
+    return;
 }
 
 die;

@@ -191,7 +191,12 @@ function initSPK () {
                     },
                     success: function (res) {
                         console.log('res spk_contains_produk: ' + res);
-                        res = JSON.parse(res);
+                        console.log(res);
+                        if (res === 'NOT FOUND!') {
+                            res = [];
+                        } else {
+                            res = JSON.parse(res);
+                        }
                         for (const SPKItem of res) {
                             jumlahTotalSPK = jumlahTotalSPK + parseFloat(SPKItem.jumlah);
                             jmlEachItem.push(SPKItem.jumlah);
@@ -272,6 +277,7 @@ function initSPK () {
                 daftarTato.push(tato);
                 daftarJahit.push(jahit);
                 daftarJapstyle.push(japstyle);
+                daftarTipeProduk.push(tipeProduk);
             });
 
             console.log('daftarNamaProdukEachSPK:');
@@ -292,7 +298,8 @@ function initSPK () {
                         logo: daftarLogo[k][l],
                         tato: daftarTato[k][l],
                         jahit: daftarJahit[k][l],
-                        japstyle: daftarJapstyle[k][l]
+                        japstyle: daftarJapstyle[k][l],
+                        tipe: daftarTipeProduk[k][l]
                     });
                 }
 

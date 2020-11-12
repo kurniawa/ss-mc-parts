@@ -17,16 +17,63 @@ if (isset($_POST['SPKID'])) {
     $SPKItem = [];
     $jmlItem = array();
     $descEachItem = array();
-    foreach ($_POST["SPKItem"] as $key) {
-        array_push($SPKItem, $key);
+
+    $hargaPcs = array();
+    $bahan = array();
+    $varia = array();
+    $ukuran = array();
+    $logo = array();
+    $tato = array();
+    $jahit = array();
+    $japstyle = array();
+    $tipe = array();
+    $hargaItem = array();
+
+    // var_dump($_POST["hargaPcs"]);
+    if (isset($_POST["SPKItem"])) {
+
+        foreach ($_POST["SPKItem"] as $key) {
+            array_push($SPKItem, $key);
+        }
+        foreach ($_POST["jmlItem"] as $key) {
+            array_push($jmlItem, $key);
+        }
+        foreach ($_POST["descEachItem"] as $key) {
+            array_push($descEachItem, $key);
+        }
+        // var_dump($SPKItem);
+        foreach ($_POST["hargaPcs"] as $key) {
+            array_push($hargaPcs, $key);
+        }
+        foreach ($_POST["bahan"] as $key) {
+            array_push($bahan, $key);
+        }
+        foreach ($_POST["varia"] as $key) {
+            array_push($varia, $key);
+        }
+        foreach ($_POST["ukuran"] as $key) {
+            array_push($ukuran, $key);
+        }
+        foreach ($_POST["logo"] as $key) {
+            array_push($logo, $key);
+        }
+        foreach ($_POST["tato"] as $key) {
+            array_push($tato, $key);
+        }
+        foreach ($_POST["jahit"] as $key) {
+            array_push($jahit, $key);
+        }
+        foreach ($_POST["japstyle"] as $key) {
+            array_push($japstyle, $key);
+        }
+        foreach ($_POST["tipe"] as $key) {
+            array_push($tipe, $key);
+        }
+        foreach ($_POST["hargaItem"] as $key) {
+            array_push($hargaItem, $key);
+        }
     }
-    foreach ($_POST["jmlItem"] as $key) {
-        array_push($jmlItem, $key);
-    }
-    foreach ($_POST["descEachItem"] as $key) {
-        array_push($descEachItem, $key);
-    }
-    // var_dump($SPKItem);
+    // var_dump($bahan);
 } else {
     $mode = 'NEW SPK';
     $SPKID = 'none';
@@ -40,6 +87,17 @@ if (isset($_POST['SPKID'])) {
     $SPKItem = 'none';
     $jmlItem = 'none';
     $descEachItem = 'none';
+
+    $hargaPcs = 'none';
+    $bahan = 'none';
+    $varia = 'none';
+    $ukuran = 'none';
+    $logo = 'none';
+    $tato = 'none';
+    $jahit = 'none';
+    $japstyle = 'none';
+    $tipe = 'none';
+    $hargaItem = 'none';
 }
 
 include_once "01-header.php";
@@ -251,9 +309,20 @@ include_once "01-header.php";
     let jmlItem = 'none';
     let descEachItem = 'none';
 
+    let hargaPcs = 'none';
+    let bahan = 'none';
+    let varia = 'none';
+    let ukuran = 'none';
+    let logo = 'none';
+    let tato = 'none';
+    let jahit = 'none';
+    let japstyle = 'none';
+    let tipe = 'none';
+    let hargaItem = 'none';
+
     let newSPK;
     let SPKBefore;
-
+    let dataSPK;
 
     if (mode == 'EDIT SPK') {
         SPKBefore = localStorage.getItem('dataSPKBefore');
@@ -306,6 +375,17 @@ include_once "01-header.php";
         jmlItem = <?= json_encode($jmlItem); ?>;
         descEachItem = <?= json_encode($descEachItem); ?>;
 
+        hargaPcs = <?= json_encode($hargaPcs); ?>;
+        bahan = <?= json_encode($bahan); ?>;
+        varia = <?= json_encode($varia); ?>;
+        ukuran = <?= json_encode($ukuran); ?>;
+        logo = <?= json_encode($logo); ?>;
+        tato = <?= json_encode($tato); ?>;
+        jahit = <?= json_encode($jahit); ?>;
+        japstyle = <?= json_encode($japstyle); ?>;
+        tipe = <?= json_encode($tipe); ?>;
+        hargaItem = <?= json_encode($hargaItem); ?>;
+
         console.log(SPKItem);
         console.log(jmlItem);
         console.log(descEachItem);
@@ -339,9 +419,11 @@ include_once "01-header.php";
 
             } else {
                 console.log('masuk ke mode perubahan item SPK');
-                for (let indexAwal = SPKBefore.item.length; indexAwal < dataSPK.item.length; indexAwal++) {
-                    SPKBefore.item.push(dataSPK.item[indexAwal]);
-                }
+                // for (let indexAwal = SPKBefore.item.length; indexAwal < dataSPK.item.length; indexAwal++) {
+                //     SPKBefore.item.push(dataSPK.item[indexAwal]);
+                // }
+                $('#btnEditSPKItem').show();
+
             }
 
 
@@ -352,15 +434,26 @@ include_once "01-header.php";
                 custID: custID,
                 daerah: daerah,
                 date: tglPembuatan,
-                desc: ketSPK
+                desc: ketSPK,
+                mode: 'edit'
             };
 
             let SPKItems = new Array();
             for (let i = 0; i < SPKItem.length; i++) {
                 SPKItems.push({
+                    tipe: tipe[i],
+                    bahan: bahan[i],
+                    varia: varia[i],
+                    ukuran: ukuran[i],
+                    logo: logo[i],
+                    tato: tato[i],
+                    jahit: jahit[i],
                     namaLengkap: SPKItem[i],
+                    japstyle: japstyle[i],
+                    hargaPcs: hargaPcs[i],
                     desc: descEachItem[i],
-                    jumlah: jmlItem[i]
+                    jumlah: jmlItem[i],
+                    hargaItem: hargaItem[i]
                 });
             }
             dataSPK.item = SPKItems;
@@ -375,16 +468,20 @@ include_once "01-header.php";
         if (dataSPK) {
             for (let i = 0; i < dataSPK.item.length; i++) {
                 htmlSPKItem = htmlSPKItem +
-                    `
-            <div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
-                <div class=''>${dataSPK.item[i].namaLengkap}</div>
-                <div class='grid-1-auto'>
-                <div class='color-green justify-self-right font-size-1_2em'>${dataSPK.item[i].jumlah}</div>
-                <div class='color-grey justify-self-right'>Jumlah</div>
-                </div>
-                <div class='pl-0_5em color-blue-purple'>${dataSPK.item[i].desc}</div>
-                </div>
-            `;
+                    `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+                        <div class='divItemName grid-2-15_auto'>
+                            <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                            ${dataSPK.item[i].namaLengkap}
+                        </div>
+                    <div class='grid-1-auto'>
+                    <div class='color-green justify-self-right font-size-1_2em'>
+                        ${dataSPK.item[i].jumlah}
+                    </div>
+                    <div class='color-grey justify-self-right'>Jumlah</div>
+                    </div>
+                    <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
+                    <div class='pl-0_5em color-blue-purple'>${dataSPK.item[i].desc}</div>
+                    </div>`;
             }
 
             $('#divSPKNumber').html(dataSPK.id);
@@ -393,20 +490,23 @@ include_once "01-header.php";
         } else {
             for (let i = 0; i < SPKItem.length; i++) {
                 htmlSPKItem = htmlSPKItem +
-                    `
-            <div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
-                <div class=''>${SPKItem[i]}</div>
-                <div class='grid-1-auto'>
-                <div class='color-green justify-self-right font-size-1_2em'>${jmlItem[i]}</div>
-                <div class='color-grey justify-self-right'>Jumlah</div>
-                </div>
-                <div class='pl-0_5em color-blue-purple'>${descEachItem[i]}</div>
-                </div>
-            `;
+                    `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+                        <div class='divItemName grid-2-15_auto'>
+                            <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                            ${SPKItem[i]}
+                        </div>
+                    <div class='grid-1-auto'>
+                    <div class='color-green justify-self-right font-size-1_2em'>
+                        ${jmlItem[i]}
+                    </div>
+                    <div class='color-grey justify-self-right'>Jumlah</div>
+                    </div>
+                    <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
+                    <div class='pl-0_5em color-blue-purple'>${descEachItem[i]}</div>
+                    </div>`;
             }
         }
         $('#divItemList').html(htmlSPKItem);
-        $('#btnEditSPKItem').show();
         $('#divBtnSPKSelesai').hide();
     }
 
@@ -550,24 +650,64 @@ include_once "01-header.php";
         let result = [];
         let totalHarga = $('#inputHargaTotalSPK').val();
 
+        // cek dulu apakah ini edit SPK yang udah ada, atau mau insert SPK baru
         $.ajax({
-            type: "POST",
-            url: "01-crud.php",
+            type: 'POST',
+            url: '01-crud.php',
             async: false,
+            cache: false,
             data: {
-                type: 'insert',
+                type: 'cek',
                 table: 'spk',
-                column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
-                value: [newSPK.id, newSPK.date, newSPK.desc, newSPK.custID, totalHarga],
-                dateIndex: 1,
-                idToReturn: newSPK.id
+                column: ['id'],
+                value: [dataSPK.id]
             },
             success: function(res) {
                 res = JSON.parse(res);
                 console.log(res);
-                result = res;
+                if (res[0] == 'udah ada') {
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '01-crud.php',
+                        async: false,
+                        cache: false,
+                        data: {
+                            type: 'UPDATE',
+                            table: 'spk',
+                            column: ['harga'],
+                            value: [totalHarga],
+                            key: 'id',
+                            keyValue: dataSPK.id
+                        },
+                        success: function(res) {
+                            console.log(res);
+                        }
+                    });
+                    result = ['INSERT OK', 'SPK UPDATED', dataSPK.id];
+                } else {
+                    $.ajax({
+                        type: "POST",
+                        url: "01-crud.php",
+                        async: false,
+                        data: {
+                            type: 'insert',
+                            table: 'spk',
+                            column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
+                            value: [newSPK.id, newSPK.date, newSPK.desc, newSPK.custID, totalHarga],
+                            dateIndex: 1,
+                            idToReturn: newSPK.id
+                        },
+                        success: function(res) {
+                            res = JSON.parse(res);
+                            console.log(res);
+                            result = res;
+                        }
+                    });
+                }
             }
         });
+
         console.log('result insertNewSPK(): ' + result);
         return result;
     }
@@ -596,10 +736,13 @@ include_once "01-header.php";
     async function proceedSPK() {
         // cek apakah produk sudah ada atau blm
         let result = new Array();
-        let status = '';
+        let status;
         let resInsertProduct = await insertNewProduct();
         console.log('resInsertProduct:');
         console.log(resInsertProduct);
+
+        dataSPK = localStorage.getItem('dataSPKToEdit');
+        dataSPK = JSON.parse(dataSPK);
 
         if (resInsertProduct[0] === 'OK') {
             // masukkan data SPK
@@ -648,7 +791,14 @@ include_once "01-header.php";
             console.log(error);
             status = 'NOT OK';
         }
-        location.href = '03-06-print-out-spk.php';
+
+        if (status == 'OK') {
+            localStorage.setItem('SPKToPrint', dataSPK);
+            localStorage.removeItem('dataSPKToEdit');
+            localStorage.removeItem('dataSPKBefore');
+
+            // location.href = '03-06-print-out-spk.php';
+        }
     }
 
     async function insertNewProduct() {
@@ -671,7 +821,16 @@ include_once "01-header.php";
             } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                 column = ['tipe', 'jahit', 'nama_lengkap'];
                 value = [item.tipe, item.jht, item.namaLengkap];
+            } else {
+                column = ['tipe', 'nama_lengkap'];
+                value = [item.tipe, item.namaLengkap];
             }
+
+            console.log('column: ');
+            console.log(column);
+            console.log('value: ');
+            console.log(value);
+
             $.ajax({
                 type: 'POST',
                 url: '01-crud.php',
@@ -692,6 +851,9 @@ include_once "01-header.php";
                         } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                             column = ['id', 'tipe', 'jahit', 'nama_lengkap', 'harga_price_list'];
                             value = [setID, item.tipe, item.jht, item.namaLengkap, item.hargaPriceList];
+                        } else {
+                            column = ['id', 'tipe', 'nama_lengkap', 'harga_price_list'];
+                            value = [setID, item.tipe, item.namaLengkap, item.hargaPriceList];
                         }
                         $.ajax({
                             type: 'POST',
@@ -766,10 +928,12 @@ include_once "01-header.php";
     hideEditOptItemSPK();
 
     function removeSPKItem(i) {
+        let dataSPK = localStorage.getItem('dataSPKToEdit');
+        dataSPK = JSON.parse(dataSPK);
         console.log(i);
-        newSPK.item.splice(i, 1);
-        console.log(newSPK.item);
-        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
+        dataSPK.item.splice(i, 1);
+        console.log(dataSPK.item);
+        localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
         location.reload();
     }
 
@@ -789,6 +953,38 @@ include_once "01-header.php";
 
     function updateSPK() {
         console.log('Running Update SPK!');
+
+        newSPK = localStorage.getItem('dataSPKToEdit');
+        newSPK = JSON.parse(newSPK);
+
+        let totalHarga = 0;
+        for (const item of newSPK.item) {
+            totalHarga = totalHarga + parseFloat(item.hargaItem);
+        }
+
+        $('#inputHargaTotalSPK').val(totalHarga);
+
+        $.ajax({
+            url: '01-crud.php',
+            type: 'POST',
+            async: false,
+            cache: false,
+            data: {
+                type: 'DELETE',
+                table: 'spk_contains_produk',
+                column: 'id_spk',
+                value: newSPK.id
+            },
+            success: function(res) {
+                console.log(res);
+                res = JSON.parse(res);
+                if (res[0] == 'DELETED') {
+
+                    proceedSPK();
+
+                }
+            }
+        });
     }
 </script>
 
