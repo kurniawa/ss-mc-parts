@@ -349,19 +349,19 @@ if (isset($_GET['i'])) {
         }
         $namaLengkap = 'SJ std ' + $std + ' ' + $plusJahit;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPriceList = parseFloat($hargaStd) + hargaJht;
-        hargaItem = hargaPriceList * $jumlah;
+        let hargaPcs = parseFloat($hargaStd) + hargaJht;
+        hargaItem = hargaPcs * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
             std: $std,
-            jht: $jht,
+            jahit: $jht,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
             hargaStd: $hargaStd,
             hargaJht: hargaJht,
-            hargaPriceList: hargaPriceList,
+            hargaPcs: hargaPcs,
             hargaItem: hargaItem
         }
         console.log(itemObj);
@@ -503,19 +503,19 @@ if (isset($_GET['i'])) {
         }
         $namaLengkap = $std + ' ' + $plusJahit;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPriceList = parseFloat($hargaStd) + hargaJht;
-        hargaItem = hargaPriceList * $jumlah;
+        let hargaPcs = parseFloat($hargaStd) + hargaJht;
+        hargaItem = hargaPcs * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
             std: $std,
-            jht: $jht,
+            jahit: $jht,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
             hargaStd: $hargaStd,
             hargaJht: hargaJht,
-            hargaPriceList: hargaPriceList,
+            hargaPcs: hargaPcs,
             hargaItem: hargaItem
         }
         console.log(itemObj);

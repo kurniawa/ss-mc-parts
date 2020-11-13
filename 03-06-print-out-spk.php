@@ -18,12 +18,12 @@ include_once '01-header.php';
 
 <script>
     let spkToPrint;
-    if (localStorage.getItem('dataSPKToEdit') != null) {
-        spkToPrint = localStorage.getItem('dataSPKToEdit');
+    if (localStorage.getItem('dataSPKToPrint') != null) {
+        spkToPrint = localStorage.getItem('dataSPKToPrint');
         spkToPrint = JSON.parse(spkToPrint);
         console.log(spkToPrint);
     } else {
-        spkToPrint = localStorage.getItem('dataSPKToEdit');
+        spkToPrint = localStorage.getItem('dataSPKToPrint');
         spkToPrint = JSON.parse(spkToPrint);
         console.log(spkToPrint);
     }

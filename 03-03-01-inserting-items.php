@@ -175,7 +175,7 @@ include_once "01-header.php";
             <div id="divSPKNumber" class="font-weight-bold">8888</div>
             <div>Tanggal</div>
             <div>:</div>
-            <div id="divSPKDate" class="font-weight-bold">15-10-2020</div>
+            <div id="divTglPembuatan" class="font-weight-bold">15-10-2020</div>
             <div>Untuk</div>
             <div>:</div>
             <div id="divSPKCustomer" class="font-weight-bold">Akong - Pluit</div>
@@ -238,7 +238,7 @@ include_once "01-header.php";
     </div>
 
     <div id="divBtnSPKSelesai" class="position-fixed bottom-0_5em w-calc-100-1em">
-        <div id="btnSPKSelesai" class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
+        <div class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
             <span class="justify-self-center font-weight-900">SPK SELESAI</span>
         </div>
     </div>
@@ -391,7 +391,7 @@ include_once "01-header.php";
         console.log(descEachItem);
 
         $('#divSPKNumber').html(SPKID);
-        $('#divTglPembuatan').html(tglPembuatan);
+        $('#divTglPembuatan').html(formatDate(tglPembuatan));
         $('#divSPKCustomer').html(`${custName} - ${daerah}`);
         $('#divTitleDesc').html(ketSPK);
 
@@ -403,7 +403,7 @@ include_once "01-header.php";
             dataSPK = JSON.parse(dataSPK);
             custName = dataSPK.custName;
             custID = dataSPK.custID;
-            tglPembuatan = dataSPK.tglPembuatan
+            tglPembuatan = dataSPK.tglPembuatan;
             daerah = dataSPK.daerah;
             ketSPK = dataSPK.ketSPK;
 
@@ -411,11 +411,34 @@ include_once "01-header.php";
             $('#divSPKCustomer').html(custName + ' - ' + daerah);
             $('#divTitleDesc').html(ketSPK);
 
+            let beda = 'tidak';
+            let namaKeyItem = ['bahan', 'desc', 'hargaItem', 'hargaPcs', 'jahit', 'japstyle', 'jumlah', 'logo', 'namaLengkap', 'tato', 'tipe', 'ukuran', 'varia'];
             if (dataSPK.item.length === SPKBefore.item.length) {
-                dataSPK.mode = 'edit';
-                localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
-                localStorage.setItem('dataSPKBefore', JSON.stringify(dataSPK));
-                console.log('key mode = edit, added!');
+
+                for (let i = 0; i < dataSPK.item.length; i++) {
+                    for (let k = 0; k < namaKeyItem.length; k++) {
+                        console.log(dataSPK.item[i][namaKeyItem[k]]);
+                        if (dataSPK.item[i][namaKeyItem[k]] !== SPKBefore.item[i][namaKeyItem[k]]) {
+                            beda = 'ya';
+                        }
+                    }
+                }
+
+                if (beda === 'ya') {
+                    console.log('masuk ke mode perubahan item SPK');
+                    $('#btnEditSPKItem').show();
+                    $('#divBtnSPKSelesai').hide();
+                } else {
+                    dataSPK.mode = 'edit';
+                    localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
+                    localStorage.setItem('dataSPKBefore', JSON.stringify(dataSPK));
+                    console.log('key mode = edit, added!');
+                    if (dataSPK.tglSelesai === null || dataSPK.tglSelesai === '') {
+                        $('#divBtnSPKSelesai').show();
+                    } else {
+                        $('#divBtnSPKSelesai').hide();
+                    }
+                }
 
             } else {
                 console.log('masuk ke mode perubahan item SPK');
@@ -423,18 +446,20 @@ include_once "01-header.php";
                 //     SPKBefore.item.push(dataSPK.item[indexAwal]);
                 // }
                 $('#btnEditSPKItem').show();
-
+                $('#divBtnSPKSelesai').hide();
             }
 
 
         } else {
+            console.log('Set localstorage pertama kali buka SPK: dataSPKToEdit dan dataSPKBefore');
             let dataSPK = {
                 id: SPKID,
                 custName: custName,
                 custID: custID,
                 daerah: daerah,
-                date: tglPembuatan,
-                desc: ketSPK,
+                tglPembuatan: tglPembuatan,
+                tglSelesai: tglSelesai,
+                ketSPK: ketSPK,
                 mode: 'edit'
             };
 
@@ -461,6 +486,12 @@ include_once "01-header.php";
             localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
             localStorage.setItem('dataSPKBefore', JSON.stringify(dataSPK));
             console.log(localStorage.getItem('dataSPKToEdit'));
+
+            if (dataSPK.tglSelesai === null || dataSPK.tglSelesai === '') {
+                $('#divBtnSPKSelesai').show();
+            } else {
+                $('#divBtnSPKSelesai').hide();
+            }
 
         }
 
@@ -507,7 +538,6 @@ include_once "01-header.php";
             }
         }
         $('#divItemList').html(htmlSPKItem);
-        $('#divBtnSPKSelesai').hide();
     }
 
 
@@ -575,13 +605,13 @@ include_once "01-header.php";
             custID: custID,
             custName: custName,
             daerah: daerah,
-            date: tglPembuatan,
-            desc: ketSPK,
+            tglPembuatan: tglPembuatan,
+            ketSPK: ketSPK,
             id: SPKID,
             item: itemToPrint
         }
 
-        localStorage.setItem('dataSPKToEdit', JSON.stringify(spkToPrint));
+        localStorage.setItem('dataSPKToPrint', JSON.stringify(spkToPrint));
 
         location.href = '03-06-print-out-spk.php';
     });
@@ -595,12 +625,13 @@ include_once "01-header.php";
     });
 
     function getSPKItems() {
+        console.log('menjalankan getSPKItems()');
         newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         $('#divSPKNumber').html(newSPK.id);
-        $('#divSPKDate').html(newSPK.date);
+        $('#divTglPembuatan').html(newSPK.tglPembuatan);
         $('#divSPKCustomer').html(newSPK.custName + '-' + newSPK.daerah);
-        $('#divTitleDesc').html(newSPK.desc);
+        $('#divTitleDesc').html(newSPK.ketSPK);
 
         console.log(newSPK.item);
         if (newSPK.item === undefined || newSPK.item.length == 0) {
@@ -694,7 +725,7 @@ include_once "01-header.php";
                             type: 'insert',
                             table: 'spk',
                             column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
-                            value: [newSPK.id, newSPK.date, newSPK.desc, newSPK.custID, totalHarga],
+                            value: [newSPK.id, newSPK.tglPembuatan, newSPK.ketSPK, newSPK.custID, totalHarga],
                             dateIndex: 1,
                             idToReturn: newSPK.id
                         },
@@ -716,22 +747,22 @@ include_once "01-header.php";
         $(".productType").toggle(500);
     }
 
-    window.addEventListener('popstate', (event) => {
-        // console.log(event.state.page);
-        // console.log(event)
-        $('#SPKBaru').hide();
-        $("#containerBeginSPK").hide();
-        $('#containerSJVaria').hide();
-        if (event.state == null) {
-            history.go(-1);
-        } else if (event.state.page == 'SJVaria') {
-            $("#containerSJVaria").show();
-        } else if (event.state.page == 'newSPK') {
-            $('#SPKBaru').show();
-        } else if (event.state.page == 'SPKBegin') {
-            $('#containerBeginSPK').show();
-        }
-    });
+    // window.addEventListener('popstate', (event) => {
+    //     // console.log(event.state.page);
+    //     // console.log(event)
+    //     $('#SPKBaru').hide();
+    //     $("#containerBeginSPK").hide();
+    //     $('#containerSJVaria').hide();
+    //     if (event.state == null) {
+    //         history.go(-1);
+    //     } else if (event.state.page == 'SJVaria') {
+    //         $("#containerSJVaria").show();
+    //     } else if (event.state.page == 'newSPK') {
+    //         $('#SPKBaru').show();
+    //     } else if (event.state.page == 'SPKBegin') {
+    //         $('#containerBeginSPK').show();
+    //     }
+    // });
 
     async function proceedSPK() {
         // cek apakah produk sudah ada atau blm
@@ -797,7 +828,7 @@ include_once "01-header.php";
             localStorage.removeItem('dataSPKToEdit');
             localStorage.removeItem('dataSPKBefore');
 
-            // location.href = '03-06-print-out-spk.php';
+            location.href = '03-06-print-out-spk.php';
         }
     }
 

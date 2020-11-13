@@ -155,8 +155,9 @@ include_once "01-header.php";
     }
 
     // set keadaan awal dimana JSON SPKToEdit dihilangkan
-    if (localStorage.getItem('dataSPKToEdit') != null) {
+    if (localStorage.getItem('dataSPKToEdit') !== null || localStorage.getItem('dataSPKBefore') !== null) {
         localStorage.removeItem('dataSPKToEdit');
+        localStorage.removeItem('dataSPKBefore');
     }
 </script>
 
