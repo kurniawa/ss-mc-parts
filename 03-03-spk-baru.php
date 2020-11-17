@@ -167,11 +167,11 @@ include_once "01-header.php";
     function beginInsertingProducts() {
         let dataSPK = {
             id: $('#SPKNo').val(),
-            date: formatDate($('#date').val()),
+            tglPembuatan: formatDate($('#date').val()),
             custName: $('#inputCustomerName').val(),
             custID: $('#inputIDCust').val(),
             daerah: $('#daerahCust').val(),
-            desc: $('#titleDesc').val(),
+            ketSPK: $('#titleDesc').val(),
             item: new Array()
         }
         localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));

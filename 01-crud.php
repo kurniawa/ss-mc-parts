@@ -67,6 +67,8 @@ if ($type === 'cek') {
     $value = $_POST['value'];
     $data_length = count($column);
     // var_dump($column[count($column) - 1]);
+    // var_dump($column);
+    // var_dump($value);
 
     if (isset($_POST['parameter'])) {
         $parameter = $_POST['parameter'];
@@ -99,7 +101,7 @@ if ($type === 'cek') {
     // var_dump(mysqli_num_rows($res));
     if (mysqli_num_rows($res) == 0) {
         # code...
-        echo 'blm ada';
+        echo json_encode(array('blm ada'));
     } else {
         $row = mysqli_fetch_assoc($res);
         echo json_encode(array('udah ada', $row['id'], $parameter));

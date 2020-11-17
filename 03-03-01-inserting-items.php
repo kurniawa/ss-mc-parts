@@ -211,9 +211,9 @@ include_once "01-header.php";
         <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
         </a>
-        <div class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
+        <a href="03-03-06-busa-stang.php" class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Busa<br>Stang</span>
-        </div>
+        </a>
         <div class="position-absolute top-5em left-50 transform-translate--50_0 grid-1-auto justify-items-center" onclick="toggleProductType();">
             <div class="circle-medium bg-color-orange-2 grid-1-auto justify-items-center">
                 <span class="color-white font-weight-bold font-size-1_5em">+</span>
@@ -346,6 +346,7 @@ include_once "01-header.php";
         cekMode = JSON.parse(cekMode);
         SPKBefore = localStorage.getItem('dataSPKBefore');
         SPKBefore = JSON.parse(SPKBefore);
+        newSPK = localStorage.getItem('newSPK');
 
         if (cekMode.hasOwnProperty('mode')) {
             if (cekMode.mode === 'edit') {
@@ -354,6 +355,8 @@ include_once "01-header.php";
             } else {
                 return false;
             }
+        } else if (newSPK !== null) {
+            return false;
         }
     }
 
@@ -647,9 +650,9 @@ include_once "01-header.php";
         let totalHarga = 0;
         let i = 0;
         for (const item of newSPK.item) {
-            var textItemJht = item.jht;
+            var textItemJht = item.jahit;
             if (textItemJht != '') {
-                textItemJht = '+ jht ' + textItemJht;
+                textItemJht = '+ jahit ' + textItemJht;
             }
             htmlItemList = htmlItemList +
                 `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
@@ -824,11 +827,13 @@ include_once "01-header.php";
         }
 
         if (status == 'OK') {
-            localStorage.setItem('SPKToPrint', dataSPK);
+            localStorage.setItem('dataSPKToPrint', dataSPK);
             localStorage.removeItem('dataSPKToEdit');
             localStorage.removeItem('dataSPKBefore');
 
-            location.href = '03-06-print-out-spk.php';
+            setTimeout(() => {
+                location.href = '03-06-print-out-spk.php';
+            }, 300);
         }
     }
 
@@ -837,6 +842,8 @@ include_once "01-header.php";
         let status = '';
         let listOfID = [];
         let parameterToPass = [];
+        console.log('newSPK:');
+        console.log(newSPK);
         for (const item of newSPK.item) {
             let lastID = JSON.parse(getLastID('produk'));
             let setID = lastID[1];
@@ -848,10 +855,10 @@ include_once "01-header.php";
             let value = new Array();
             if (item.tipe === 'sj-varia') {
                 column = ['tipe', 'bahan', 'varia', 'ukuran', 'jahit'];
-                value = [item.tipe, item.bahan, item.varia, item.ukuran, item.jht];
+                value = [item.tipe, item.bahan, item.varia, item.ukuran, item.jahit];
             } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                 column = ['tipe', 'jahit', 'nama_lengkap'];
-                value = [item.tipe, item.jht, item.namaLengkap];
+                value = [item.tipe, item.jahit, item.namaLengkap];
             } else {
                 column = ['tipe', 'nama_lengkap'];
                 value = [item.tipe, item.namaLengkap];
@@ -866,6 +873,7 @@ include_once "01-header.php";
                 type: 'POST',
                 url: '01-crud.php',
                 async: false,
+                cache: false,
                 data: {
                     type: 'cek',
                     table: 'produk',
@@ -875,21 +883,28 @@ include_once "01-header.php";
                 },
                 success: function(res) {
                     console.log(res);
-                    if (res === 'blm ada') {
+                    res = JSON.parse(res);
+                    console.log(res);
+                    if (res[0] === 'blm ada') {
                         if (item.tipe === 'sj-varia') {
                             column = ['id', 'tipe', 'bahan', 'varia', 'ukuran', 'jahit', 'nama_lengkap', 'harga_price_list'];
-                            value = [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jht, item.namaLengkap, item.hargaPriceList];
+                            value = [setID, item.tipe, item.bahan, item.varia, item.ukuran, item.jahit, item.namaLengkap, item.hargaPcs];
                         } else if (item.tipe === 'sj-kombi' || item.tipe === 'sj-std') {
                             column = ['id', 'tipe', 'jahit', 'nama_lengkap', 'harga_price_list'];
-                            value = [setID, item.tipe, item.jht, item.namaLengkap, item.hargaPriceList];
+                            value = [setID, item.tipe, item.jahit, item.namaLengkap, item.hargaPcs];
                         } else {
                             column = ['id', 'tipe', 'nama_lengkap', 'harga_price_list'];
-                            value = [setID, item.tipe, item.namaLengkap, item.hargaPriceList];
+                            value = [setID, item.tipe, item.namaLengkap, item.hargaPcs];
                         }
+                        console.log('column:');
+                        console.log(column);
+                        console.log('value:');
+                        console.log(value);
                         $.ajax({
                             type: 'POST',
                             url: '01-crud.php',
                             async: false,
+                            cache: false,
                             data: {
                                 type: 'insert',
                                 table: 'produk',
@@ -913,8 +928,8 @@ include_once "01-header.php";
                             }
                         });
                     } else {
-                        res = JSON.parse(res);
-                        console.log(res);
+                        // res = JSON.parse(res);
+                        // console.log(res);
                         listOfID.push(parseInt(res[1]));
                         parameterToPass.push(res[2]);
                         result.push('OK');

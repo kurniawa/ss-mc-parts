@@ -84,6 +84,7 @@ include_once '01-header.php';
 
     $('#divTableToPrint').html(htmlTable);
     document.getElementById('goToMainMenu').addEventListener('click', event => {
+        localStorage.removeItem('dataSPKToPrint');
         window.history.go(1 - (history.length));
     });
 </script>

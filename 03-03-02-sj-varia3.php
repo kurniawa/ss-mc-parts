@@ -390,6 +390,7 @@ if (isset($_GET['i'])) {
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
+        let ukuran = '';
 
         $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
         let hargaJht = 0;
@@ -451,7 +452,8 @@ if (isset($_GET['i'])) {
             hargaBahan: $hargaBahan,
             hargaJht: hargaJht,
             hargaPcs: hargaPcs,
-            hargaItem: hargaItem
+            hargaItem: hargaItem,
+            ukuran: ukuran
         }
         console.log(itemObj);
         let newSPK = localStorage.getItem('dataSPKToEdit');
@@ -547,6 +549,7 @@ if (isset($_GET['i'])) {
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
+        let ukuran = '';
 
         $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
         let hargaJht = 0;
@@ -608,7 +611,8 @@ if (isset($_GET['i'])) {
             hargaBahan: $hargaBahan,
             hargaJht: hargaJht,
             hargaPcs: hargaPcs,
-            hargaItem: hargaItem
+            hargaItem: hargaItem,
+            ukuran: ukuran
         }
         console.log(itemObj);
         let newSPK = localStorage.getItem('dataSPKToEdit');

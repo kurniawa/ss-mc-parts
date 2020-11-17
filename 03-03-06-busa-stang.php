@@ -57,29 +57,35 @@ if (isset($_GET['i'])) {
     let idElementToRemove;
     let idElementToReset;
 
-    // $(document).ready(function() {
+    $(document).ready(function() {
 
-    //     fetch('json/products.json').then(response => response.json()).then(data => {
-    //         console.log(data);
+        fetch('json/products.json').then(response => response.json()).then(data => {
+            console.log(data);
 
-    //         for (const busaStang of data[4]) {
-    //             arrayBusaStang.push({
-    //                 nama: busaStang.nama,
-    //                 harga: busaStang.harga
-    //             });
-    //             arrayTipeBusaStang.push(busaStang.nama);
-    //         }
+            // for (const busaStang of data[4]) {
+            //     arrayBusaStang.push({
+            //         nama: busaStang.nama,
+            //         harga: busaStang.harga
+            //     });
+            //     arrayTipeBusaStang.push(busaStang.nama);
+            // }
 
-    //         console.log(arrayBusaStang);
+            arrayBusaStang.push({
+                nama: data[4].nama,
+                harga: data[4].harga
+            });
+            arrayTipeBusaStang.push(data[4].nama);
 
-    //         // for (const jht of data[0].jahit[0].tipe_jht) {
-    //         //     arrayJht.push(jht);
-    //         // }
-    //         // console.log(arrayJht);
-    //     });
+            console.log(arrayBusaStang);
+
+            // for (const jht of data[0].jahit[0].tipe_jht) {
+            //     arrayJht.push(jht);
+            // }
+            // console.log(arrayJht);
+        });
 
 
-    // });
+    });
 
     function addBusaStang() {
         let elementsToAppend =
@@ -142,9 +148,11 @@ if (isset($_GET['i'])) {
         </div>`;
 
 
+    // onkeyup="cekTankpadAddBoxes(this.value)";
+
     let elementHTML = [
-        `<input id="inputBusaStang" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Tankpad" onkeyup="cekTankpadAddBoxes(this.value);">
-        <input id='inputHargaTankpad' type='hidden'>
+        `<input id="inputBusaStang" class="input-1 mt-1em pb-1em" type="text" value="Busa Stang" disabled>
+        <input id='inputHargaBusaStang' type='hidden'>
         `,
 
         [htmlBoxJumlah, htmlBoxDesc],
@@ -165,19 +173,20 @@ if (isset($_GET['i'])) {
         $(divID).html(elementHTML);
 
         if (elementID === `#inputBusaStang`) {
-            $("#inputBusaStang").autocomplete({
-                source: arrayTipeBusaStang,
-                select: function(event, ui) {
-                    console.log(ui);
-                    console.log(ui.item.value);
-                    cekTankpadAddBoxes(ui.item.value);
-                    // sjVaria.push({
-                    //     'nama_bahan': ui.item.value
-                    // });
-                    // sjVaria['nama_bahan'] = ui.item.value;
-                    // console.log('sjVaria: ' + sjVaria);
-                }
-            });
+            // $("#inputBusaStang").autocomplete({
+            //     source: arrayTipeBusaStang,
+            //     select: function(event, ui) {
+            //         console.log(ui);
+            //         console.log(ui.item.value);
+            //         cekTankpadAddBoxes(ui.item.value);
+            //         // sjVaria.push({
+            //         //     'nama_bahan': ui.item.value
+            //         // });
+            //         // sjVaria['nama_bahan'] = ui.item.value;
+            //         // console.log('sjVaria: ' + sjVaria);
+            //     }
+            // });
+            $(divID).html(elementHTML);
 
         } else if (elementID === elementSystem[1][1]) {
             arrayVariasi.forEach(variasi => {
@@ -195,13 +204,19 @@ if (isset($_GET['i'])) {
 
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
-    function cekTankpadAddBoxes(tipeTankpad) {
+    function cekBusaStangAddBoxes(tipeBusaStang) {
         try {
-            for (const tankpad of arrayBusaStang) {
-                if (tipeTankpad === tankpad.nama) {
-                    console.log('namaTankpad1:' + tipeTankpad);
-                    console.log('namaTankpad2:' + tankpad.nama);
-                    console.log('hargaTankpad:' + tankpad.harga);
+            console.log('masuk ke try');
+            console.log(arrayBusaStang);
+            console.log(arrayBusaStang.length);
+
+            for (let i = 0; i < arrayBusaStang.length; i++) {
+                console.log('masuk ke for');
+                if (tipeBusaStang === arrayBusaStang[i].nama) {
+                    console.log('masuk ke if');
+                    console.log('namaTankpad1:' + tipeBusaStang);
+                    console.log('namaTankpad2:' + arrayBusaStang[i].nama);
+                    console.log('hargaTankpad:' + arrayBusaStang[i].harga);
 
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
@@ -211,21 +226,67 @@ if (isset($_GET['i'])) {
                             createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
                         }
                     }
-                    $(`#inputHargaTankpad`).val(tankpad.harga);
-                    console.log('Harga Tankpad:');
-                    console.log($(`#inputHargaTankpad`).val());
+                    $(`#inputHargaBusaStang`).val(arrayBusaStang[i].harga);
+                    console.log('Harga Busa Stang:');
+                    console.log($(`#inputHargaBusaStang`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Tankpad not found!")
+                    console.log("Nama Busa Stang not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
-
             }
+
+            // for (const busaStang of arrayBusaStang) {
+            //     console.log('masuk ke for');
+            //     if (tipeBusaStang === busaStang.nama) {
+            //         console.log('masuk ke if');
+            //         console.log('namaTankpad1:' + tipeBusaStang);
+            //         console.log('namaTankpad2:' + busaStang.nama);
+            //         console.log('hargaTankpad:' + busaStang.harga);
+
+            //         indexElementSystem = 1;
+            //         removeElement(indexElementSystem);
+            //         for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+            //             console.log('i: ' + i);
+            //             if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
+            //                 createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
+            //             }
+            //         }
+            //         $(`#inputHargaBusaStang`).val(busaStang.harga);
+            //         console.log('Harga Busa Stang:');
+            //         console.log($(`#inputHargaBusaStang`).val());
+            //         throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
+            //     } else {
+            //         console.log("Nama Busa Stang not found!")
+            //         indexElementSystem = 1;
+            //         removeElement(indexElementSystem);
+            //     }
+
+            // }
         } catch (error) {
             console.log(error);
         }
+
+        // indexElementSystem = 1;
+        // removeElement(indexElementSystem);
+        // for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+        //     console.log('i: ' + i);
+        //     if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
+        //         createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
+        //     }
+        // }
+        // $(`#inputHargaBusaStang`).val(tankpad.harga);
+        // console.log('Harga Tankpad:');
+        // console.log($(`#inputHargaBusaStang`).val());
+
     }
+    console.log('cekBusaStangAddBoxes');
+
+    setTimeout(() => {
+        cekBusaStangAddBoxes("Busa Stang");
+    }, 300);
+
 
     function closeAndAddBox(elementToRemove, divID, divElementID, i, j) {
         $(elementToRemove).remove();
@@ -300,19 +361,19 @@ if (isset($_GET['i'])) {
 
     function insertItemToLocal() {
         // console.log('clicked');
-        $tipe = 'tankpad'
-        $tankpad = $(`#inputBusaStang`).val();
+        $tipe = 'busa-stang'
+        $busaStang = $(`#inputBusaStang`).val();
         // $jht = '';
         // $plusJahit = '';
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
 
-        $hargaTankpad = $(`#inputHargaTankpad`).val();
+        $hargaBusaStang = $(`#inputHargaBusaStang`).val();
         let hargaJht = 0;
         let hargaItem = 0;
 
-        console.log('$tankpad: ' + $tankpad);
+        console.log('$tankpad: ' + $busaStang);
         // console.log('$jht: ' + $jht);
         console.log('$desc: ' + $desc);
         console.log('$jumlah: ' + $jumlah);
@@ -329,7 +390,7 @@ if (isset($_GET['i'])) {
             $jumlah = $(`#inputJumlah`).val();
         }
 
-        if ($tankpad === '') {
+        if ($busaStang === '') {
             $textWarning = '<span class="color-red">Kombinasi masih belum ditentukan!</span>';
             $('#divWarning').html($textWarning).removeClass('d-none');
             return;
@@ -345,18 +406,18 @@ if (isset($_GET['i'])) {
         // if ($jht !== '') {
         //     $plusJahit = '+ jht ' + $jht;
         // }
-        $namaLengkap = 'Tankpad ' + $tankpad;
+        $namaLengkap = $busaStang;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPcs = parseFloat($hargaTankpad)
+        let hargaPcs = parseFloat($hargaBusaStang)
         hargaItem = hargaPcs * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
-            tankpad: $tankpad,
+            busaStang: $busaStang,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
-            hargaTankpad: $hargaTankpad,
+            hargaBusaStang: $hargaBusaStang,
             hargaPcs: hargaPcs,
             hargaItem: hargaItem
         }
@@ -389,9 +450,9 @@ if (isset($_GET['i'])) {
         let newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
 
-        if (newSPK.item[m].tankpad !== '') {
-            console.log(newSPK.item[m].tankpad);
-            $(`#inputBusaStang`).val(newSPK.item[m].tankpad);
+        if (newSPK.item[m].busaStang !== '') {
+            console.log(newSPK.item[m].busaStang);
+            $(`#inputBusaStang`).val(newSPK.item[m].busaStang);
         }
 
         // if (newSPK.item[m].varia !== '') {
@@ -447,18 +508,18 @@ if (isset($_GET['i'])) {
     function confirmEditItemSPK() {
         console.log('confirm edit item SPK');
         $tipe = 'tankpad'
-        $tankpad = $(`#inputBusaStang`).val();
+        $busaStang = $(`#inputBusaStang`).val();
         // $jht = '';
         // $plusJahit = '';
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
 
-        $hargaTankpad = $(`#inputHargaTankpad`).val();
+        $hargaBusaStang = $(`#inputHargaBusaStang`).val();
         let hargaJht = 0;
         let hargaItem = 0;
 
-        console.log('$tankpad: ' + $tankpad);
+        console.log('$busaStang: ' + $busaStang);
         // console.log('$jht: ' + $jht);
         console.log('$desc: ' + $desc);
         console.log('$jumlah: ' + $jumlah);
@@ -474,7 +535,7 @@ if (isset($_GET['i'])) {
             $jumlah = $(`#inputJumlah`).val();
         }
 
-        if ($tankpad === '') {
+        if ($busaStang === '') {
             $textWarning = '<span class="color-red">Kombinasi masih belum ditentukan!</span>';
             $('#divWarning').html($textWarning).removeClass('d-none');
             return;
@@ -497,19 +558,19 @@ if (isset($_GET['i'])) {
         // if ($jht !== '') {
         //     $plusJahit = '+ jht ' + $jht;
         // }
-        $namaLengkap = 'Tankpad ' + $tankpad;
+        $namaLengkap = $busaStang;
         $namaLengkap = $namaLengkap.trim();
-        let hargaPcs = parseFloat($hargaTankpad);
+        let hargaPcs = parseFloat($hargaBusaStang);
         hargaItem = hargaPcs * $jumlah;
 
         let itemObj = {
             tipe: $tipe,
-            tankpad: $tankpad,
+            busaStang: $busaStang,
             jht: $jht,
             desc: $desc,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
-            hargaTankpad: $hargaTankpad,
+            hargaBusaStang: $hargaBusaStang,
             hargaPcs: hargaPcs,
             hargaItem: hargaItem
         }
