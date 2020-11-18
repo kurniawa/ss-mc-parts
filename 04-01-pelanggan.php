@@ -2,10 +2,14 @@
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
-<a href="04-03-pelanggan-baru.php" class="btn-atas-kanan">
-    + Pelanggan Baru
-</a>
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+    <div class="justify-self-right pr-0_5em">
+        <a href="04-03-pelanggan-baru.php" class="btn-atas-kanan">
+            + Pelanggan Baru
+        </a>
+    </div>
+</header>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">

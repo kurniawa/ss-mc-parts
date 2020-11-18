@@ -2,8 +2,14 @@
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
-
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+    <div class="justify-self-right pr-0_5em">
+        <!-- <a href="06-02-produk-baru.php" id="btnNewProduct" class="btn-atas-kanan2">
+            + Tambah Produk Baru
+        </a> -->
+    </div>
+</header>
 <div id="SPKBaru">
 
     <div class="mt-1em ml-1em grid-2-10_auto">

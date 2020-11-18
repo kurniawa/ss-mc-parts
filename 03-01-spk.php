@@ -2,10 +2,14 @@
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
-<div id="btn-spk-baru" class="btn-atas-kanan" onclick="addNewSPK();">
-    + Buat SPK Baru
-</div>
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+    <div class="justify-self-right pr-0_5em">
+        <div id="btn-spk-baru" class="btn-atas-kanan2" onclick="addNewSPK();">
+            + Buat SPK Baru
+        </div>
+    </div>
+</header>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em bb-0_5px-solid-grey">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">

@@ -2,7 +2,9 @@
 include_once "01-header.php";
 ?>
 
-<header class="header"></header>
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+</header>
 
 <div id="containerDetailNota">
     <div class="grid-3-25_25_50">

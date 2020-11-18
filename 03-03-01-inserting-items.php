@@ -827,7 +827,7 @@ include_once "01-header.php";
         }
 
         if (status == 'OK') {
-            localStorage.setItem('dataSPKToPrint', dataSPK);
+            localStorage.setItem('dataSPKToPrint', JSON.stringify(dataSPK));
             localStorage.removeItem('dataSPKToEdit');
             localStorage.removeItem('dataSPKBefore');
 

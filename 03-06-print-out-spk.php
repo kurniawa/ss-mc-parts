@@ -41,7 +41,7 @@ include_once '01-header.php';
     </tr>
     <tr>
         <td>TGL</td>
-        <td>: ${spkToPrint.date}</td>
+        <td>: ${spkToPrint.tglPembuatan}</td>
         <td></td>
     </tr>
     <tr>

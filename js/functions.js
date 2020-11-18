@@ -130,3 +130,7 @@ function randomColor () {
     let randomIndex = Math.floor(Math.random() * arrayColor.length);
     return arrayColor[randomIndex];
 }
+
+function goBack () {
+    window.history.back();
+}
