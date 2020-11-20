@@ -228,6 +228,10 @@ include_once "01-header.php";
             },
             success: function(responseText) {
                 console.log(responseText);
+                responseText = JSON.parse(responseText);
+                if (responseText[0] === 'New customer created successfully.') {
+                    history.back();
+                }
             }
         });
 

@@ -231,10 +231,12 @@
         "ukuran": [
             {
                 "tipe_ukuran": "JB 93x53",
+                "nama_nota": "JB",
                 "harga": 3250
             },
             {
                 "tipe_ukuran": "Super-JB 97x53",
+                "nama_nota": "Super-JB",
                 "harga": 4500
             }
         ],

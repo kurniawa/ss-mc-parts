@@ -194,7 +194,7 @@ if ($type === "SELECT") {
         }
         echo json_encode($rows);
     } else {
-        echo "NOT FOUND!";
+        echo json_encode(array("NOT FOUND!"));
         die;
     }
 }

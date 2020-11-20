@@ -2,7 +2,9 @@
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+</header>
 
 <div class="grid-2-10-auto mt-1em ml-1em">
     <div>
@@ -41,6 +43,37 @@ include_once "01-header.php";
     </div>
 </div>
 
+<!-- <div id="closingArea" class="closingArea" style="display: none;"></div>
+<div class="lightBox" style="display:none;">
+    <br><br>
+    <div class="text-center">
+        Input Ekspedisi Baru berhasil!
+    </div>
+    <br><br>
+</div> -->
+
+<style>
+    .closingArea {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: white;
+    }
+
+    .lightBox {
+        position: absolute;
+        top: 25vh;
+        left: 0.5em;
+        right: 0.5em;
+        height: 13em;
+        background-color: white;
+        padding: 1em;
+        border: 1px solid grey;
+    }
+</style>
+
 <script>
     function inputEkspedisiBaru() {
         $bentuk = $("#bentukPerusahaan").val();
@@ -49,6 +82,8 @@ include_once "01-header.php";
         $kontak = $("#kontak").val();
         $keterangan = $("#keterangan").val();
         $peringatan = $("#peringatan");
+        var lastIdEkspedisi = getLastID('ekspedisi');
+        lastIdEkspedisi = JSON.parse(lastIdEkspedisi);
 
         console.log($alamat);
         if ($nama == "") {
@@ -65,15 +100,23 @@ include_once "01-header.php";
             type: "POST",
             async: false,
             data: {
-                id: "",
-                nama: $nama,
-                bentuk: $bentuk,
-                alamat: $alamat,
-                kontak: $kontak,
-                keterangan: $keterangan
+                id: lastIdEkspedisi[1],
+                nama: $nama.trim(),
+                bentuk: $bentuk.trim(),
+                alamat: $alamat.trim(),
+                kontak: $kontak.trim(),
+                keterangan: $keterangan.trim(),
+                type: 'new_ekspedisi'
             },
             success: function(responseText) {
                 console.log(responseText);
+                responseText = JSON.parse(responseText);
+                if (responseText[0] === 'New record created successfully.') {
+                    alert('Ekspedisi baru berhasil diinput!');
+                    setTimeout(() => {
+                        window.history.back();
+                    }, 500);
+                }
             }
         });
     }

@@ -145,7 +145,7 @@ $id = $_GET["id"];
                                     },
                                     success: function(responseText) {
                                         console.log(responseText);
-
+                                        var namaLengkapEkspedisi = '';
                                         $expedition = JSON.parse(responseText);
                                         console.log($expedition);
 
@@ -157,8 +157,20 @@ $id = $_GET["id"];
                                             $placeholder = "Ekspedisi Normal";
                                         }
 
+                                        if ($expedition[0].bentuk !== '') {
+                                            namaLengkapEkspedisi = namaLengkapEkspedisi + $expedition[0].bentuk;
+                                        }
+
+                                        namaLengkapEkspedisi = namaLengkapEkspedisi + ' ' + $expedition[0].nama;
+                                        namaLengkapEkspedisi = namaLengkapEkspedisi.trim();
                                         $address = $expedition[0].alamat.replace(new RegExp('\r?\n', 'g'), '<br>');
-                                        $("#customerExpedition").html($address);
+
+                                        var htmlEkspedisi =
+                                            `
+                                        <span style='font-weight: bold'>${namaLengkapEkspedisi}</span><br>
+                                        ${$address}
+                                        `;
+                                        $("#customerExpedition").html(htmlEkspedisi);
 
                                         // APPEND input-input ekspedisi untuk pelanggan ini
                                         $htmlToAppend = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +

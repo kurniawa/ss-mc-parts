@@ -58,13 +58,13 @@ if (isset($_GET['i'])) {
 <script>
     // codingan untuk antisipasi editing item
 
-    let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
-    let sjVaria = [{}];
-    let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
-    let arrayBahan = new Array();
-    let arrayNamaBahan = new Array();
-    let arrayVariasi = new Array();
-    let arrayJenisLG = [],
+    var indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
+    var sjVaria = [{}];
+    var pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
+    var arrayBahan = new Array();
+    var arrayNamaBahan = new Array();
+    var arrayVariasi = new Array();
+    var arrayJenisLG = [],
         arrayGambarLGBludru = [],
         arrayGambarLGPolimas = [],
         arrayGambarLGSablon = [],
@@ -73,9 +73,13 @@ if (isset($_GET['i'])) {
         arrayJht = [],
         arrayJenisTato = [];
 
+    var arrayTipeUkuran = new Array();
+    var arrayNamaNotaUkuran = new Array();
+    var arrayHargaUkuran = new Array();
+
     // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
-    let idElementToRemove;
-    let idElementToReset;
+    var idElementToRemove;
+    var idElementToReset;
 
     // console.log('Length divSJVaria: ' + $('div.divSJVaria').length);
 
@@ -122,6 +126,11 @@ if (isset($_GET['i'])) {
             for (const jht of data[0].jahit[0].tipe_jht) {
                 arrayJht.push(jht);
             }
+            for (const ukuran of data[0].ukuran) {
+                arrayTipeUkuran.push(ukuran.tipe_ukuran);
+                arrayNamaNotaUkuran.push(ukuran.nama_nota);
+                arrayHargaUkuran.push(ukuran.harga);
+            }
         });
 
         // console.log(arrayBahan);
@@ -137,12 +146,13 @@ if (isset($_GET['i'])) {
     });
 
     function addSJVaria() {
-        let elementsToAppend =
+        var elementsToAppend =
             `<div id="divSJVaria-${indexSJVaria}" class="divSJVaria b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
                 <div id='divInputBahan-${indexSJVaria}'></div>
                 <div id='divVaria-${indexSJVaria}'></div>
                 <div id='divJenisLGTato-${indexSJVaria}'></div>
                 <div id='divGambar-${indexSJVaria}'></div>
+                <div id='divUkuran-${indexSJVaria}'></div>
                 <div id='divJht-${indexSJVaria}'></div>
                 <div id='divDesc-${indexSJVaria}'></div>
                 <div id='divJumlah-${indexSJVaria}'></div>
@@ -151,46 +161,61 @@ if (isset($_GET['i'])) {
         $('#divArraySJVaria').append(elementsToAppend);
     }
 
-    let indexElementSystem = 0;
-    let elementSystem = [
+    var indexElementSystem = 0;
+    var elementSystem = [
         [`#divInputBahan-${indexSJVaria}`, `#inputBahan-${indexSJVaria}`],
         [`#divVaria-${indexSJVaria}`, `#divSelectVaria-${indexSJVaria}`],
         [
             [`#availableOptions`, `#boxJumlah`],
             [`#availableOptions`, `#boxJht`],
-            [`#availableOptions`, `#boxDesc`]
+            [`#availableOptions`, `#boxDesc`],
+            [`#availableOptions`, `#boxUkuran`]
         ],
         [
             [`#divJumlah-${indexSJVaria}`, `#divInputJumlah-${indexSJVaria}`],
             [`#divJht-${indexSJVaria}`, `#divSelectJht-${indexSJVaria}`],
-            [`#divDesc-${indexSJVaria}`, `#divTADesc-${indexSJVaria}`]
+            [`#divDesc-${indexSJVaria}`, `#divTADesc-${indexSJVaria}`],
+            [`#divUkuran-${indexSJVaria}`, `#divSelectUkuran-${indexSJVaria}`]
         ]
     ];
 
     // console.log(elementSystem);
-    let removeElementSystem = [`#selectPolosLGTato-${indexSJVaria}`, 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
+    var removeElementSystem = [`#selectPolosLGTato-${indexSJVaria}`, 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
 
-    let htmlBoxJumlah =
+    var htmlBoxJumlah =
         `<div id="boxJumlah" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Jumlah");'>
         Jumlah
     </div>`;
 
-    let htmlBoxJht =
+    var htmlBoxUkuran =
+        `<div id="boxUkuran" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Ukuran");'>
+        + Ukuran
+    </div>`;
+
+    var htmlBoxJht =
         `<div id="boxJht" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Jht");'>
         + Jahit
     </div>`;
 
-    let htmlBoxDesc =
+    var htmlBoxDesc =
         `<div id="boxDesc" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl3ElementFromBox("Desc");'>
         + Ktrgn
     </div>`;
 
-    let htmlDivInputJumlah =
+    var htmlDivInputJumlah =
         `<div id="divInputJumlah-${indexSJVaria}" class="mt-1em">
             <input type="number" name="jumlah-${indexSJVaria}" id="inputJumlah-${indexSJVaria}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
         </div>`;
 
-    let htmlDivSelectJht =
+    var htmlDivSelectUkuran =
+        `<div id='divSelectUkuran-${indexSJVaria}' class="grid-2-auto_10 mt-1em">
+            <select name="selectUkuran-${indexSJVaria}" id="selectUkuran-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange='namaDanHargaUkuran(this.value)'>
+                <option value="" disabled selected>Pilih Jenis Ukuran</option>
+            </select>
+            <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][3][1]}","${elementSystem[2][3][0]}","${elementSystem[2][3][1]}", 2, 3);'></span>
+        </div>`;
+
+    var htmlDivSelectJht =
         `<div id='divSelectJht-${indexSJVaria}' class="grid-2-auto_10 mt-1em">
             <select name="selectJht-${indexSJVaria}" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
@@ -198,14 +223,14 @@ if (isset($_GET['i'])) {
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][1][1]}","${elementSystem[2][1][0]}","${elementSystem[2][1][1]}", 2, 1);'></span>
         </div>`;
 
-    let htmlDivTADesc =
+    var htmlDivTADesc =
         `<div id="divTADesc-${indexSJVaria}" class="mt-1em">
             <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[3][2][1]}", "${elementSystem[2][2][0]}","${elementSystem[2][2][1]}", 2, 2);'></span></div>
             <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc-${indexSJVaria}" id="taDesc-${indexSJVaria}" placeholder="Keterangan"></textarea>
         </div>`;
 
 
-    let elementHTML = [
+    var elementHTML = [
         `<input id="inputBahan-${indexSJVaria}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">`,
 
         `<div id='divSelectVaria-${indexSJVaria}' class="grid-1-auto mt-1em mb-0_5em">
@@ -215,11 +240,22 @@ if (isset($_GET['i'])) {
             <input id='inputHargaBahan-${indexSJVaria}' type='hidden'>
         </div>`,
 
-        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
+        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc, htmlBoxUkuran],
 
-        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
+        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc, htmlDivSelectUkuran]
 
     ];
+
+    function namaDanHargaUkuran(dataUkuran) {
+        console.log(dataUkuran);
+        dataUkuran = JSON.parse(dataUkuran);
+        console.log(dataUkuran);
+        var ukuran = JSON.parse($(`#selectUkuran-${indexSJVaria}`).val());
+        console.log(ukuran);
+        console.log(ukuran.tipeUkuran);
+        console.log(ukuran.namaNotaUkuran);
+        console.log(ukuran.hargaUkuran);
+    }
 
     async function pilihFungsi(namaFungsi, divID, elementID, elementHTML) {
         window[namaFungsi](divID, elementID, elementHTML);
@@ -260,6 +296,10 @@ if (isset($_GET['i'])) {
             arrayJht.forEach(tipeJht => {
                 $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
             });
+        } else if (elementID === `#divSelectUkuran-${indexSJVaria}`) {
+            for (var i = 0; i < arrayTipeUkuran.length; i++) {
+                $("#selectUkuran-" + indexSJVaria).append(`<option value='{"tipeUkuran":"${arrayTipeUkuran[i]}","namaNotaUkuran":"${arrayNamaNotaUkuran[i]}","hargaUkuran":${arrayHargaUkuran[i]}}'>${arrayTipeUkuran[i]}</option>`);
+            }
         } else if (elementID === `#divSelectJenisLG-${indexSJVaria}`) {
             arrayJenisLG.forEach(tipeJht => {
                 $("#selectJenisLG-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
@@ -269,10 +309,6 @@ if (isset($_GET['i'])) {
                 $("#selectJenisTato-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
             });
         }
-    }
-
-    function resetElement(params) {
-
     }
 
     addSJVaria();
@@ -342,6 +378,8 @@ if (isset($_GET['i'])) {
             // removeElement(indexElementSystem);
             $('#boxDesc').remove();
             createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
+        } else if (value === 'Ukuran') {
+            createElement(elementSystem[indexElementSystem][3][0], elementSystem[indexElementSystem][3][1], elementHTML[indexElementSystem][3]);
         }
     }
 
@@ -390,11 +428,12 @@ if (isset($_GET['i'])) {
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
-        let ukuran = '';
+        var ukuran = '';
+
 
         $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
-        let hargaJht = 0;
-        let hargaItem = 0;
+        var hargaJht = 0;
+        var hargaItem = 0;
 
         console.log('$bahan: ' + $bahan);
         console.log('$varia: ' + $varia);
@@ -405,6 +444,16 @@ if (isset($_GET['i'])) {
         if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
             $jht = $(`#selectJht-${indexSJVaria}`).val();
             hargaJht = 1000;
+        }
+        if ($(`#divSelectUkuran-${indexSJVaria}`).length !== 0) {
+            ukuran = $(`#selectUkuran-${indexSJVaria}`).val();
+            if (ukuran !== '') {
+                ukuran = JSON.parse(ukuran);
+                console.log(ukuran);
+                console.log(ukuran.tipeUkuran);
+                console.log(ukuran.namaNotaUkuran);
+                console.log(ukuran.hargaUkuran);
+            }
         }
         if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
             $desc = $(`#taDesc-${indexSJVaria}`).val();
@@ -436,12 +485,23 @@ if (isset($_GET['i'])) {
         if ($jht !== '') {
             $plusJahit = '+ jht ' + $jht;
         }
-        $namaLengkap = $bahan + ' ' + $varia + ' ' + $plusJahit;
+
+        $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
+        if (ukuran !== '') {
+            $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
+        }
+
+        $namaLengkap = $namaLengkap + ' ' + $plusJahit;
+
         $namaLengkap = $namaLengkap.trim();
-        let hargaPcs = parseFloat($hargaBahan) + hargaJht;
+        var hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
         hargaItem = hargaPcs * $jumlah;
 
-        let itemObj = {
+        console.log(hargaPcs);
+        console.log(hargaJht);
+        console.log(ukuran.hargaUkuran);
+
+        var itemObj = {
             tipe: $tipe,
             bahan: $bahan,
             varia: $varia,
@@ -453,20 +513,22 @@ if (isset($_GET['i'])) {
             hargaJht: hargaJht,
             hargaPcs: hargaPcs,
             hargaItem: hargaItem,
-            ukuran: ukuran
+            ukuran_tipe: ukuran.tipeUkuran,
+            ukuran_nama_nota: ukuran.namaNotaUkuran,
+            ukuran_harga: ukuran.hargaUkuran
         }
         console.log(itemObj);
-        let newSPK = localStorage.getItem('dataSPKToEdit');
+        var newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         console.log(newSPK);
 
         newSPK.item.push(itemObj);
         console.log(newSPK);
         localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        location.href = '03-03-01-inserting-items.php';
+        // window.history.back();
     }
 
-    let m = <?php echo $m ?>;
+    var m = <?php echo $m ?>;
     console.log(m);
     $('#bottomDiv2').hide()
     setTimeout(() => {
@@ -549,11 +611,11 @@ if (isset($_GET['i'])) {
         $desc = '';
         $namaLengkap = '';
         $jumlah = 0;
-        let ukuran = '';
+        var ukuran = '';
 
         $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
-        let hargaJht = 0;
-        let hargaItem = 0;
+        var hargaJht = 0;
+        var hargaItem = 0;
 
         console.log('$bahan: ' + $bahan);
         console.log('$varia: ' + $varia);
@@ -564,6 +626,16 @@ if (isset($_GET['i'])) {
         if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
             $jht = $(`#selectJht-${indexSJVaria}`).val();
             hargaJht = 1000;
+        }
+        if ($(`#divSelectUkuran-${indexSJVaria}`).length !== 0) {
+            ukuran = $(`#selectUkuran-${indexSJVaria}`).val();
+            if (ukuran !== '') {
+                ukuran = JSON.parse(ukuran);
+                console.log(ukuran);
+                console.log(ukuran.tipeUkuran);
+                console.log(ukuran.namaNotaUkuran);
+                console.log(ukuran.hargaUkuran);
+            }
         }
         if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
             $desc = $(`#taDesc-${indexSJVaria}`).val();
@@ -595,12 +667,19 @@ if (isset($_GET['i'])) {
         if ($jht !== '') {
             $plusJahit = '+ jht ' + $jht;
         }
-        $namaLengkap = $bahan + ' ' + $varia + ' ' + $plusJahit;
+
+        $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
+        if (ukuran !== '') {
+            $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
+        }
+
+        $namaLengkap = $namaLengkap + ' ' + $plusJahit;
+
         $namaLengkap = $namaLengkap.trim();
-        let hargaPcs = parseFloat($hargaBahan) + hargaJht;
+        var hargaPcs = parseFloat($hargaBahan) + hargaJht;
         hargaItem = hargaPcs * $jumlah;
 
-        let itemObj = {
+        var itemObj = {
             tipe: $tipe,
             bahan: $bahan,
             varia: $varia,
@@ -612,10 +691,12 @@ if (isset($_GET['i'])) {
             hargaJht: hargaJht,
             hargaPcs: hargaPcs,
             hargaItem: hargaItem,
-            ukuran: ukuran
+            ukuran_tipe: ukuran.tipeUkuran,
+            ukuran_nama_nota: ukuran.namaNotaUkuran,
+            ukuran_harga: ukuran.hargaUkuran
         }
         console.log(itemObj);
-        let newSPK = localStorage.getItem('dataSPKToEdit');
+        var newSPK = localStorage.getItem('dataSPKToEdit');
         newSPK = JSON.parse(newSPK);
         console.log(newSPK);
 

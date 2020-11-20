@@ -203,12 +203,17 @@ $id = $_GET["id"];
                     bentuk: $bentuk,
                     alamat: $alamat,
                     kontak: $kontak,
-                    keterangan: $keterangan
+                    keterangan: $keterangan,
+                    type: 'update_ekspedisi'
                 },
                 success: function(responseText) {
                     console.log(responseText);
-                    if (responseText == "Data updated successfully.") {
-                        window.location.replace("05-05-detail-ekspedisi.php?id=" + $id);
+                    responseText = JSON.parse(responseText);
+                    if (responseText[0] === "Data updated successfully.") {
+                        alert('Data ekspedisi berhasil di-update!');
+                        setTimeout(() => {
+                            window.history.back();
+                        }, 500);
                     }
                 }
             });

@@ -14,10 +14,12 @@ $sql = "INSERT INTO pelanggan(nama, alamat, pulau, daerah, kontak, singkatan, ke
 
 $res = mysqli_query($con, $sql);
 
+$paramsToReturn = array();
+
 if (!$res) {
-    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+    array_push($paramsToReturn, "Error: " . $sql . "<br>" . mysqli_error($con));
 } else {
-    echo "New customer created successfully.";
+    array_push($paramsToReturn, "New customer created successfully.");
     $customerID = mysqli_insert_id($con);
 }
 
@@ -25,27 +27,27 @@ if (!$res) {
 
 if (isset($_POST["arrayEkspedisiNormalID"]) && !isset($_POST["arrayEkspedisiTransitID"])) {
     $arrayEkspedisiNormalID = $_POST["arrayEkspedisiNormalID"];
-    var_dump($arrayEkspedisiNormalID);
+    // var_dump($arrayEkspedisiNormalID);
     foreach ($arrayEkspedisiNormalID as $ekspedisiNormalID) {
         $sql = "INSERT INTO pelanggan_use_ekspedisi(id_ekspedisi, id_pelanggan) VALUE($ekspedisiNormalID, $customerID)";
         insertEkspedisi($sql);
     }
 } else if (!isset($_POST["arrayEkspedisiNormalID"]) && isset($_POST["arrayEkspedisiTransitID"])) {
     $arrayEkspedisiTransitID = $_POST["arrayEkspedisiTransitID"];
-    var_dump($arrayEkspedisiTransitID);
+    // var_dump($arrayEkspedisiTransitID);
     foreach ($arrayEkspedisiTransitID as $ekspedisiTransitID) {
         $sql = "INSERT INTO pelanggan_use_ekspedisi(id_ekspedisi, id_pelanggan, ekspedisi_transit) VALUE($ekspedisiTransitID, $customerID, 'y')";
         insertEkspedisi($sql);
     }
 } else if (isset($_POST["arrayEkspedisiNormalID"]) && isset($_POST["arrayEkspedisiTransitID"])) {
     $arrayEkspedisiNormalID = $_POST["arrayEkspedisiNormalID"];
-    var_dump($arrayEkspedisiNormalID);
+    // var_dump($arrayEkspedisiNormalID);
     foreach ($arrayEkspedisiNormalID as $ekspedisiNormalID) {
         $sql = "INSERT INTO pelanggan_use_ekspedisi(id_ekspedisi, id_pelanggan) VALUE($ekspedisiNormalID, $customerID)";
         insertEkspedisi($sql);
     }
     $arrayEkspedisiTransitID = $_POST["arrayEkspedisiTransitID"];
-    var_dump($arrayEkspedisiTransitID);
+    // var_dump($arrayEkspedisiTransitID);
     foreach ($arrayEkspedisiTransitID as $ekspedisiTransitID) {
         $sql = "INSERT INTO pelanggan_use_ekspedisi(id_ekspedisi, id_pelanggan, ekspedisi_transit) VALUE($ekspedisiTransitID, $customerID, 'y')";
         insertEkspedisi($sql);
@@ -56,15 +58,17 @@ if (isset($_POST["arrayEkspedisiNormalID"]) && !isset($_POST["arrayEkspedisiTran
 function insertEkspedisi($sql)
 {
     global $con;
-    var_dump($sql);
+    global $paramsToReturn;
+    // var_dump($sql);
     $res = mysqli_query($con, $sql);
 
     if (!$res) {
-        echo "Error: " . $sql . "<br>" . mysqli_error($con);
+        array_push($paramsToReturn, "Error: " . $sql . "<br>" . mysqli_error($con));
     } else {
-        echo "Relasi Ekspedisi Pelanggan terbentuk.";
+        array_push($paramsToReturn, "Relasi Ekspedisi Pelanggan terbentuk.");
     }
 }
 
+echo json_encode($paramsToReturn);
 
 mysqli_close($con);

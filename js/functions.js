@@ -28,7 +28,7 @@ function elementToToggle (elements) {
 }
 
 function getLastID (table) {
-    let results;
+    var results;
     $.ajax({
         type: "POST",
         url: "01-crud.php",
