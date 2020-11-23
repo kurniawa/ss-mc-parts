@@ -379,6 +379,7 @@ if (isset($_GET['i'])) {
             $('#boxDesc').remove();
             createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
         } else if (value === 'Ukuran') {
+            $('#boxUkuran').remove();
             createElement(elementSystem[indexElementSystem][3][0], elementSystem[indexElementSystem][3][1], elementHTML[indexElementSystem][3]);
         }
     }
@@ -525,12 +526,12 @@ if (isset($_GET['i'])) {
         newSPK.item.push(itemObj);
         console.log(newSPK);
         localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        // window.history.back();
+        window.history.back();
     }
 
     var m = <?php echo $m ?>;
     console.log(m);
-    $('#bottomDiv2').hide()
+    $('#bottomDiv2').hide();
     setTimeout(() => {
 
         if (m !== undefined) {
@@ -557,7 +558,7 @@ if (isset($_GET['i'])) {
             $(`#selectVaria-${indexSJVaria}`).val(newSPK.item[m].varia);
         }
 
-        console.log(newSPK.item[m].jht);
+        console.log(newSPK.item[m].jahit);
         // if (newSPK.item[m].jht !== '' || newSPK.item[m].desc !== '' || newSPK.item[m].jumlah !== '') {
         //     if (newSPK.item[m].jht !== '') {
         //         addLvl3ElementFromBox('Jht');
@@ -574,9 +575,9 @@ if (isset($_GET['i'])) {
         //     }
         // }
 
-        if (newSPK.item[m].jht !== '') {
+        if (newSPK.item[m].jahit !== '') {
             addLvl3ElementFromBox('Jht');
-            $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jht);
+            $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jahit);
         }
         if (newSPK.item[m].desc !== '') {
             addLvl3ElementFromBox('Desc');
@@ -588,15 +589,35 @@ if (isset($_GET['i'])) {
             $(`#inputJumlah-${indexSJVaria}`).val(newSPK.item[m].jumlah);
         }
 
+        if (newSPK.item[m].ukuran_tipe !== '' || newSPK.item[m].ukuran_tipe !== null) {
+            addLvl3ElementFromBox('Ukuran');
+            // $(`#boxUkuran`).remove();
+            var selectUkuran = document.getElementById(`selectUkuran-${indexSJVaria}`);
+            for (var i = 0; i < selectUkuran.options.length; i++) {
+                console.log('ukuran:');
+                console.log(selectUkuran.options[i]);
+                if (selectUkuran.options[i].value !== '') {
+                    var valueSelectUkuran = JSON.parse(selectUkuran.options[i].value);
+                    var tipeUkuran = valueSelectUkuran.tipeUkuran;
+                    if (tipeUkuran === newSPK.item[m].ukuran_tipe) {
+                        selectUkuran.selectedIndex = i;
+                        break;
+                    }
+                }
+            }
+            // $(`#selectUkuran-${indexSJVaria}`).val(newSPK.item[m].ukuran_tipe);
+        }
+
         cekVariaAddBoxes2();
     }
 
     function cekVariaAddBoxes2() {
-        indexElementSystem = 2;
+        indexElementSystem = 3;
+        var elementBoxToShow = indexElementSystem - 1;
         for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);
             if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
-                createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
+                createElement(elementSystem[elementBoxToShow][i][0], elementSystem[elementBoxToShow][i][1], elementHTML[elementBoxToShow][i]);
             }
         }
     }
@@ -703,7 +724,8 @@ if (isset($_GET['i'])) {
         newSPK.item[m] = itemObj;
         console.log(newSPK);
         localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        location.href = '03-03-01-inserting-items.php';
+        // location.href = '03-03-01-inserting-items.php';
+        window.history.back();
     }
 </script>
 

@@ -2,13 +2,51 @@
 
 include_once "01-config.php";
 
-$type = $_POST["type"];
+if (isset($_POST["type"])) {
+    $type = $_POST["type"];
+    if ($type === "delete") {
+        funcDelete();
+    } elseif ($type === "last") {
+        funcLast();
+    } elseif ($type === "live-search") {
+        funcLiveSearch();
+    } elseif ($type === "cek") {
+        funcCek();
+    } elseif ($type === "insert") {
+        funcInsert();
+    } elseif ($type === "SELECT") {
+        $table = $_POST["table"];
+        if (isset($_POST["column"])) {
+            $column = $_POST["column"];
+            $value = $_POST["value"];
+        } else {
+            $column = null;
+            $value = null;
+        }
 
-if ($type === "delete") {
+        if (isset($_POST["order"])) {
+            $order = $_POST["order"];
+        } else {
+            $order = null;
+        }
+        funcSelect($table, $column, $value, $order);
+    } elseif ($type === "SELECT ONE") {
+        funcSelectOne();
+    } elseif ($type === "UPDATE") {
+        funcUpdate();
+    } elseif ($type === "DELETE") {
+        funcDelete2();
+    }
+}
+
+function funcDelete()
+{
+    global $con;
     $id = $_POST["id"];
     $column = $_POST["column"];
-    $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
+    $table = $_POST["table"];
     $sql = "DELETE FROM $table WHERE $column=$id";
+    $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
     $res = mysqli_query($con, $sql);
     if (!$res) {
         echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
@@ -18,7 +56,11 @@ if ($type === "delete") {
         die;
     }
     return;
-} elseif ($type === "last") {
+}
+
+function funcLast()
+{
+    global $con;
     $table = $_POST["table"];
     $sql = "SELECT max(id) FROM $table";
     $res = mysqli_query($con, $sql);
@@ -38,7 +80,11 @@ if ($type === "delete") {
         echo json_encode(array("lastID", $setID));
     }
     return;
-} elseif ($type === "live-search") {
+}
+
+function funcLiveSearch()
+{
+    global $con;
     $key = $_POST["key"];
     $table = $_POST["table"];
     $column = $_POST["column"];
@@ -61,7 +107,9 @@ if ($type === "delete") {
     return;
 }
 
-if ($type === 'cek') {
+function funcCek()
+{
+    global $con;
     $table = $_POST['table'];
     $column = $_POST['column'];
     $value = $_POST['value'];
@@ -108,7 +156,9 @@ if ($type === 'cek') {
     }
 }
 
-if ($type === 'insert') {
+function funcInsert()
+{
+    global $con;
     $table = $_POST['table'];
     $column = $_POST['column'];
     $value = $_POST['value'];
@@ -160,11 +210,10 @@ if ($type === 'insert') {
     }
 }
 
-if ($type === "SELECT") {
-    $table = $_POST["table"];
-    if (isset($_POST["column"])) {
-        $column = $_POST["column"];
-        $value = $_POST["value"];
+function funcSelect($table, $column, $value, $order)
+{
+    global $con;
+    if ($column !== null) {
         $data_length = count($column);
 
         $sql = "SELECT * FROM $table WHERE ";
@@ -179,11 +228,9 @@ if ($type === "SELECT") {
         $sql = "SELECT * FROM $table";
     }
 
-    if (isset($_POST['order'])) {
-        $order = $_POST['order'];
+    if ($order !== null) {
         $sql = $sql . " ORDER BY $order DESC";
     }
-
 
     $res = mysqli_query($con, $sql);
 
@@ -192,14 +239,20 @@ if ($type === "SELECT") {
         while ($row = mysqli_fetch_assoc($res)) {
             $rows[] = $row;
         }
-        echo json_encode($rows);
+        if (isset($_POST["table"])) {
+            echo json_encode($rows);
+        } else {
+            return json_encode($rows);
+        }
     } else {
         echo json_encode(array("NOT FOUND!"));
         die;
     }
 }
 
-if ($type === "SELECT ONE") {
+function funcSelectOne()
+{
+    global $con;
     $table = $_POST["table"];
     $column = $_POST["column"];
     $value = $_POST["value"];
@@ -230,7 +283,9 @@ if ($type === "SELECT ONE") {
     }
 }
 
-if ($type === "UPDATE") {
+function funcUpdate()
+{
+    global $con;
     $table = $_POST["table"];
     $column = $_POST["column"];
     $value = $_POST["value"];
@@ -264,7 +319,9 @@ if ($type === "UPDATE") {
     }
 }
 
-if ($type === "DELETE") {
+function funcDelete2()
+{
+    global $con;
     $table = $_POST["table"];
     $column = $_POST["column"];
     $value = $_POST["value"];
@@ -281,4 +338,4 @@ if ($type === "DELETE") {
     return;
 }
 
-die;
+// die;

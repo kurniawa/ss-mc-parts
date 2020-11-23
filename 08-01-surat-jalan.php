@@ -27,7 +27,7 @@ include_once "01-header.php";
     let daftarSrjalan = new Array();
     showDaftarSrjalan();
 
-    async function showDaftarSrjalan() {
+    function showDaftarSrjalan() {
         let htmlDaftarSrjalan = '';
         let daftarSPK = localStorage.getItem('daftarSPK');
         daftarSPK = JSON.parse(daftarSPK);
