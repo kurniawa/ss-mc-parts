@@ -232,12 +232,6 @@ $id = $_GET["id"];
         window.history.back();
     }
 
-    function btnKurangEkspedisi($id) {
-        console.log("btnKurangEkspedisi");
-        $("#divInputID-" + $id).remove();
-        $("#searchResults-" + $id).removeClass("grid-1-auto").addClass("d-none");
-    }
-
     function deleteCustomer() {
         let results;
         $.ajax({
@@ -332,91 +326,67 @@ $id = $_GET["id"];
 
     });
 
-    function showPertanyaanEkspedisiTransit() {
-        history.pushState(2, null, "./pertanyaan-ekspedisi-transit");
-        $("#closingAreaPertanyaan").toggle(300);
-        $("#pertanyaanEkspedisiTransit").toggle(300);
-    }
-
-    function addInputEkspedisi($jawaban) {
-        $("#closingAreaPertanyaan").css("display", "none");
-        $("#pertanyaanEkspedisiTransit").css("display", "none");
-        if ($jawaban == 'tidak') {
-            $placeholder = "Ekspedisi";
-            $tipeEkspedisi = "inputEkspedisiNormal";
-        } else {
-            $placeholder = "Ekspedisi Transit";
-            $tipeEkspedisi = "inputEkspedisiTransit";
-        }
-
-        $newDiv = '<div id="divInputID-' + $indexAddExpedition + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
-            '<div class="bb-1px-solid-grey">' +
-            '<input id="inputID-' + $indexAddExpedition + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $indexAddExpedition + ');">' +
-            '<div id="searchResults-' + $indexAddExpedition + '" class="d-none b-1px-solid-grey bb-none"></div>' +
-            '</div>' +
-            '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $indexAddExpedition + ');">' +
-            '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
-            '</div>' +
-            '</div>';
-
-        $("#divInputEkspedisi").append($newDiv);
-        $indexAddExpedition++;
-        history.back();
-    }
-
-    function searchEkspedisi($id) {
-        $namaEkspedisi = $("#inputID-" + $id).val();
-
-        if ($namaEkspedisi == "") {
-            $("#searchResults-" + $id).html("").removeClass("grid-1-auto").addClass("d-none");
-
-        } else {
-            $.ajax({
-                type: "POST",
-                url: "06-live-search.php",
-                async: false,
-                data: {
-                    nama: "%" + $namaEkspedisi + "%",
-                    table: "ekspedisi"
-                },
-                success: function(responseText) {
-                    console.log(responseText);
-
-                    $htmlToAppend = "";
-
-                    $("#searchResults-" + $id).removeClass("d-none").addClass("grid-1-auto");
-
-                    if (responseText === "not found!") {
-                        $htmlToAppend = $htmlToAppend +
-                            "<div class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em color-grey'>Ekspedisi tidak ditemukan!</div>";
-                        $("#searchResults-" + $id).html($htmlToAppend);
-
-                    } else {
-
-                        $results = JSON.parse(responseText);
-                        console.log($results);
-
-                        if ($results.length > 5) {
-                            $results.splice(5);
-                        }
-                        $idResult = 0;
-                        for (const ekspedisi of $results) {
-                            $htmlToAppend = $htmlToAppend +
-                                "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $id + "," + $idResult + ")'>" +
-                                ekspedisi.nama + "</div>";
-                            $idResult++;
-                        }
-
-                        $("#searchResults-" + $id).html($htmlToAppend);
-
-                    }
+    // function showPertanyaanEkspedisiTransit() {
+    //     history.pushState(2, null, "./pertanyaan-ekspedisi-transit");
+    //     $("#closingAreaPertanyaan").toggle(300);
+    //     $("#pertanyaanEkspedisiTransit").toggle(300);
+    // }
 
 
-                }
-            });
 
-        }
-    }
+    // function searchEkspedisi($id) {
+    //     $namaEkspedisi = $("#inputID-" + $id).val();
+
+    //     if ($namaEkspedisi == "") {
+    //         $("#searchResults-" + $id).html("").removeClass("grid-1-auto").addClass("d-none");
+
+    //     } else {
+    //         $.ajax({
+    //             type: "POST",
+    //             url: "06-live-search.php",
+    //             async: false,
+    //             data: {
+    //                 nama: "%" + $namaEkspedisi + "%",
+    //                 table: "ekspedisi"
+    //             },
+    //             success: function(responseText) {
+    //                 console.log(responseText);
+
+    //                 $htmlToAppend = "";
+
+    //                 $("#searchResults-" + $id).removeClass("d-none").addClass("grid-1-auto");
+
+    //                 if (responseText === "not found!") {
+    //                     $htmlToAppend = $htmlToAppend +
+    //                         "<div class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em color-grey'>Ekspedisi tidak ditemukan!</div>";
+    //                     $("#searchResults-" + $id).html($htmlToAppend);
+
+    //                 } else {
+
+    //                     $results = JSON.parse(responseText);
+    //                     console.log($results);
+
+    //                     if ($results.length > 5) {
+    //                         $results.splice(5);
+    //                     }
+    //                     $idResult = 0;
+    //                     for (const ekspedisi of $results) {
+    //                         $htmlToAppend = $htmlToAppend +
+    //                             "<div id='chosenValue-" + $idResult + "' class='bb-1px-solid-grey hover-bg-color-grey pt-0_5em pb-0_5em pl-0_5em' onclick='pickChoice(" + $id + "," + $idResult + ")'>" +
+    //                             ekspedisi.nama + "</div>";
+    //                         $idResult++;
+    //                     }
+
+    //                     $("#searchResults-" + $id).html($htmlToAppend);
+
+    //                 }
+
+
+    //             }
+    //         });
+
+    //     }
+    // }
 
     function pickChoice($id, $idResult) {
         $inputID = $("#inputID-" + $id);
