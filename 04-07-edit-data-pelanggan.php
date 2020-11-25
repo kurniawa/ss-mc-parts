@@ -1,9 +1,10 @@
 <?php
 include_once "01-header.php";
 
+error_reporting(E_ALL & E_STRICT);
 ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
+ini_set('log_errors', '0');
+ini_set('error_log', './');
 
 if (isset($_GET["id"])) {
     $id = $_GET["id"];
@@ -16,30 +17,39 @@ $column = ["id"];
 $value = [$id];
 $order = null;
 $dataPelanggan = funcSelect($table, $column, $value, $order);
-// var_dump($dataPelanggan);
+var_dump($dataPelanggan);
 // echo "<br><br>";
 // var_dump(json_decode($dataPelanggan));
 $dataIdEkspedisi = funcSelect("pelanggan_use_ekspedisi", ["id_pelanggan"], $value, null);
-$idEkspedisi = json_decode($dataIdEkspedisi);
 // var_dump($dataIdEkspedisi);
-// var_dump($dataIdEkspedisi);
-// echo "<br><br>";
-// var_dump($dataIdEkspedisi[0]);
-// echo "<br><br>";
-// var_dump($dataIdEkspedisi[0]->id)
-// $idEkspedisi = $dataIdEkspedisi[0]->id_ekspedisi;
-// var_dump($idEkspedisi);
-$dataDetailEkspedisi = array();
-for ($i = 0; $i < count($idEkspedisi); $i++) {
+$jsonDecodeDataIdEkspedisi = json_decode($dataIdEkspedisi);
+var_dump($jsonDecodeDataIdEkspedisi[0]);
+if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
     # code...
-    array_push($dataDetailEkspedisi, funcSelect("ekspedisi", ["id"], $idEkspedisi[$i]->id_ekspedisi, null));
+    $dataEkspedisiAll = json_encode("TIDAK ADA KETERANGAN EKSPEDISI!");
+    var_dump($dataEkspedisiAll);
+} else {
+    $idEkspedisi = json_decode($dataIdEkspedisi);
+    // var_dump($dataIdEkspedisi);
+    // echo "<br><br>";
+    // var_dump($dataIdEkspedisi[0]);
+    // echo "<br><br>";
+    // var_dump($dataIdEkspedisi[0]->id)
+    // $idEkspedisi = $dataIdEkspedisi[0]->id_ekspedisi;
+    // var_dump($idEkspedisi);
+    $dataDetailEkspedisi = array();
+    for ($i = 0; $i < count($idEkspedisi); $i++) {
+        # code...
+        array_push($dataDetailEkspedisi, funcSelect("ekspedisi", ["id"], $idEkspedisi[$i]->id_ekspedisi, null));
+    }
+    // var_dump($dataDetailEkspedisi);
+    // $decodeDataDetailEkspedisi = json_decode($dataDetailEkspedisi);
+    // var_dump($decodeDataDetailEkspedisi);
+    // var_dump($dataDetailEkspedisi[0]->id);
+    $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
+    // var_dump($dataEkspedisiAll);
 }
-// var_dump($dataDetailEkspedisi);
-// $decodeDataDetailEkspedisi = json_decode($dataDetailEkspedisi);
-// var_dump($decodeDataDetailEkspedisi);
-// var_dump($dataDetailEkspedisi[0]->id);
-$dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
-// var_dump($dataEkspedisiAll);
+
 
 ?>
 
@@ -66,28 +76,34 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
 
     <div class="ml-1em mr-1em mt-2em">
         <label for="nama">Nama Pelanggan:</label>
-        <input id="nama" class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik">
+        <input id="nama" name="nama" class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik" onkeyup="cekAdanyaPerubahanData('#nama', '#nama2');">
+        <input id="nama2" type="hidden">
         <br><br>
         <label for="alamat">Alamat Pelanggan:</label>
-        <textarea class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" id="alamat" placeholder="Alamat"></textarea>
+        <textarea class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" id="alamat" onkeyup="cekAdanyaPerubahanData('#alamat', '#alamat2');"></textarea>
+        <textarea id="alamat2" style="display: none;"></textarea>
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
             <div>
                 <label for="pulau">Pulau:</label>
-                <input id="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau">
+                <input id="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau" onkeyup="cekAdanyaPerubahanData('#pulau', '#pulau2');">
+                <input id="pulau2" type="hidden">
             </div>
             <div>
                 <label for="daerah">Daerah:</label>
-                <input id="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah">
+                <input id="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah" onkeyup="cekAdanyaPerubahanData('#daerah', '#daerah2');">
+                <input id="daerah2" type="hidden">
             </div>
         </div>
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
             <div>
                 <label for="kontak">Kontak:</label>
-                <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak">
+                <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" onkeyup="cekAdanyaPerubahanData('#kontak', '#kontak2');">
+                <input id="kontak2" type="hidden">
             </div>
             <div>
                 <label for="singkatan">Singkatan:</label>
-                <input id="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
+                <input id="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)" onkeyup="cekAdanyaPerubahanData('#singkatan', '#singkatan2');">
+                <input id="singkatan2" type="hidden">
             </div>
         </div>
 
@@ -100,7 +116,8 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
             <div class="bg-color-orange-1 pl-1em pr-1em pt-0_5em pb-0_5em b-radius-50px" onclick="showPertanyaanEkspedisiTransit();">+ Tambah Ekspedisi</div>
         </div>
         <label for="keterangan">Keterangan:</label>
-        <textarea id="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" placeholder="Keterangan lain (opsional)"></textarea>
+        <textarea id="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="keterangan" placeholder="Keterangan lain (opsional)" onkeyup="cekAdanyaPerubahanData('#keterangan', '#keterangan2');"></textarea>
+        <textarea id="keterangan2" name="keterangan2" style="display: none;"></textarea>
     </div>
 
     <div class="grid-2-10_auto_auto mt-1em ml-1em mr-1em">
@@ -126,13 +143,15 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
 
     <!-- Warning apabila ada yang kurang -->
 
-    <div id="warning" class="d-none"></div>
+    <div id="warning" style="display: none;"></div>
 
-    <div>
-        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="editCustomerInfo();">
-            <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
-        </div>
+    <!-- <div> -->
+    <div class="grid-1-auto">
+        <button onclick="editCustomerInfo();" id="divBtnEditDataPelanggan" class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="editCustomerInfo();">
+            <span id="btnEditDataPelanggan" class="justify-self-center font-weight-bold">Konfirmasi Edit Data Pelanggan</span>
+        </button>
     </div>
+    <!-- </div> -->
 
     <div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
     </div>
@@ -175,48 +194,74 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
     $singkatan = $('#singkatan');
     $keterangan = $('#keterangan');
 
+    // set semua value 2 kali, untuk pengecekan, apabila terjadi perubahan data
     $inputNamaPelanggan.val(dataPelanggan[0].nama);
+    document.getElementById('nama2').value = dataPelanggan[0].nama;
+
     txtAreaAlamat.value = dataPelanggan[0].alamat;
+    $('#alamat2').val(dataPelanggan[0].alamat);
+
     $pulau.val(dataPelanggan[0].pulau);
+    $('#pulau2').val(dataPelanggan[0].pulau);
+
     $daerah.val(dataPelanggan[0].daerah);
+    $('#daerah2').val(dataPelanggan[0].daerah);
+
     $kontak.val(dataPelanggan[0].kontak);
+    $('#kontak2').val(dataPelanggan[0].kontak);
+
     $singkatan.val(dataPelanggan[0].singkatan);
+    $('#singkatan2').val(dataPelanggan[0].singkatan);
+
     $keterangan.val(dataPelanggan[0].keterangan);
+    $('#keterangan2').val(dataPelanggan[0].keterangan);
 
     // DATA EKSPEDISI
     // untuk autocomplete, ditampung dulu array ekspedisi
     var arrayEkspedisi = <?= $dataEkspedisiAll; ?>;
     console.log(arrayEkspedisi);
-    var arrayNamaEkspedisi = new Array();
-    for (const ekspedisi of arrayEkspedisi) {
-        arrayNamaEkspedisi.push(ekspedisi.nama);
-    }
-    console.log(arrayNamaEkspedisi);
-    // --
-    var dataIdEkspedisi = <?= $dataIdEkspedisi; ?>;
-    console.log(dataIdEkspedisi);
-    var dataDetailEkspedisi = <?= json_encode($dataDetailEkspedisi); ?>;
-    console.log(dataDetailEkspedisi);
-    for (var i = 0; i < dataDetailEkspedisi.length; i++) {
-        var parsedItem = JSON.parse(dataDetailEkspedisi[i]);
-        console.log(parsedItem);
-        var htmlEkspedisi = '';
-        if (dataIdEkspedisi[i].ekspedisi_transit === 'y') {
-            htmlEkspedisi = `${htmlEkspedisi}
+    if (arrayEkspedisi === 'TIDAK ADA KETERANGAN EKSPEDISI!') {
+        console.log('TIDAK ADA KETERANGAN EKSPEDISI!');
+    } else {
+        var arrayNamaEkspedisi = new Array();
+        for (const ekspedisi of arrayEkspedisi) {
+            arrayNamaEkspedisi.push(ekspedisi.nama);
+        }
+        console.log(arrayNamaEkspedisi);
+
+        var arrayKombNamaIdEkspedisi = new Array();
+        for (const ekspedisi of arrayEkspedisi) {
+            arrayKombNamaIdEkspedisi.push(ekspedisi.id + '---' + ekspedisi.nama);
+        }
+        // --
+        var dataIdEkspedisi = <?= $dataIdEkspedisi; ?>;
+        console.log(dataIdEkspedisi);
+        var dataDetailEkspedisi = <?= json_encode($dataDetailEkspedisi); ?>;
+        console.log(dataDetailEkspedisi);
+        for (var i = 0; i < dataDetailEkspedisi.length; i++) {
+            var parsedItem = JSON.parse(dataDetailEkspedisi[i]);
+            console.log(parsedItem);
+            $tipeEkspedisi = '';
+            var htmlEkspedisi = '';
+            if (dataIdEkspedisi[i].ekspedisi_transit === 'y') {
+                htmlEkspedisi = `${htmlEkspedisi}
             <div id="divInputID-${i}" class="containerInputEkspedisi grid-2-auto_15 mb-1em">
             <div class="bb-1px-solid-grey">
             <label for='inputID-${i}'>Ekspedisi Transit:</label>
             `;
-        } else {
-            htmlEkspedisi = `${htmlEkspedisi}
+                $tipeEkspedisi = 'inputEkspedisiTransit';
+            } else {
+                htmlEkspedisi = `${htmlEkspedisi}
             <div id="divInputID-${i}" class="containerInputEkspedisi grid-2-auto_15 mb-1em">
             <div class="bb-1px-solid-grey">
             <label for='inputID-${i}'>Ekspedisi Utama:</label>
             `;
-        }
-        htmlEkspedisi = `${htmlEkspedisi}
-            <input id="inputID-${i}" class="inputEkspedisiAll input-1 pb-1em bb-none" type="text" value="${parsedItem[0].nama}">
-            <div id="searchResults-${i}" class="d-none b-1px-solid-grey bb-none"></div>
+                $tipeEkspedisi = 'inputEkspedisiNormal';
+            }
+            htmlEkspedisi = `${htmlEkspedisi}
+            <input id="inputID-${i}" class="input-1 pb-1em bb-none" type="text" value="${parsedItem[0].nama}">
+            <input type="hidden" name="idEkspedisi[]" value="${parsedItem[0].id}" class="inputEkspedisiAll">
+            <input id="inputIDHidden-${i}" type="hidden" value="${parsedItem[0].nama}" class="${$tipeEkspedisi}">
             </div>
             <div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(${i});">
             <div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>
@@ -224,8 +269,10 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
             </div>
         `;
 
-        $("#divInputEkspedisi").append(htmlEkspedisi);
-        setAutoComplete(".inputEkspedisiAll", arrayNamaEkspedisi);
+            $("#divInputEkspedisi").append(htmlEkspedisi);
+            setAutoCompletePlusPerubahan(`#inputID-${i}`, arrayKombNamaIdEkspedisi, `#inputIDHidden-${i}`);
+
+        }
     }
 
     function setAutoComplete(elementToAutoComplete, sourceArray) {
@@ -247,6 +294,7 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
     console.log($('#divInputEkspedisi').length);
 
     function addInputEkspedisi($jawaban) {
+
         $("#closingAreaPertanyaan").css("display", "none");
         $("#pertanyaanEkspedisiTransit").css("display", "none");
         if ($jawaban == 'tidak') {
@@ -257,24 +305,209 @@ $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
             $tipeEkspedisi = "inputEkspedisiTransit";
         }
 
-        $newDiv = '<div id="divInputID-' + $('#divInputEkspedisi').length + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
+        $index = $('#divInputEkspedisi').children().length;
+        $newDiv = '<div id="divInputID-' + $index + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
             '<div class="bb-1px-solid-grey">' +
-            '<input id="inputID-' + $('#divInputEkspedisi').length + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '");">' +
-            '<div id="searchResults-' + $('#divInputEkspedisi').length + '" class="d-none b-1px-solid-grey bb-none"></div>' +
+            '<input id="inputID-' + $index + '" class="input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '");">' +
+            '<input id="inputIDHidden-' + $index + '" type="hidden" name="idEkspedisi[]" class="inputEkspedisiAll ' + $tipeEkspedisi + '">' +
             '</div>' +
-            '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $('#divInputEkspedisi').length + ');">' +
+            `<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi('${'#divInputID-' + $('#divInputEkspedisi').children().length-1}');">` +
             '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
             '</div>' +
             '</div>';
 
         $("#divInputEkspedisi").append($newDiv);
-        setAutoComplete('.inputEkspedisiAll', arrayNamaEkspedisi);
+        setAutoCompletePlusPenambahan(`#inputID-${$index}`, arrayKombNamaIdEkspedisi, `#inputIDHidden-${$index}`);
     }
 
     function btnKurangEkspedisi(idElementToRemove) {
         console.log("btnKurangEkspedisi");
+        console.log(idElementToRemove);
         $(idElementToRemove).remove();
-        $("#searchResults-" + $id).removeClass("grid-1-auto").addClass("d-none");
+        // $("#searchResults-" + $id).removeClass("grid-1-auto").addClass("d-none");
+    }
+
+    // FUNGSI UNTUK CEK APAKAH TERJADI PERUBAHAN DATA
+    // Hide button pengeditan di awal membuka halaman
+    $('#divBtnEditDataPelanggan').hide();
+
+    function cekAdanyaPerubahanData(id1, id2) {
+        console.log('Jalankan: Pen cek an perubahan data!');
+        $val1 = $(id1).val();
+        $val2 = $(id2).val();
+
+        console.log('value1:');
+        console.log($val1);
+        console.log('value2:');
+        console.log($val2);
+
+        if ($val1 !== $val2) {
+            console.log('Ada perubahan data!');
+            $('#divBtnEditDataPelanggan').show();
+        } else {
+            console.log('Data tidak berubah!');
+            $('#divBtnEditDataPelanggan').hide();
+        }
+
+    }
+
+    function setAutoCompletePlusPerubahan(elementToAutoComplete, sourceArray, elementToCompare) {
+        $(elementToAutoComplete).autocomplete({
+            source: sourceArray,
+            select: function(event, ui) {
+                console.log(ui);
+                console.log(ui.item.value);
+                cekAdanyaPerubahanData(elementToAutoComplete, elementToCompare);
+            }
+        });
+    }
+
+    // Set length awal dari data ekspedisi
+    const lengthDataEkspedisi = $('#divInputEkspedisi').children().length;
+    console.log('Length divInputEkspedisi Awal:');
+    console.log(lengthDataEkspedisi);
+
+    function setAutoCompletePlusPenambahan(elementToAutoComplete, sourceArray, elementValueToSet) {
+        console.log('Menambahakan feature autocomplete untuk: ' + elementToAutoComplete);
+        console.log('Plus pengecekan adanya penambahan data.');
+        $(elementToAutoComplete).autocomplete({
+            source: sourceArray,
+            select: function(event, ui) {
+                console.log(ui);
+                console.log(ui.item.value);
+                cekAdanyaPenambahanData(lengthDataEkspedisi, $('#divInputEkspedisi').children().length);
+                $value = ui.item.value.split('---');
+                console.log($value);
+                $id = $value[0];
+                console.log('chosen ID: ' + $id);
+                console.log('elementValueToSet: ' + elementValueToSet);
+                $(elementValueToSet).val($id);
+                console.log(elementValueToSet + '.val()= ' + $(elementValueToSet).val());
+            }
+        });
+    }
+
+    function cekAdanyaPenambahanData(length1, length2) {
+        console.log('Jalankan: pengecekan adanya penambahan data!');
+        console.log('length1: ' + length1);
+        console.log('length2: ' + length2);
+        if (length1 !== length2) {
+            console.log('Penambahan/Pengurangan data: ADA');
+            $('#divBtnEditDataPelanggan').show();
+
+        } else {
+            console.log('Penambahan/Pengurangan data: TIDAK ADA');
+            $('#divBtnEditDataPelanggan').hide();
+
+        }
+    }
+
+    function editCustomerInfo() {
+        console.log('\n\n\n\n***** JALANKAN: editCustomerInfo() *****\n\n\n\n');
+        $id = <?php echo ($id) ?>;
+        $nama = $("#nama").val();
+        $alamat = $("#alamat").val();
+        $pulau = $("#pulau").val();
+        $daerah = $("#daerah").val();
+        $kontak = $("#kontak").val();
+        $singkatan = $("#singkatan").val();
+        $keterangan = $("#keterangan").val();
+        $warning = "";
+
+        $arrayGaPenting = [$nama, $alamat, $pulau, $daerah, $kontak, $singkatan, $keterangan];
+        console.log($arrayGaPenting);
+        // Cek apakah nama, pulau, daerah nya belum terisi
+
+        // Sebelum Insert, cek terlebih dahulu apakah ekspedisi yang diinput terdaftar di database
+        // Sebelumnya cek dulu apakah input ekspedisi kosong
+
+        console.log("$('.inputEkspedisiNormal').length : " + $(".inputEkspedisiNormal").length);
+        console.log("$('.inputEkspedisiTransit').length : " + $(".inputEkspedisiTransit").length);
+        var arrayEkspedisiNormalID = new Array();
+        var arrayEkspedisiTransitID = new Array();
+        console.log("arrayEkspedisiNormalID: " + arrayEkspedisiNormalID);
+        console.log("arrayEkspedisiTransitID: " + arrayEkspedisiTransitID);
+
+        // Delete terlebih dahulu semua Ekspedisi untuk pelanggan ini
+
+
+        if ($(".inputEkspedisiAll").length != 0) {
+
+            $inputEkspedisiNormalIndex = 0;
+            $inputEkspedisiTransitIndex = 0;
+
+            $(".inputEkspedisiAll").each(function(index) {
+                // cek ekspedisi sekaligus kalo emang ada, return id
+                console.log('ID Ekspedisi: ' + $(this).val());
+                // $resultCekEkspedisi = cekEkspedisi($(this).val());
+                // if ($resultCekEkspedisi === "No result!") {
+                //     $warning = $warning + "<div>Ekspedisi tidak sesuai. Silahkan input ulang ekspedisi atau tambahkan ekspedisi baru terlebih dahulu.</div>";
+                //     $("#warning").html($warning).show();
+                //     return false;
+                // } else {
+
+                //     if ($(".inputEkspedisiNormal:eq(" + $inputEkspedisiNormalIndex + ")").val() == null) {
+                //         arrayEkspedisiTransitID.push($resultCekEkspedisi);
+                //         $inputEkspedisiTransitIndex++;
+                //     } else {
+                //         arrayEkspedisiNormalID.push($resultCekEkspedisi);
+                //         $inputEkspedisiNormalIndex++;
+                //     }
+                // }
+
+            });
+
+            console.log("arrayEkspedisiNormalID: " + JSON.stringify(arrayEkspedisiNormalID));
+            console.log("arrayEkspedisiTransitID: " + JSON.stringify(arrayEkspedisiTransitID));
+
+        }
+
+        // Penghapusan semua ekspedisi yang ada
+
+        // END
+        // $.ajax({
+        //     type: "POST",
+        //     url: "04-05-insert-edit-customer.php",
+        //     async: false,
+        //     data: {
+        //         id: $id,
+        //         nama: $nama,
+        //         alamat: $alamat,
+        //         pulau: $pulau,
+        //         daerah: $daerah,
+        //         kontak: $kontak,
+        //         singkatan: $singkatan,
+        //         keterangan: $keterangan,
+        //         arrayEkspedisiNormalID: arrayEkspedisiNormalID,
+        //         arrayEkspedisiTransitID: arrayEkspedisiTransitID
+        //     },
+        //     success: function(responseText) {
+        //         console.log(responseText);
+        //     }
+        // });
+
+    }
+
+    function cekEkspedisi(params) {
+        console.log(params);
+        $idToReturn = "";
+        if (params != "") {
+            $.ajax({
+                type: "POST",
+                url: "04-04-cek-ekspedisi.php",
+                async: false,
+                data: {
+                    nama: params
+                },
+                success: function(responseText) {
+                    console.log(responseText);
+                    $idToReturn = responseText;
+                }
+            });
+        }
+        console.log($idToReturn);
+        return $idToReturn;
+
     }
 </script>
 

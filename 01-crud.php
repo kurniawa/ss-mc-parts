@@ -2,6 +2,7 @@
 
 include_once "01-config.php";
 
+// var_dump($_POST);
 if (isset($_POST["type"])) {
     $type = $_POST["type"];
     if ($type === "delete") {
@@ -46,6 +47,30 @@ function funcDelete()
     $column = $_POST["column"];
     $table = $_POST["table"];
     $sql = "DELETE FROM $table WHERE $column=$id";
+    $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
+    $res = mysqli_query($con, $sql);
+    if (!$res) {
+        echo json_encode(array("error", "Error: " . $sql . "<br>" . mysqli_error($con)));
+        die;
+    } else {
+        echo json_encode(array("deleted", $msg));
+        die;
+    }
+    return;
+}
+
+function funcDelete3($table, $column, $value)
+{
+    global $con;
+
+    $sql = "DELETE FROM $table WHERE ";
+    for ($i = 0; $i < count($column); $i++) {
+        if ($i === count($column)) {
+            $sql = $sql . $column[$i] = $value[$i];
+        } else {
+            $sql = $sql . $column[$i] = $value[$i] . " AND ";
+        }
+    }
     $msg = "Query: " . $sql . " SUCCESSFULLY EXECUTED.";
     $res = mysqli_query($con, $sql);
     if (!$res) {
@@ -245,8 +270,11 @@ function funcSelect($table, $column, $value, $order)
             return json_encode($rows);
         }
     } else {
-        echo json_encode(array("NOT FOUND!"));
-        die;
+        if (isset($_POST["table"])) {
+            echo json_encode(array("NOT FOUND!"));
+        } else {
+            return json_encode(array("NOT FOUND!"));
+        }
     }
 }
 
