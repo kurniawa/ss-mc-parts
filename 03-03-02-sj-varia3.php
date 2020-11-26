@@ -488,15 +488,17 @@ if (isset($_GET['i'])) {
         }
 
         $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
+        var hargaPcs = 0;
         if (ukuran !== '') {
             $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
+            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
+        } else {
+            $namaLengkap = $namaLengkap + ' ' + $plusJahit;
+            hargaPcs = parseFloat($hargaBahan) + hargaJht;
         }
 
-        $namaLengkap = $namaLengkap + ' ' + $plusJahit;
-
-        $namaLengkap = $namaLengkap.trim();
-        var hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
         hargaItem = hargaPcs * $jumlah;
+        $namaLengkap = $namaLengkap.trim();
 
         console.log(hargaPcs);
         console.log(hargaJht);
@@ -526,7 +528,7 @@ if (isset($_GET['i'])) {
         newSPK.item.push(itemObj);
         console.log(newSPK);
         localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        window.history.back();
+        // window.history.back();
     }
 
     var m = <?php echo $m ?>;
@@ -692,9 +694,13 @@ if (isset($_GET['i'])) {
         $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
         if (ukuran !== '') {
             $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
+            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
+        } else {
+            $namaLengkap = $namaLengkap + ' ' + $plusJahit;
+            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
         }
 
-        $namaLengkap = $namaLengkap + ' ' + $plusJahit;
+        hargaItem = hargaPcs * $jumlah;
 
         $namaLengkap = $namaLengkap.trim();
         var hargaPcs = parseFloat($hargaBahan) + hargaJht;

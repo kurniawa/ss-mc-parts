@@ -134,12 +134,15 @@ $id = $_GET["id"];
 
                             for (const $eachExpeditionID of $idExpeditionAll) {
 
+                                console.log('ExpeditionID: ')
+                                console.log($eachExpeditionID);
+                                console.log($eachExpeditionID.id);
                                 $.ajax({
                                     url: "01-get.php",
                                     type: "POST",
                                     async: false,
                                     data: {
-                                        id: $customer[0].id,
+                                        id: $eachExpeditionID.id_ekspedisi,
                                         table: "ekspedisi",
                                         column: "id"
                                     },

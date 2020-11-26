@@ -17,18 +17,18 @@ $column = ["id"];
 $value = [$id];
 $order = null;
 $dataPelanggan = funcSelect($table, $column, $value, $order);
-var_dump($dataPelanggan);
+// var_dump($dataPelanggan);
 // echo "<br><br>";
 // var_dump(json_decode($dataPelanggan));
 $dataIdEkspedisi = funcSelect("pelanggan_use_ekspedisi", ["id_pelanggan"], $value, null);
 // var_dump($dataIdEkspedisi);
 $jsonDecodeDataIdEkspedisi = json_decode($dataIdEkspedisi);
-var_dump($jsonDecodeDataIdEkspedisi[0]);
+// var_dump($jsonDecodeDataIdEkspedisi[0]);
 if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
     # code...
-    $dataEkspedisiAll = json_encode("TIDAK ADA KETERANGAN EKSPEDISI!");
-    var_dump($dataEkspedisiAll);
+    $statusEkspedisi = json_encode("TIDAK ADA KETERANGAN EKSPEDISI!");
 } else {
+    $statusEkspedisi = json_encode("EKSPEDISI DITEMUKAN!");
     $idEkspedisi = json_decode($dataIdEkspedisi);
     // var_dump($dataIdEkspedisi);
     // echo "<br><br>";
@@ -46,9 +46,9 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
     // $decodeDataDetailEkspedisi = json_decode($dataDetailEkspedisi);
     // var_dump($decodeDataDetailEkspedisi);
     // var_dump($dataDetailEkspedisi[0]->id);
-    $dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
-    // var_dump($dataEkspedisiAll);
 }
+$dataEkspedisiAll = funcSelect("ekspedisi", null, null, null);
+// var_dump($dataEkspedisiAll);
 
 
 ?>
@@ -63,7 +63,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
     </div> -->
 </header>
 
-<div id="pageEditCustomer">
+<form id="pageEditCustomer" method="POST" action="04-07-edit-data-pelanggan-2.php">
 
     <div class="mt-1em ml-1em grid-2-10_auto">
         <div class="">
@@ -78,6 +78,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
         <label for="nama">Nama Pelanggan:</label>
         <input id="nama" name="nama" class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik" onkeyup="cekAdanyaPerubahanData('#nama', '#nama2');">
         <input id="nama2" type="hidden">
+        <input id="idPelanggan" name="idPelanggan" type="hidden" value="<?= $id; ?>">
         <br><br>
         <label for="alamat">Alamat Pelanggan:</label>
         <textarea class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" id="alamat" onkeyup="cekAdanyaPerubahanData('#alamat', '#alamat2');"></textarea>
@@ -85,24 +86,24 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
             <div>
                 <label for="pulau">Pulau:</label>
-                <input id="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau" onkeyup="cekAdanyaPerubahanData('#pulau', '#pulau2');">
+                <input id="pulau" name="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau" onkeyup="cekAdanyaPerubahanData('#pulau', '#pulau2');">
                 <input id="pulau2" type="hidden">
             </div>
             <div>
                 <label for="daerah">Daerah:</label>
-                <input id="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah" onkeyup="cekAdanyaPerubahanData('#daerah', '#daerah2');">
+                <input id="daerah" name="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah" onkeyup="cekAdanyaPerubahanData('#daerah', '#daerah2');">
                 <input id="daerah2" type="hidden">
             </div>
         </div>
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
             <div>
                 <label for="kontak">Kontak:</label>
-                <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" onkeyup="cekAdanyaPerubahanData('#kontak', '#kontak2');">
+                <input id="kontak" name="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" onkeyup="cekAdanyaPerubahanData('#kontak', '#kontak2');">
                 <input id="kontak2" type="hidden">
             </div>
             <div>
                 <label for="singkatan">Singkatan:</label>
-                <input id="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)" onkeyup="cekAdanyaPerubahanData('#singkatan', '#singkatan2');">
+                <input id="singkatan" name="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)" onkeyup="cekAdanyaPerubahanData('#singkatan', '#singkatan2');">
                 <input id="singkatan2" type="hidden">
             </div>
         </div>
@@ -116,8 +117,8 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
             <div class="bg-color-orange-1 pl-1em pr-1em pt-0_5em pb-0_5em b-radius-50px" onclick="showPertanyaanEkspedisiTransit();">+ Tambah Ekspedisi</div>
         </div>
         <label for="keterangan">Keterangan:</label>
-        <textarea id="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="keterangan" placeholder="Keterangan lain (opsional)" onkeyup="cekAdanyaPerubahanData('#keterangan', '#keterangan2');"></textarea>
-        <textarea id="keterangan2" name="keterangan2" style="display: none;"></textarea>
+        <textarea id="keterangan" name="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="keterangan" placeholder="Keterangan lain (opsional)" onkeyup="cekAdanyaPerubahanData('#keterangan', '#keterangan2');"></textarea>
+        <textarea id="keterangan2" style="display: none;"></textarea>
     </div>
 
     <div class="grid-2-10_auto_auto mt-1em ml-1em mr-1em">
@@ -147,7 +148,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
 
     <!-- <div> -->
     <div class="grid-1-auto">
-        <button onclick="editCustomerInfo();" id="divBtnEditDataPelanggan" class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="editCustomerInfo();">
+        <button onclick="editCustomerInfo();" id="divBtnEditDataPelanggan" class="m-1em h-4em bg-color-orange-2 grid-1-auto">
             <span id="btnEditDataPelanggan" class="justify-self-center font-weight-bold">Konfirmasi Edit Data Pelanggan</span>
         </button>
     </div>
@@ -176,7 +177,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
             </div>
         </div>
     </div>
-</div>
+</form>
 
 
 <script>
@@ -218,24 +219,28 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
 
     // DATA EKSPEDISI
     // untuk autocomplete, ditampung dulu array ekspedisi
-    var arrayEkspedisi = <?= $dataEkspedisiAll; ?>;
-    console.log(arrayEkspedisi);
-    if (arrayEkspedisi === 'TIDAK ADA KETERANGAN EKSPEDISI!') {
-        console.log('TIDAK ADA KETERANGAN EKSPEDISI!');
-    } else {
-        var arrayNamaEkspedisi = new Array();
-        for (const ekspedisi of arrayEkspedisi) {
-            arrayNamaEkspedisi.push(ekspedisi.nama);
-        }
-        console.log(arrayNamaEkspedisi);
+    var statusEkspedisi = <?= $statusEkspedisi; ?>;
+    console.log(statusEkspedisi);
 
-        var arrayKombNamaIdEkspedisi = new Array();
-        for (const ekspedisi of arrayEkspedisi) {
-            arrayKombNamaIdEkspedisi.push(ekspedisi.id + '---' + ekspedisi.nama);
-        }
+    var arrayEkspedisi = <?= $dataEkspedisiAll ?>;
+    var arrayNamaEkspedisi = new Array();
+    for (const ekspedisi of arrayEkspedisi) {
+        arrayNamaEkspedisi.push(ekspedisi.nama);
+    }
+    console.log(arrayNamaEkspedisi);
+
+    var arrayKombNamaIdEkspedisi = new Array();
+    for (const ekspedisi of arrayEkspedisi) {
+        arrayKombNamaIdEkspedisi.push(ekspedisi.id + '---' + ekspedisi.nama);
+    }
+    var dataIdEkspedisi = <?= $dataIdEkspedisi; ?>;
+    console.log(dataIdEkspedisi);
+
+    if (statusEkspedisi === 'TIDAK ADA KETERANGAN EKSPEDISI!') {
+        console.log('TIDAK ADA KETERANGAN EKSPEDISI!');
+
+    } else {
         // --
-        var dataIdEkspedisi = <?= $dataIdEkspedisi; ?>;
-        console.log(dataIdEkspedisi);
         var dataDetailEkspedisi = <?= json_encode($dataDetailEkspedisi); ?>;
         console.log(dataDetailEkspedisi);
         for (var i = 0; i < dataDetailEkspedisi.length; i++) {
@@ -243,6 +248,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
             console.log(parsedItem);
             $tipeEkspedisi = '';
             var htmlEkspedisi = '';
+            $name = '';
             if (dataIdEkspedisi[i].ekspedisi_transit === 'y') {
                 htmlEkspedisi = `${htmlEkspedisi}
             <div id="divInputID-${i}" class="containerInputEkspedisi grid-2-auto_15 mb-1em">
@@ -250,6 +256,7 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
             <label for='inputID-${i}'>Ekspedisi Transit:</label>
             `;
                 $tipeEkspedisi = 'inputEkspedisiTransit';
+                $name = 'idEkspedisiTransit[]'
             } else {
                 htmlEkspedisi = `${htmlEkspedisi}
             <div id="divInputID-${i}" class="containerInputEkspedisi grid-2-auto_15 mb-1em">
@@ -257,10 +264,11 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
             <label for='inputID-${i}'>Ekspedisi Utama:</label>
             `;
                 $tipeEkspedisi = 'inputEkspedisiNormal';
+                $name = 'idEkspedisi[]';
             }
             htmlEkspedisi = `${htmlEkspedisi}
             <input id="inputID-${i}" class="input-1 pb-1em bb-none" type="text" value="${parsedItem[0].nama}">
-            <input type="hidden" name="idEkspedisi[]" value="${parsedItem[0].id}" class="inputEkspedisiAll">
+            <input type="hidden" name="${$name}" value="${parsedItem[0].id}" class="inputEkspedisiAll">
             <input id="inputIDHidden-${i}" type="hidden" value="${parsedItem[0].nama}" class="${$tipeEkspedisi}">
             </div>
             <div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(${i});">
@@ -297,19 +305,22 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
 
         $("#closingAreaPertanyaan").css("display", "none");
         $("#pertanyaanEkspedisiTransit").css("display", "none");
+        $name = '';
         if ($jawaban == 'tidak') {
             $placeholder = "Ekspedisi";
             $tipeEkspedisi = "inputEkspedisiNormal";
+            $name = "idEkspedisi[]";
         } else {
             $placeholder = "Ekspedisi Transit";
             $tipeEkspedisi = "inputEkspedisiTransit";
+            $name = 'idEkspedisiTransit[]';
         }
 
         $index = $('#divInputEkspedisi').children().length;
         $newDiv = '<div id="divInputID-' + $index + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
             '<div class="bb-1px-solid-grey">' +
             '<input id="inputID-' + $index + '" class="input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '");">' +
-            '<input id="inputIDHidden-' + $index + '" type="hidden" name="idEkspedisi[]" class="inputEkspedisiAll ' + $tipeEkspedisi + '">' +
+            '<input id="inputIDHidden-' + $index + '" type="hidden" name="' + $name + '" class="inputEkspedisiAll ' + $tipeEkspedisi + '">' +
             '</div>' +
             `<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi('${'#divInputID-' + $('#divInputEkspedisi').children().length-1}');">` +
             '<div class="justify-self-center w-1em h-0_3em bg-color-white b-radius-50px"></div>' +
@@ -429,7 +440,6 @@ if ($jsonDecodeDataIdEkspedisi[0] === 'NOT FOUND!') {
         console.log("arrayEkspedisiTransitID: " + arrayEkspedisiTransitID);
 
         // Delete terlebih dahulu semua Ekspedisi untuk pelanggan ini
-
 
         if ($(".inputEkspedisiAll").length != 0) {
 

@@ -103,7 +103,10 @@ if (isset($_POST['SPKID'])) {
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
+<div class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+
+</div>
 
 <div class="threeDotMenu">
     <div class="threeDot">
