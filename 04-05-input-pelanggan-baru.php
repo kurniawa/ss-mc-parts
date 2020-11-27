@@ -2,6 +2,7 @@
 
 include_once "01-config.php";
 
+$id = htmlspecialchars($_POST["id"]);
 $nama = htmlspecialchars($_POST["nama"]);
 $alamat = htmlspecialchars($_POST["alamat"]);
 $pulau = htmlspecialchars($_POST["pulau"]);
@@ -10,7 +11,7 @@ $kontak = htmlspecialchars($_POST["kontak"]);
 $singkatan = htmlspecialchars($_POST["singkatan"]);
 $keterangan = htmlspecialchars($_POST["keterangan"]);
 
-$sql = "INSERT INTO pelanggan(nama, alamat, pulau, daerah, kontak, singkatan, keterangan) VALUE('$nama', '$alamat', '$pulau', '$daerah', '$kontak', '$singkatan', '$keterangan')";
+$sql = "INSERT INTO pelanggan(id, nama, alamat, pulau, daerah, kontak, singkatan, keterangan) VALUE($id, '$nama', '$alamat', '$pulau', '$daerah', '$kontak', '$singkatan', '$keterangan')";
 
 $res = mysqli_query($con, $sql);
 

@@ -95,6 +95,12 @@ include_once "01-header.php";
             $peringatan.toggle(100);
         }
 
+        if ($bentuk === '' || $bentuk === null) {
+            console.log('Bentuk Perusahaan tidak diisi!');
+        } else {
+            $bentuk = $bentuk.trim();
+        }
+
         $.ajax({
             url: "05-04-insert-edit-ekspedisi.php",
             type: "POST",
@@ -102,7 +108,7 @@ include_once "01-header.php";
             data: {
                 id: lastIdEkspedisi[1],
                 nama: $nama.trim(),
-                bentuk: $bentuk.trim(),
+                bentuk: $bentuk,
                 alamat: $alamat.trim(),
                 kontak: $kontak.trim(),
                 keterangan: $keterangan.trim(),

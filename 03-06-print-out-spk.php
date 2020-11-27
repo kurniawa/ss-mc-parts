@@ -56,6 +56,8 @@ include_once '01-header.php';
 
     `;
 
+    var jumlahTotalItem = 0;
+
     for (const spkItem of spkToPrint.item) {
         if (spkItem.desc !== '') {
             htmlTable = htmlTable +
@@ -65,7 +67,7 @@ include_once '01-header.php';
                 <td>${spkItem.jumlah}</td>
             </tr>
             <tr>
-                <td colspan='2'>${spkItem.desc}</td>
+                <td colspan='2' style='font-style: italic;'>${spkItem.desc.replace(new RegExp('\r?\n', 'g'), '<br />')}</td>
                 <td></td>
             </tr>
             `;
@@ -78,6 +80,19 @@ include_once '01-header.php';
             </tr>
             `;
         }
+
+        jumlahTotalItem = jumlahTotalItem + parseFloat(spkItem.jumlah);
+
+        htmlTable = htmlTable +
+            `
+        <tr>
+            <td colspan='2' style='font-weight: bold; text-align: right;'>
+                Total
+                <div style='display: inline-block;width: 0.5em;'></div>
+            </td>
+            <td style='font-weight: bold;'>${jumlahTotalItem}</td>
+        </tr>
+        `
     }
 
     htmlTable = htmlTable + '</table>';

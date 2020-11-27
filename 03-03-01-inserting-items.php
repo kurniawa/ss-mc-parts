@@ -392,6 +392,7 @@ include_once "01-header.php";
         tipe = <?= json_encode($tipe); ?>;
         hargaItem = <?= json_encode($hargaItem); ?>;
 
+        console.log('SPKitem:');
         console.log(SPKItem);
         console.log(jmlItem);
         console.log(descEachItem);
@@ -502,6 +503,7 @@ include_once "01-header.php";
         }
 
         let htmlSPKItem = '';
+        $jmlTotalSPK = 0;
         if (dataSPK) {
             for (let i = 0; i < dataSPK.item.length; i++) {
                 htmlSPKItem = htmlSPKItem +
@@ -517,8 +519,11 @@ include_once "01-header.php";
                     <div class='color-grey justify-self-right'>Jumlah</div>
                     </div>
                     <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
-                    <div class='pl-0_5em color-blue-purple'>${dataSPK.item[i].desc}</div>
+                    <div class='pl-0_5em color-blue-purple'>${dataSPK.item[i].desc.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
                     </div>`;
+
+                $jmlTotalSPK = $jmlTotalSPK + parseFloat(dataSPK.item[i].jumlah);
+                console.log('$jmlTotalSPK-1: ' + $jmlTotalSPK);
             }
 
             $('#divSPKNumber').html(dataSPK.id);
@@ -539,11 +544,20 @@ include_once "01-header.php";
                     <div class='color-grey justify-self-right'>Jumlah</div>
                     </div>
                     <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
-                    <div class='pl-0_5em color-blue-purple'>${descEachItem[i]}</div>
+                    <div class='pl-0_5em color-blue-purple'>${descEachItem[i].replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
                     </div>`;
+
+                $jmlTotalSPK = $jmlTotalSPK + parseFloat(jmlItem[i]);
+                console.log('$jmlTotalSPK-2: ' + $jmlTotalSPK);
             }
         }
         $('#divItemList').html(htmlSPKItem);
+        if ($jmlTotalSPK !== 0) {
+            $('#divJmlTotal2').html($jmlTotalSPK);
+            $('#divJmlTotal').show();
+        }
+        console.log('$jmlTotalSPK: ' + $jmlTotalSPK);
+
     }
 
 
@@ -598,8 +612,10 @@ include_once "01-header.php";
     document.getElementById('downloadExcel').addEventListener('click', (event) => {
         console.log(event);
         let itemToPrint = new Array();
+        console.log(SPKItem);
 
         for (let i = 0; i < SPKItem.length; i++) {
+            console.log('Masukkan data item - ' + i);
             itemToPrint.push({
                 namaLengkap: SPKItem[i],
                 desc: descEachItem[i],
@@ -619,7 +635,12 @@ include_once "01-header.php";
 
         localStorage.setItem('dataSPKToPrint', JSON.stringify(spkToPrint));
 
-        location.href = '03-06-print-out-spk.php';
+        var moveToPrintOutSPK = confirm('Lanjut ke print-out SPK: ');
+        if (moveToPrintOutSPK === true) {
+            location.href = '03-06-print-out-spk.php';
+        } else {
+            console.log(moveToPrintOutSPK);
+        }
     });
 
     document.querySelector('.threeDot').addEventListener('click', function() {
@@ -670,16 +691,25 @@ include_once "01-header.php";
                 <div class='color-grey justify-self-right'>Jumlah</div>
                 </div>
                 <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
-                <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
+                <div class='pl-0_5em color-blue-purple'>${item.desc.replace(new RegExp('\r?\n', 'g'), '<br />' )}</div>
                 </div>`;
 
             // kita jumlah harga semua item untuk satu SPK
-            totalHarga = totalHarga + item.hargaItem;
+            totalHarga = totalHarga + parseFloat(item.hargaItem);
+            totalJumlahItem = totalJumlahItem + item.jumlah;
             i++;
         }
         $('#inputHargaTotalSPK').val(totalHarga);
         $('#divItemList').html(htmlItemList);
         $('#btnProsesSPK').show();
+
+        if ($jmlTotalSPK !== 0) {
+            $('#divJmlTotal2').html(totalJumlahItem);
+            $('#divJmlTotal').show();
+
+            console.log('$jmlTotalSPK: ' + $jmlTotalSPK);
+
+        }
     }
 
     async function insertNewSPK() {
@@ -833,6 +863,8 @@ include_once "01-header.php";
             localStorage.setItem('dataSPKToPrint', JSON.stringify(dataSPK));
             localStorage.removeItem('dataSPKToEdit');
             localStorage.removeItem('dataSPKBefore');
+
+            alert('SPK berhasil dibuat');
 
             setTimeout(() => {
                 location.href = '03-06-print-out-spk.php';

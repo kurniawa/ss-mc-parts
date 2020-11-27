@@ -167,6 +167,9 @@ include_once "01-header.php";
         $keterangan = $("#keterangan").val();
         $warning = "";
 
+        $lastID = getLastID('pelanggan');
+        $lastID = JSON.parse($lastID);
+
         $arrayGaPenting = [$nama, $alamat, $pulau, $daerah, $kontak, $singkatan, $keterangan];
         console.log($arrayGaPenting);
         // Cek apakah nama, pulau, daerah nya belum terisi
@@ -216,13 +219,14 @@ include_once "01-header.php";
             url: "04-05-input-pelanggan-baru.php",
             async: false,
             data: {
-                nama: $nama,
-                alamat: $alamat,
-                pulau: $pulau,
-                daerah: $daerah,
-                kontak: $kontak,
-                singkatan: $singkatan,
-                keterangan: $keterangan,
+                id: $lastID[1],
+                nama: $nama.trim(),
+                alamat: $alamat.trim(),
+                pulau: $pulau.trim(),
+                daerah: $daerah.trim(),
+                kontak: $kontak.trim(),
+                singkatan: $singkatan.trim(),
+                keterangan: $keterangan.trim(),
                 arrayEkspedisiNormalID: arrayEkspedisiNormalID,
                 arrayEkspedisiTransitID: arrayEkspedisiTransitID
             },
@@ -230,7 +234,10 @@ include_once "01-header.php";
                 console.log(responseText);
                 responseText = JSON.parse(responseText);
                 if (responseText[0] === 'New customer created successfully.') {
-                    history.back();
+                    alert('Pelanggan Baru berhasil diinput!');
+                    setTimeout(() => {
+                        history.back();
+                    }, 500);
                 }
             }
         });

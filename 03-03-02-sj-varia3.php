@@ -528,7 +528,7 @@ if (isset($_GET['i'])) {
         newSPK.item.push(itemObj);
         console.log(newSPK);
         localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        // window.history.back();
+        window.history.back();
     }
 
     var m = <?php echo $m ?>;

@@ -170,7 +170,7 @@ $id = $_GET["id"];
 
                                         var htmlEkspedisi =
                                             `
-                                        <span style='font-weight: bold'>${namaLengkapEkspedisi}</span><br>
+                                        <span style='font-weight: 900;font-size:1.4em;'>${namaLengkapEkspedisi}</span><br>
                                         ${$address}
                                         `;
                                         $("#customerExpedition").html(htmlEkspedisi);
