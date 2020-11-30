@@ -178,6 +178,7 @@ include_once "01-header.php";
             custID: $('#inputIDCust').val(),
             daerah: $('#daerahCust').val(),
             ketSPK: $('#titleDesc').val(),
+            keteranganTambahan: '',
             item: new Array()
         }
         localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));

@@ -33,6 +33,8 @@ let daftarTato = new Array();
 let daftarJahit = new Array();
 let daftarJapstyle = new Array();
 
+var daftarKeteranganTambahanSPK = new Array();
+
 function initSPK () {
     $.ajax({
         type: "POST",
@@ -71,6 +73,7 @@ function initSPK () {
                     daftarTglSrjalan.push(dataItem.tgl_surat_jalan);
                     daftarHargaTotal.push(dataItem.harga);
                     daftarKoliSPK.push(dataItem.koli);
+                    daftarKeteranganTambahanSPK.push(dataItem.keterangan);
 
                 }
                 console.log('daftarIDSPK: ' + daftarIDSPK);
@@ -327,7 +330,8 @@ function initSPK () {
                         ekspedisi: daftarEkspedisi[k],
                         hargaTotalSPK: daftarHargaTotal[k],
                         hargaItemSPK: daftarHargaItemSPK[k],
-                        koli: daftarKoliSPK[k]
+                        koli: daftarKoliSPK[k],
+                        keteranganTambahan: daftarKeteranganTambahanSPK[k]
                     }
                     jsonSPK.push(jsonSPKItem);
                 }

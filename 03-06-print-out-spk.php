@@ -82,9 +82,10 @@ include_once '01-header.php';
         }
 
         jumlahTotalItem = jumlahTotalItem + parseFloat(spkItem.jumlah);
+    }
 
-        htmlTable = htmlTable +
-            `
+    htmlTable = htmlTable +
+        `
         <tr>
             <td colspan='2' style='font-weight: bold; text-align: right;'>
                 Total
@@ -92,10 +93,9 @@ include_once '01-header.php';
             </td>
             <td style='font-weight: bold;'>${jumlahTotalItem}</td>
         </tr>
-        `
-    }
+        </table>
+        `;
 
-    htmlTable = htmlTable + '</table>';
 
     $('#divTableToPrint').html(htmlTable);
     document.getElementById('goToMainMenu').addEventListener('click', event => {

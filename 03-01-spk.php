@@ -33,7 +33,7 @@ include_once "01-header.php";
     initSPK();
     daftarSPK();
 
-    async function daftarSPK() {
+    function daftarSPK() {
         let i = 0;
         console.log('function dafarSPK dijalankan.');
         console.log('daftarIDSPK: ' + daftarIDSPK);
@@ -94,6 +94,7 @@ include_once "01-header.php";
                 <input type='hidden' name='tglSelesai' value='${daftarTglSelesai[i]}'>
                 <input type='hidden' name='ketSPK' value='${daftarKetSPK[i]}'>
                 <input type='hidden' name='jmlTotal' value='${daftarJumlahTotalSPK[i]}'>
+                <input type='hidden' name='keteranganTambahan' value='${daftarKeteranganTambahanSPK[i]}'>
             `;
             for (let j = 0; j < daftarNamaProdukEachSPK[i].length; j++) {
                 htmlItemsEachSPK = htmlItemsEachSPK +

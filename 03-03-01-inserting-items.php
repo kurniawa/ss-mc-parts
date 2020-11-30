@@ -14,6 +14,8 @@ if (isset($_POST['SPKID'])) {
     $tglSelesai = $_POST["tglSelesai"];
     $ketSPK = $_POST["ketSPK"];
     $jmlTotal = $_POST["jmlTotal"];
+    $keteranganTambahan = $_POST["keteranganTambahan"];
+
     $SPKItem = [];
     $jmlItem = array();
     $descEachItem = array();
@@ -98,6 +100,8 @@ if (isset($_POST['SPKID'])) {
     $japstyle = 'none';
     $tipe = 'none';
     $hargaItem = 'none';
+
+    $keteranganTambahan = "none";
 }
 
 include_once "01-header.php";
@@ -196,6 +200,11 @@ include_once "01-header.php";
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
     <input id="inputHargaTotalSPK" type="hidden">
 
+    <div id="divKeteranganTambahan" class="mt-1em">
+        <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='removeKeteranganTambahan();'></span></div>
+        <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc" id="taKeteranganTambahan" placeholder="Keterangan"></textarea>
+    </div>
+
     <div id="divJmlTotal" class="text-right">
         <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
         <div class="font-weight-bold color-red font-size-1_5em">Total</div>
@@ -230,6 +239,10 @@ include_once "01-header.php";
     </div>
     <div id="divBtnHideEditOptItemSPK" class="text-center">
         <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
+    </div>
+
+    <div id="boxKeteranganTambahan" class="position-fixed bottom-5em d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='showKeteranganTambahan();'>
+        + Ktrgn Tambahan
     </div>
 
     <div id="btnProsesSPK" class="position-fixed bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
@@ -295,6 +308,8 @@ include_once "01-header.php";
     $('.divThreeDotMenuContent').hide();
     $('.threeDotMenu').css('display', 'none'); // -> untuk new SPK
     $('.productType').hide();
+    $('#boxKeteranganTambahan').hide();
+    $('#divKeteranganTambahan').hide();
     $('#btnProsesSPK').hide();
     $('#divJmlTotal').hide();
     $('#divBtnSPKSelesai').hide();
@@ -322,6 +337,8 @@ include_once "01-header.php";
     let japstyle = 'none';
     let tipe = 'none';
     let hargaItem = 'none';
+
+    var keteranganTambahan = 'none';
 
     let newSPK;
     let SPKBefore;
@@ -369,6 +386,13 @@ include_once "01-header.php";
         // deklarasi awal variabel-variable yang di send melalui post
         $('#btnProsesSPK').hide();
         $('#divBtnSPKSelesai').show();
+
+        if ($('#divKeteranganTambahan').css('display') === 'none') {
+            $('#boxKeteranganTambahan').show();
+        } else {
+            $('#boxKeteranganTambahan').hide();
+        }
+
         $('.threeDotMenu').css('display', 'grid');
         SPKID = <?= json_encode($SPKID) ?>;
         custName = <?= json_encode($custName) ?>;
@@ -392,6 +416,8 @@ include_once "01-header.php";
         tipe = <?= json_encode($tipe); ?>;
         hargaItem = <?= json_encode($hargaItem); ?>;
 
+        keteranganTambahan = <?= json_encode($keteranganTambahan); ?>;
+
         console.log('SPKitem:');
         console.log(SPKItem);
         console.log(jmlItem);
@@ -401,6 +427,7 @@ include_once "01-header.php";
         $('#divTglPembuatan').html(formatDate(tglPembuatan));
         $('#divSPKCustomer').html(`${custName} - ${daerah}`);
         $('#divTitleDesc').html(ketSPK);
+        $('#taKeteranganTambahan').html(keteranganTambahan);
 
         let dataSPK = localStorage.getItem('dataSPKToEdit');
         console.log(dataSPK);
@@ -413,14 +440,16 @@ include_once "01-header.php";
             tglPembuatan = dataSPK.tglPembuatan;
             daerah = dataSPK.daerah;
             ketSPK = dataSPK.ketSPK;
+            keteranganTambahan = dataSPK.keteranganTambahan;
 
             $('#divTglPembuatan').html(formatDate(tglPembuatan));
             $('#divSPKCustomer').html(custName + ' - ' + daerah);
             $('#divTitleDesc').html(ketSPK);
+            $('#taKeteranganTambahan').html(keteranganTambahan);
 
             let beda = 'tidak';
             let namaKeyItem = ['bahan', 'desc', 'hargaItem', 'hargaPcs', 'jahit', 'japstyle', 'jumlah', 'logo', 'namaLengkap', 'tato', 'tipe', 'ukuran', 'varia'];
-            if (dataSPK.item.length === SPKBefore.item.length) {
+            if (dataSPK.item.length === SPKBefore.item.length || dataSPK.keteranganTambahan !== $('#taKeteranganTambahan').val()) {
 
                 for (let i = 0; i < dataSPK.item.length; i++) {
                     for (let k = 0; k < namaKeyItem.length; k++) {
@@ -429,6 +458,10 @@ include_once "01-header.php";
                             beda = 'ya';
                         }
                     }
+                }
+
+                if (dataSPK.keteranganTambahan !== $('#taKeteranganTambahan').val()) {
+                    beda = 'ya';
                 }
 
                 if (beda === 'ya') {
@@ -467,7 +500,8 @@ include_once "01-header.php";
                 tglPembuatan: tglPembuatan,
                 tglSelesai: tglSelesai,
                 ketSPK: ketSPK,
-                mode: 'edit'
+                mode: 'edit',
+                keteranganTambahan: keteranganTambahan
             };
 
             let SPKItems = new Array();
@@ -630,6 +664,7 @@ include_once "01-header.php";
             tglPembuatan: tglPembuatan,
             ketSPK: ketSPK,
             id: SPKID,
+            keteranganTambahan: keteranganTambahan,
             item: itemToPrint
         }
 
@@ -659,6 +694,7 @@ include_once "01-header.php";
         $('#divTglPembuatan').html(newSPK.tglPembuatan);
         $('#divSPKCustomer').html(newSPK.custName + '-' + newSPK.daerah);
         $('#divTitleDesc').html(newSPK.ketSPK);
+        $('#taKeteranganTambahan').val(newSPK.keteranganTambahan);
 
         console.log(newSPK.item);
         if (newSPK.item === undefined || newSPK.item.length == 0) {
@@ -696,18 +732,24 @@ include_once "01-header.php";
 
             // kita jumlah harga semua item untuk satu SPK
             totalHarga = totalHarga + parseFloat(item.hargaItem);
-            totalJumlahItem = totalJumlahItem + item.jumlah;
+            totalJumlahItem = totalJumlahItem + parseFloat(item.jumlah);
             i++;
         }
         $('#inputHargaTotalSPK').val(totalHarga);
         $('#divItemList').html(htmlItemList);
         $('#btnProsesSPK').show();
 
-        if ($jmlTotalSPK !== 0) {
+        if ($('#divKeteranganTambahan').css('display') === 'none') {
+            $('#boxKeteranganTambahan').show();
+        } else {
+            $('#boxKeteranganTambahan').hide();
+        }
+
+        if (totalJumlahItem !== 0) {
             $('#divJmlTotal2').html(totalJumlahItem);
             $('#divJmlTotal').show();
 
-            console.log('$jmlTotalSPK: ' + $jmlTotalSPK);
+            console.log('$jmlTotalSPK: ' + totalJumlahItem);
 
         }
     }
@@ -716,6 +758,11 @@ include_once "01-header.php";
         console.log('SPKNo: ' + newSPK.id);
         let result = [];
         let totalHarga = $('#inputHargaTotalSPK').val();
+
+        // cek apakah ada keterangan tambahan
+        if ($('#taKeteranganTambahan') !== null || $('#taKeteranganTambahan') !== '') {
+            newSPK.keteranganTambahan = $('#taKeteranganTambahan').val();
+        }
 
         // cek dulu apakah ini edit SPK yang udah ada, atau mau insert SPK baru
         $.ajax({
@@ -760,8 +807,8 @@ include_once "01-header.php";
                         data: {
                             type: 'insert',
                             table: 'spk',
-                            column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga'],
-                            value: [newSPK.id, newSPK.tglPembuatan, newSPK.ketSPK, newSPK.custID, totalHarga],
+                            column: ['id', 'tgl_pembuatan', 'ket_judul', 'id_pelanggan', 'harga', 'keterangan'],
+                            value: [newSPK.id, newSPK.tglPembuatan, newSPK.ketSPK, newSPK.custID, totalHarga, newSPK.keteranganTambahan],
                             dateIndex: 1,
                             idToReturn: newSPK.id
                         },
@@ -1066,6 +1113,16 @@ include_once "01-header.php";
                 }
             }
         });
+    }
+
+    function showKeteranganTambahan() {
+        $('#boxKeteranganTambahan').hide();
+        $('#divKeteranganTambahan').show();
+    }
+
+    function removeKeteranganTambahan() {
+        $('#boxKeteranganTambahan').show();
+        $('#divKeteranganTambahan').hide();
     }
 </script>
 
