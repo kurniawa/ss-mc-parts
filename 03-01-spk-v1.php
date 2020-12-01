@@ -1,21 +1,5 @@
 <?php
-
-include_once "01-config.php";
 include_once "01-header.php";
-
-$query_all_spk = "SELECT * FROM spk ORDER BY tgl_pembuatan DESC";
-$res_all_spk = mysqli_query($con, $query_all_spk);
-
-if (!$res_all_spk) {
-    echo $query_all_spk . ": FAILED! " . mysqli_error($con);
-    die;
-}
-
-if (mysqli_num_rows($res_all_spk) < 0) {
-    echo $query_all_spk . ": NOT FOUND! ";
-    die;
-}
-
 ?>
 
 <header class="header grid-2-auto">
@@ -43,45 +27,6 @@ if (mysqli_num_rows($res_all_spk) < 0) {
 </div>
 
 <div id="div-daftar-spk" class='ml-0_5em mr-0_5em'>
-    <?php
-
-    while ($row = mysqli_fetch_assoc($res_all_spk)) {
-        $id_pelanggan = $row['id_pelanggan'];
-        $query_select_pelanggan = "SELECT * FROM pelanggan WHERE id=$id_pelanggan";
-
-        $htmlForm = "<form method='POST' action='03-03-01-inserting-items.php' class='pb-0_5em pt-0_5em bb-1px-solid-grey'>
-                    <div class='grid-5-9_45_25_18_5'>
-                    <div class='circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: orange'>" . $row["singkatan"] . "</div>
-                    <div>daftarNamaPelangganSPK[i] - ${daftarDaerahPelangganSPK[i]}</div>
-                    <div class='grid-3-auto'>
-                    <div class='grid-1-auto justify-items-center ${warnaTglPembuatan} color-white b-radius-5px w-3_5em'>
-                    <div class='font-size-2_5em'>${getDay}</div><div>${getMonth}-${subGetYear}</div>
-                    </div>
-                    -
-                    <div class='grid-1-auto justify-items-center ${warnaTglSls} color-white b-radius-5px w-3_5em'>
-                    <div class='font-size-2_5em'>${getDaySls}</div><div>${getMonthSls}-${subGetYearSls}</div>
-                    </div>
-                    </div>
-                    <div class='grid-1-auto'>
-                    <div class='color-green justify-self-right font-size-1_2em font-weight-bold'>${daftarJumlahTotalSPK[i]}</div>
-                    <div class='color-grey justify-self-right'>Jumlah</div>
-                    </div>
-                    <div class='justify-self-center'><img class='w-0_7em' src='img/icons/dropdown.svg' onclick='elementToToggle(${elementToToggle});'></div>
-                    </div> + htmlHiddenInput +
-                // DROPDOWN
-                <div id='divSPKItems-${i}' class='p-0_5em b-1px-solid-grey' style='display: none'>
-                <div class='font-weight-bold color-grey'>No. ${daftarIDSPK[i]}</div>
-                <div class='grid-2-auto'>` + htmlItemsEachSPK + `</div>
-                <div class='text-right'>
-                <button type='submit' class='d-inline-block bg-color-orange-1 pl-1em pr-1em b-radius-50px' style='border: none'>
-                Lebih Detail >>
-                </button>
-                </div>
-                </div>
-                </form>";
-    }
-
-    ?>
 </div>
 
 <script>
