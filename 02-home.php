@@ -1,19 +1,27 @@
 <?php
 include_once "01-header.php";
 
+$htmlErrorReport = "<div id='divErrorReport'>";
+$htmlSucceedReport = "<div id='divSuccedReport'>";
 // Create connection
 $conn = mysqli_connect("localhost", "root", "");
 // Check connection
 if (!$conn) {
-    die("Connection failed: " . mysqli_connect_error());
+    $htmlErrorReport = $htmlErrorReport . "Connection failed: " . mysqli_connect_error() . "<br><br>";
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Connection established!<br><br>";
 }
 
 // Create database
 $sql = "CREATE DATABASE mcparts";
 if (mysqli_query($conn, $sql)) {
-    echo "Database created successfully";
+    $htmlSucceedReport = $htmlSucceedReport . "Database created successfully<br><br>.";
 } else {
-    echo "Error creating database: " . mysqli_error($conn);
+    if (mysqli_error($conn) === "Can't create database 'mcparts'; database exists") {
+        $htmlSucceedReport = $htmlSucceedReport . mysqli_error($conn) . "<br><br>";
+    } else {
+        $htmlErrorReport = $htmlErrorReport . mysqli_error($conn) . "<br><br>";
+    }
 }
 
 mysqli_close($conn);
@@ -25,26 +33,27 @@ $query_cek_ekspedisi = "SELECT id FROM ekspedisi";
 $res_cek_ekspedisi = mysqli_query($con, $query_cek_ekspedisi);
 
 if (empty($res_cek_ekspedisi)) {
-    $query_create_ekspedisi = "CREATE TABLE `ekspedisi` (
-        `id` int(11) AUTO_INCREMENT PRIMARY KEY,
-        `nama` varchar(100) NOT NULL,
-        `bentuk` varchar(10) DEFAULT NULL,
-        `alamat` varchar(200) NOT NULL,
-        `kontak` varchar(45) DEFAULT NULL,
-        `keterangan` varchar(200) DEFAULT NULL
+    $query_create_ekspedisi = "CREATE TABLE ekspedisi (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        nama varchar(100) NOT NULL,
+        bentuk varchar(10) DEFAULT NULL,
+        alamat varchar(200) NOT NULL,
+        pulau_tujuan varchar(45) DEFAULT NULL,
+        daerah_tujuan varchar(45) DEFAULT NULL,
+        kontak varchar(45) DEFAULT NULL,
+        keterangan varchar(200) DEFAULT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
 
     $res_create_ekspedisi = mysqli_query($con, $query_create_ekspedisi);
 
     if (!$res_create_ekspedisi) {
-        echo $query_create_ekspedisi . " : FAILED! " . mysqli_error($con);
+        $htmlErrorReport = $htmlErrorReport . $query_create_ekspedisi . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport .  "Create table ekspedisi SUCCEED!<br><br>";
     }
     // INSERT INTO ekspedisi
-}
-
-if (!$res_cek_ekspedisi) {
-    echo $query_cek_ekspedisi . ": FAILED: " . mysqli_error($con);
-    die;
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table ekspedisi exist.<br><br>";
 }
 
 // ----- END -----
@@ -54,29 +63,27 @@ $query_cek_pelanggan = "SELECT id FROM pelanggan";
 $res_cek_pelanggan = mysqli_query($con, $query_cek_pelanggan);
 
 if (empty($res_cek_pelanggan)) {
-    $query_create_pelanggan = "CREATE TABLE `pelanggan` (
-        `id` int(11) AUTO_INCREMENT PRIMARY KEY,
-        `nama` varchar(100) NOT NULL,
-        `alamat` varchar(200) DEFAULT NULL,
-        `pulau` varchar(20) NOT NULL,
-        `daerah` varchar(20) NOT NULL,
-        `kontak` varchar(45) DEFAULT NULL,
-        `keterangan` varchar(200) DEFAULT NULL,
-        `singkatan` varchar(3) DEFAULT NULL,
-        `id_reseller` int(11) DEFAULT NULL
+    $query_create_pelanggan = "CREATE TABLE pelanggan (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        nama varchar(100) NOT NULL,
+        alamat varchar(200) DEFAULT NULL,
+        pulau varchar(20) NOT NULL,
+        daerah varchar(20) NOT NULL,
+        kontak varchar(45) DEFAULT NULL,
+        keterangan varchar(200) DEFAULT NULL,
+        singkatan varchar(3) DEFAULT NULL,
+        id_reseller int(11) DEFAULT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
 
+    $res_create_pelanggan = mysqli_query($con, $query_create_pelanggan);
+    if (!$res_create_pelanggan) {
+        $htmlErrorReport = $htmlErrorReport . $query_create_pelanggan . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport .  "Create table pelanggan SUCCEED!<br><br>";
+    }
     // INSERT INTO
-}
-
-if (!$res_cek_pelanggan) {
-    echo $query_cek_pelanggan . ": FAILED: " . mysqli_error($con);
-    die;
-}
-
-if (mysqli_num_rows($res_cek_pelanggan) < 0) {
-    echo "NOT FOUND!";
-    die;
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table pelanggan exist.<br><br>";
 }
 
 // ----- END -----
@@ -87,22 +94,36 @@ $query_cek_pelanggan_use_ekspedisi = "SELECT id FROM pelanggan_use_ekspedisi";
 $res_cek_pelanggan_use_ekspedisi = mysqli_query($con, $query_cek_pelanggan_use_ekspedisi);
 
 if (empty($res_cek_pelanggan_use_ekspedisi)) {
-    $query_create_pelanggan = "CREATE TABLE `pelanggan_use_ekspedisi` (
-        `id` int(11) AUTO_INCREMENT PRIMARY KEY,
-        `id_ekspedisi` int(11) NOT NULL,
-        `id_pelanggan` int(11) NOT NULL,
-        `ekspedisi_transit` char(1) NOT NULL DEFAULT 'n',
-        `ekspedisi_utama` char(1) NOT NULL DEFAULT 'n',
-        ADD CONSTRAINT `pelanggan_use_ekspedisi_ibfk_1` FOREIGN KEY (`id_ekspedisi`) REFERENCES `ekspedisi` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        ADD CONSTRAINT `pelanggan_use_ekspedisi_ibfk_2` FOREIGN KEY (`id_pelanggan`) REFERENCES `pelanggan` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-      )ENGINE=InnoDB DEFAULT CHARSET=latin1";
+    $query_create_pelanggan_use_ekspedisi = "CREATE TABLE pelanggan_use_ekspedisi (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        id_ekspedisi int(11) NOT NULL,
+        id_pelanggan int(11) NOT NULL,
+        ekspedisi_transit char(1) NOT NULL DEFAULT 'n',
+        ekspedisi_utama char(1) NOT NULL DEFAULT 'n'
+      )ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
+    $res_create_pelanggan_use_ekspedisi = mysqli_query($con, $query_create_pelanggan_use_ekspedisi);
+    if (!$res_create_pelanggan_use_ekspedisi) {
+        $htmlErrorReport = $htmlErrorReport . $query_create_pelanggan_use_ekspedisi . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table pelanggan_use_ekspedisi SUCCEED!<br><br>";
+
+        $query_fk_pelanggan_use_ekspedisi = "
+        ALTER TABLE pelanggan_use_ekspedisi
+        ADD CONSTRAINT pelanggan_use_ekspedisi_ibfk_1 FOREIGN KEY (id_ekspedisi) REFERENCES ekspedisi (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT pelanggan_use_ekspedisi_ibfk_2 FOREIGN KEY (id_pelanggan) REFERENCES pelanggan (id) ON DELETE CASCADE ON UPDATE CASCADE;";
+
+        $res_fk_pelanggan_use_ekspedisi = mysqli_query($con, $query_fk_pelanggan_use_ekspedisi);
+
+        if (!$res_fk_pelanggan_use_ekspedisi) {
+            $htmlErrorReport = $htmlErrorReport . $query_fk_pelanggan_use_ekspedisi . " : FAILED!" . mysqli_error($con) . "<br><br>";
+        } else {
+            $htmlSucceedReport = $htmlSucceedReport . $query_fk_pelanggan_use_ekspedisi . " : SUCCEED!<br><br>";
+        }
+    }
     // INSERT INTO pelanggan_use_ekspedisi
-}
-
-if (!$res_cek_pelanggan_use_ekspedisi) {
-    echo $query_cek_pelanggan_use_ekspedisi . ": FAILED: " . mysqli_error($con);
-    die;
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table pelanggan_use_ekspedisi exist.<br><br>";
 }
 
 // ----- END -----
@@ -113,20 +134,23 @@ $query_cek_produk = "SELECT id FROM produk";
 $res_cek_produk = mysqli_query($con, $query_cek_produk);
 
 if (empty($res_cek_produk)) {
-    $query_create_pelanggan = "CREATE TABLE `produk` (
-        `id` int(11) AUTO_INCREMENT PRIMARY KEY,
-        `id_ekspedisi` int(11) NOT NULL,
-        `id_pelanggan` int(11) NOT NULL,
-        `ekspedisi_transit` char(1) NOT NULL DEFAULT 'n',
-        `ekspedisi_utama` char(1) NOT NULL DEFAULT 'n'
+    $query_create_produk = "CREATE TABLE produk (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        id_ekspedisi int(11) NOT NULL,
+        id_pelanggan int(11) NOT NULL,
+        ekspedisi_transit char(1) NOT NULL DEFAULT 'n',
+        ekspedisi_utama char(1) NOT NULL DEFAULT 'n'
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
 
+    $res_create_produk = mysqli_query($con, $query_create_produk);
+    if (!$res_create_produk) {
+        $htmlErrorReport = $htmlErrorReport .  $query_create_produk . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table produk SUCCEED!<br><br>";
+    }
     // INSERT INTO produk
-}
-
-if (!$res_cek_produk) {
-    echo $query_cek_produk . ": FAILED: " . mysqli_error($con);
-    die;
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table produk exist.<br><br>";
 }
 
 // ----- END -----
@@ -134,34 +158,33 @@ if (!$res_cek_produk) {
 // TABEL SPK
 $query_cek_spk = "SELECT id FROM spk";
 $res_cek_spk = mysqli_query($con, $query_cek_spk);
-if (empty($res)) {
-    $query_create_spk = "CREATE TABLE `spk` (
-        `id` int(11) AUTO_INCREMENT PRIMARY KEY,
-        `no_spk` varchar(45) NOT NULL,
-        `tgl_pembuatan` date NOT NULL,
-        `tgl_selesai` date DEFAULT NULL,
-        `ket_judul` varchar(200) DEFAULT NULL,
-        `catatan_kaki` varchar(200) DEFAULT NULL,
-        `id_pelanggan` int(11) DEFAULT NULL,
-        `no_nota` varchar(45) DEFAULT NULL,
-        `tgl_nota` date DEFAULT NULL,
-        `no_surat_jalan` varchar(45) DEFAULT NULL,
-        `tgl_surat_jalan` date DEFAULT NULL,
-        `koli` int(11) DEFAULT NULL,
-        `harga` int(11) DEFAULT NULL
+if (empty($res_cek_spk)) {
+    $query_create_spk = "CREATE TABLE spk (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        no_spk varchar(45) NOT NULL,
+        tgl_pembuatan date NOT NULL,
+        tgl_selesai date DEFAULT NULL,
+        ket_judul varchar(200) DEFAULT NULL,
+        catatan_kaki varchar(200) DEFAULT NULL,
+        id_pelanggan int(11) DEFAULT NULL,
+        no_nota varchar(45) DEFAULT NULL,
+        tgl_nota date DEFAULT NULL,
+        no_surat_jalan varchar(45) DEFAULT NULL,
+        tgl_surat_jalan date DEFAULT NULL,
+        koli int(11) DEFAULT NULL,
+        harga int(11) DEFAULT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
+
     $res_create_spk = mysqli_query($con, $query_create_spk);
+    if (!$res_create_spk) {
+        $htmlErrorReport = $htmlErrorReport . $query_create_spk . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table spk SUCCEED!<br><br>";
+    }
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table spk exist.<br><br>";
 }
 
-if (!$res_cek_spk) {
-    echo $query_cek_spk . ": FAILED: " . mysqli_error($con);
-    die;
-}
-
-if (mysqli_num_rows($res_cek_spk) < 0) {
-    echo "NOT FOUND!";
-    die;
-}
 // ----- END -----
 
 // TABEL spk_contains_produk
@@ -169,28 +192,42 @@ if (mysqli_num_rows($res_cek_spk) < 0) {
 $query_cek_spk_contains_produk = "SELECT id FROM spk_contains_produk";
 $res_cek_spk_contains_produk = mysqli_query($con, $query_cek_spk_contains_produk);
 if (empty($res_cek_spk_contains_produk)) {
-    $query_create_spk_contains_produk = "CREATE TABLE `spk_contains_produk` (
-        `id` int(11) NOT NULL,
-        `id_spk` int(11) NOT NULL,
-        `id_produk` int(11) NOT NULL,
-        `ktrg` varchar(256) DEFAULT NULL,
-        `jumlah` int(11) DEFAULT NULL,
-        `harga_item` int(11) DEFAULT NULL,
-        `koreksi_harga` int(11) DEFAULT NULL,
-        ADD CONSTRAINT `spk_contains_produk_ibfk_1` FOREIGN KEY (`id_spk`) REFERENCES `spk` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-        ADD CONSTRAINT `spk_contains_produk_ibfk_2` FOREIGN KEY (`id_produk`) REFERENCES `produk` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-      )ENGINE=InnoDB DEFAULT CHARSET=latin1";
-    $res_create_spk_contains_produk = mysqli_query($con, $query_create_spk_contains_produk);
-}
+    $query_create_spk_contains_produk = "CREATE TABLE spk_contains_produk (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        id_spk int(11) NOT NULL,
+        id_produk int(11) NOT NULL,
+        ktrg varchar(256) DEFAULT NULL,
+        jumlah int(11) DEFAULT NULL,
+        harga_item int(11) DEFAULT NULL,
+        koreksi_harga int(11) DEFAULT NULL
+      )ENGINE=InnoDB DEFAULT CHARSET=latin1;";
 
-if (!$res_cek_spk_contains_produk) {
-    echo $query_cek_spk_contains_produk . ": FAILED: " . mysqli_error($con);
-    die;
+    $res_create_spk_contains_produk = mysqli_query($con, $query_create_spk_contains_produk);
+    if (!$res_create_spk_contains_produk) {
+        $htmlErrorReport = $htmlErrorReport . $query_create_spk_contains_produk . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table spk_contains_produk SUCCEED!<br><br>";
+        $query_fk_spk_contains_produk = "
+        ALTER TABLE spk_contains_produk
+        ADD CONSTRAINT spk_contains_produk_ibfk_1 FOREIGN KEY (id_spk) REFERENCES spk (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT spk_contains_produk_ibfk_2 FOREIGN KEY (id_produk) REFERENCES produk (id) ON DELETE CASCADE ON UPDATE CASCADE;";
+
+        $res_fk_spk_contains_produk = mysqli_query($con, $query_fk_spk_contains_produk);
+
+        if (!$res_fk_spk_contains_produk) {
+            $htmlErrorReport = $htmlErrorReport . $query_fk_spk_contains_produk . " : FAILED!<br>" . mysqli_error($con) . "<br><br>";
+        } else {
+            $htmlSucceedReport = $htmlSucceedReport . $query_fk_spk_contains_produk . " : SUCCEED!<br><br>";
+        }
+    }
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table spk_contains_produk exist.<br><br>";
 }
 
 // ----- END -----
 
-
+$htmlErrorReport = $htmlErrorReport . "</div>";
+$htmlSucceedReport = $htmlSucceedReport . "</div>";
 
 ?>
 <div id="homeScreen">
@@ -259,6 +296,10 @@ if (!$res_cek_spk_contains_produk) {
         </div>
     </div>
 </div>
+
+<div id="containerErrorReport"></div>
+
+<div id="containerSucceedReport"></div>
 <style>
     body {
         background-color: #ffb800;
@@ -284,9 +325,41 @@ if (!$res_cek_spk_contains_produk) {
         object-fit: cover;
         width: 3em;
     }
+
+    #containerErrorReport {
+        margin: 1em;
+        padding: 1em;
+        border: 2px solid red;
+        background: rgba(255, 0, 0, 0.5);
+    }
+
+    #containerSucceedReport {
+        margin: 1em;
+        padding: 1em;
+        border: 2px solid green;
+        background: rgba(63, 191, 63, 0.5);
+    }
 </style>
 
 <script>
+    // setTimeout(() => {}, 1000);
+    var htmlErrorReport = `<?= $htmlErrorReport; ?>`;
+    var htmlSucceedReport = `<?= $htmlSucceedReport; ?>`;
+
+    $('#containerErrorReport').html(htmlErrorReport);
+    $('#containerSucceedReport').html(htmlSucceedReport);
+
+    if ($('#divErrorReport').html() === '') {
+        $('#containerErrorReport').hide();
+    } else {
+        $('#containerErrorReport').show();
+    }
+
+    if ($('#divSucceedReport').html() === '') {
+        $('#containerSucceedReport').hide();
+    } else {
+        $('#containerSucceedReport').show();
+    }
     initSPK();
 </script>
 <?php

@@ -15,33 +15,42 @@ include_once "01-header.php";
     </div>
 </div>
 
-<div class="ml-1em mr-1em mt-2em">
-    <div class="grid-2-auto grid-column-gap-1em">
-        <div class="bb-0_5px-grey pb-1em">
-            <select class="b-none" name="bentuk-perusahaan" id="bentukPerusahaan" required>
-                <option value="" selected disabled>Bentuk</option>
-                <option value="">-</option>
-                <option value="PT">PT</option>
-                <option value="CV">CV</option>
-            </select>
+<form action="05-03-ekspedisi-baru-2.php" method="POST" onsubmit="formValidation();">
+    <div class="ml-1em mr-1em mt-2em">
+        <div class="grid-2-auto grid-column-gap-1em">
+            <div class="bb-0_5px-grey pb-1em">
+                <select class="b-none" name="bentuk-perusahaan" id="bentukPerusahaan" required>
+                    <option value="" selected disabled>Bentuk</option>
+                    <option value="">-</option>
+                    <option value="PT">PT</option>
+                    <option value="CV">CV</option>
+                </select>
+            </div>
+            <input id="nama-ekspedisi" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
         </div>
-        <input id="nama" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
+
+        <textarea id="alamat" class="mt-1em pt-1em pl-1em" name="alamat-ekspedisi" placeholder="Alamat"></textarea>
+        <div class="mt-1em">
+            <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" name="kontak-ekspedisi">
+        </div>
+        <br>
+        <label for="divTujuanEkspedisi">Tujuan Ekspedisi:</label>
+        <div id="divTujuanEkspedisi" class="mt-1em grid-2-auto grid-column-gap-1em">
+            <input id="pulauTujuan" class="input-1 pb-1em" type="text" placeholder="Pulau Tujuan Ekspedisi" name="pulau-tujuan">
+            <input id="daerahTujuan" class="input-1 pb-1em" type="text" placeholder="Daerah Tujuan Ekspedisi" name="daerah-tujuan">
+        </div>
+        <textarea id="keterangan" class="mt-1em pt-1em pl-1em" name="keterangan" placeholder="Keterangan lain (opsional)"></textarea>
+    </div>
+    <div id="peringatan" class="d-none color-red p-1em">
+
+    </div>
+    <div class="m-1em">
+        <button type="submit" class="h-4em bg-color-orange-2 grid-1-auto w-100">
+            <span class="justify-self-center font-weight-bold">Input Ekspedisi Baru</span>
+        </button>
     </div>
 
-    <textarea id="alamat" class="mt-1em pt-1em pl-1em" name="alamat" placeholder="Alamat"></textarea>
-    <div class="mt-1em">
-        <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak">
-    </div>
-    <textarea id="keterangan" class="mt-1em pt-1em pl-1em" name="keterangan" placeholder="Keterangan lain (opsional)"></textarea>
-</div>
-<div id="peringatan" class="d-none color-red p-1em">
-
-</div>
-<div>
-    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="inputEkspedisiBaru();">
-        <span class="justify-self-center font-weight-bold">Input Ekspedisi Baru</span>
-    </div>
-</div>
+</form>
 
 <!-- <div id="closingArea" class="closingArea" style="display: none;"></div>
 <div class="lightBox" style="display:none;">
@@ -75,6 +84,47 @@ include_once "01-header.php";
 </style>
 
 <script>
+    // Just use a simple button instead of a submit button. And call a JavaScript function to handle form submit:
+
+    // <input type="button" name="submit" value="submit" onclick="submit_form();"/>
+    // Function within a script tag:
+
+    // function submit_form() {
+    //     if (conditions) {
+    //         document.forms['myform'].submit();
+    //     }
+    //     else {
+    //         returnToPreviousPage();
+    //     }
+    // }
+
+    function formValidation() {
+        $nama = $("#nama").val();
+        $alamat = $("#alamat").val();
+        $peringatan = $("#peringatan");
+
+        if ($nama === "") {
+            $peringatan.html("Nama Ekspedisi harus diisi!");
+            if ($peringatan.css("display") == "none") {
+                $peringatan.show();
+            }
+            alert("Nama Ekspedisi harus diisi!");
+            history.back();
+            return false;
+        }
+
+        if ($alamat === '') {
+            $peringatan.html("Alamat Ekspedisi harus diisi!");
+            if ($peringatan.css("display") == "none") {
+                $peringatan.show();
+            }
+            history.back();
+            return false;
+        }
+
+        return true;
+    }
+
     function inputEkspedisiBaru() {
         $bentuk = $("#bentukPerusahaan").val();
         $nama = $("#nama").val();

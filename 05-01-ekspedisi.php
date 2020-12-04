@@ -1,5 +1,33 @@
 <?php
 include_once "01-header.php";
+
+// GET EKSPEDISI
+include_once "01-config.php";
+
+$query_get_ekspedisi = "SELECT * FROM ekspedisi ORDER BY nama ASC";
+$res_get_ekspedisi = mysqli_query($con, $query_get_ekspedisi);
+
+$htmlLogError = "<div class='logError'>";
+$htmlLogSucceed = "<div class='logSucceed'>";
+
+$continue = "";
+$listEkspedisi = array();
+
+if (!$res_get_ekspedisi) {
+    $htmlLogError = $htmlLogError . $query_get_ekspedisi . " FAILED! " . mysqli_error($con) . "<br><br>";
+} else {
+    $htmlLogSucceed = $htmlLogSucceed . $query_get_ekspedisi . " SUCCEED!<br><br>";
+    $continue = "yes";
+
+    while ($row = mysqli_fetch_assoc($res_get_ekspedisi)) {
+        array_push($listEkspedisi, $row);
+    }
+
+    // var_dump($listEkspedisi);
+}
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogSucceed = $htmlLogSucceed . "</div>";
 ?>
 
 <header class="header grid-2-auto">
@@ -10,6 +38,10 @@ include_once "01-header.php";
         </a>
     </div>
 </header>
+
+<div class="divLogError"></div>
+
+<div class="divLogSucceed"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
@@ -30,40 +62,91 @@ include_once "01-header.php";
 </div>
 
 <script>
-    $.ajax({
-        type: "POST",
-        url: "05-02-get-ekspedisi.php",
-        async: false,
-        success: function(responseText) {
-            console.log(responseText);
-            responseText = JSON.parse(responseText);
-            console.log(responseText);
-            for (const ekspedisi of responseText) {
-                $newElement = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-solid-grey'>" +
-                    "<div class='grid-4-8-auto-auto-5'>" +
-                    "<div class='font-weight-bold'>" + ekspedisi.bentuk + "</div>" +
-                    "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
-                    "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
-                    "<div id='divDropdown-" + ekspedisi.id + "' class='justify-self-right' onclick='showDropDown(" + ekspedisi.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
-                    "</div>" +
-                    "<div id='divDetailDropDown-" + ekspedisi.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogSucceed = `<?= $htmlLogSucceed; ?>`;
 
-                    "<div class='grid-2-10-auto'>" +
-                    "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
-                    "<div>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
-                    "</div>" +
+    $('.divLogError').html(htmlLogError);
+    $('.divLogSucceed').html(htmlLogSucceed);
 
-                    "<div class='grid-1-auto justify-items-right mt-1em'>" +
-                    "<a href='05-05-detail-ekspedisi.php?id=" + ekspedisi.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
-                    "</div>" +
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
 
-                    "</div>" +
-                    "</div>" +
-                    "<div class='d-none alamat justify-self-right text-right'>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>";
-                $("#divDaftarEkspedisi").append($newElement);
-            }
+    if ($('.logSucceed').html() === '') {
+        $('.divLogSucceed').hide();
+    } else {
+        $('.divLogSucceed').show();
+    }
+
+    var listEkspedisi = `<?= json_encode($listEkspedisi); ?>`;
+
+    listEkspedisi = JSON.parse(listEkspedisi);
+
+    if (listEkspedisi === undefined || listEkspedisi.length == 0) {
+        console.log("Tidak ada list ekspedisi di database!");
+    } else {
+        for (const ekspedisi of responseText) {
+            $htmlEkspedisi = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-solid-grey'>" +
+                "<div class='grid-4-8-auto-auto-5'>" +
+                "<div class='font-weight-bold'>" + ekspedisi.bentuk + "</div>" +
+                "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
+                "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
+                "<div id='divDropdown-" + ekspedisi.id + "' class='justify-self-right' onclick='showDropDown(" + ekspedisi.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                "</div>" +
+                "<div id='divDetailDropDown-" + ekspedisi.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+
+                "<div class='grid-2-10-auto'>" +
+                "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+                "<div>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+                "</div>" +
+
+                "<div class='grid-1-auto justify-items-right mt-1em'>" +
+                "<a href='05-05-detail-ekspedisi.php?id=" + ekspedisi.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+                "</div>" +
+
+                "</div>" +
+                "</div>" +
+                "<div class='d-none alamat justify-self-right text-right'>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>";
+            $("#divDaftarEkspedisi").append($htmlEkspedisi);
         }
-    });
+    }
+
+    // $.ajax({
+    //     type: "POST",
+    //     url: "05-02-get-ekspedisi.php",
+    //     async: false,
+    //     success: function(responseText) {
+    //         console.log(responseText);
+    //         responseText = JSON.parse(responseText);
+    //         console.log(responseText);
+    //         for (const ekspedisi of responseText) {
+    //             $newElement = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-solid-grey'>" +
+    //                 "<div class='grid-4-8-auto-auto-5'>" +
+    //                 "<div class='font-weight-bold'>" + ekspedisi.bentuk + "</div>" +
+    //                 "<div class='font-weight-bold'>" + ekspedisi.nama + "</div>" +
+    //                 "<div class='font-weight-bold justify-self-right color-blue-purple'>" + ekspedisi.kontak + "</div>" +
+    //                 "<div id='divDropdown-" + ekspedisi.id + "' class='justify-self-right' onclick='showDropDown(" + ekspedisi.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+    //                 "</div>" +
+    //                 "<div id='divDetailDropDown-" + ekspedisi.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+
+    //                 "<div class='grid-2-10-auto'>" +
+    //                 "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+    //                 "<div>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+    //                 "</div>" +
+
+    //                 "<div class='grid-1-auto justify-items-right mt-1em'>" +
+    //                 "<a href='05-05-detail-ekspedisi.php?id=" + ekspedisi.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+    //                 "</div>" +
+
+    //                 "</div>" +
+    //                 "</div>" +
+    //                 "<div class='d-none alamat justify-self-right text-right'>" + ekspedisi.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>";
+    //             $("#divDaftarEkspedisi").append($newElement);
+    //         }
+    //     }
+    // });
 </script>
 
 <style>
