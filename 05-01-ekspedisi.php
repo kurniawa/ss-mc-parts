@@ -8,7 +8,7 @@ $query_get_ekspedisi = "SELECT * FROM ekspedisi ORDER BY nama ASC";
 $res_get_ekspedisi = mysqli_query($con, $query_get_ekspedisi);
 
 $htmlLogError = "<div class='logError'>";
-$htmlLogSucceed = "<div class='logSucceed'>";
+$htmlLogOK = "<div class='logOK'>";
 
 $continue = "";
 $listEkspedisi = array();
@@ -16,7 +16,7 @@ $listEkspedisi = array();
 if (!$res_get_ekspedisi) {
     $htmlLogError = $htmlLogError . $query_get_ekspedisi . " FAILED! " . mysqli_error($con) . "<br><br>";
 } else {
-    $htmlLogSucceed = $htmlLogSucceed . $query_get_ekspedisi . " SUCCEED!<br><br>";
+    $htmlLogOK = $htmlLogOK . $query_get_ekspedisi . " SUCCEED!<br><br>";
     $continue = "yes";
 
     while ($row = mysqli_fetch_assoc($res_get_ekspedisi)) {
@@ -27,7 +27,7 @@ if (!$res_get_ekspedisi) {
 }
 
 $htmlLogError = $htmlLogError . "</div>";
-$htmlLogSucceed = $htmlLogSucceed . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
 ?>
 
 <header class="header grid-2-auto">
@@ -41,7 +41,7 @@ $htmlLogSucceed = $htmlLogSucceed . "</div>";
 
 <div class="divLogError"></div>
 
-<div class="divLogSucceed"></div>
+<div class="divLogOK"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
@@ -63,10 +63,10 @@ $htmlLogSucceed = $htmlLogSucceed . "</div>";
 
 <script>
     var htmlLogError = `<?= $htmlLogError; ?>`;
-    var htmlLogSucceed = `<?= $htmlLogSucceed; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
 
     $('.divLogError').html(htmlLogError);
-    $('.divLogSucceed').html(htmlLogSucceed);
+    $('.divLogOK').html(htmlLogOK);
 
     if ($('.logError').html() === '') {
         $('.divLogError').hide();
@@ -74,20 +74,18 @@ $htmlLogSucceed = $htmlLogSucceed . "</div>";
         $('.divLogError').show();
     }
 
-    if ($('.logSucceed').html() === '') {
-        $('.divLogSucceed').hide();
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
     } else {
-        $('.divLogSucceed').show();
+        $('.divLogOK').show();
     }
 
-    var listEkspedisi = `<?= json_encode($listEkspedisi); ?>`;
-
-    listEkspedisi = JSON.parse(listEkspedisi);
+    var listEkspedisi = <?= json_encode($listEkspedisi); ?>;
 
     if (listEkspedisi === undefined || listEkspedisi.length == 0) {
         console.log("Tidak ada list ekspedisi di database!");
     } else {
-        for (const ekspedisi of responseText) {
+        for (const ekspedisi of listEkspedisi) {
             $htmlEkspedisi = "<div class='ml-1em mr-1em pt-1em pb-1em bb-1px-solid-grey'>" +
                 "<div class='grid-4-8-auto-auto-5'>" +
                 "<div class='font-weight-bold'>" + ekspedisi.bentuk + "</div>" +

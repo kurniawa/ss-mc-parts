@@ -15,29 +15,29 @@ include_once "01-header.php";
     </div>
 </div>
 
-<form action="05-03-ekspedisi-baru-2.php" method="POST" onsubmit="formValidation();">
+<form action="05-03-ekspedisi-baru-2.php" method="POST">
     <div class="ml-1em mr-1em mt-2em">
         <div class="grid-2-auto grid-column-gap-1em">
             <div class="bb-0_5px-grey pb-1em">
-                <select class="b-none" name="bentuk-perusahaan" id="bentukPerusahaan" required>
+                <select class="b-none" name="bentuk_perusahaan" id="bentukPerusahaan">
                     <option value="" selected disabled>Bentuk</option>
                     <option value="">-</option>
                     <option value="PT">PT</option>
                     <option value="CV">CV</option>
                 </select>
             </div>
-            <input id="nama-ekspedisi" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi">
+            <input id="nama-ekspedisi" name="nama_ekspedisi" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi" required>
         </div>
 
-        <textarea id="alamat" class="mt-1em pt-1em pl-1em" name="alamat-ekspedisi" placeholder="Alamat"></textarea>
+        <textarea id="alamat" class="mt-1em pt-1em pl-1em" name="alamat_ekspedisi" placeholder="Alamat" required></textarea>
         <div class="mt-1em">
-            <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" name="kontak-ekspedisi">
+            <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak" name="kontak_ekspedisi">
         </div>
         <br>
         <label for="divTujuanEkspedisi">Tujuan Ekspedisi:</label>
         <div id="divTujuanEkspedisi" class="mt-1em grid-2-auto grid-column-gap-1em">
-            <input id="pulauTujuan" class="input-1 pb-1em" type="text" placeholder="Pulau Tujuan Ekspedisi" name="pulau-tujuan">
-            <input id="daerahTujuan" class="input-1 pb-1em" type="text" placeholder="Daerah Tujuan Ekspedisi" name="daerah-tujuan">
+            <input id="pulauTujuan" class="input-1 pb-1em" type="text" placeholder="Pulau Tujuan Ekspedisi" name="pulau_tujuan">
+            <input id="daerahTujuan" class="input-1 pb-1em" type="text" placeholder="Daerah Tujuan Ekspedisi" name="daerah_tujuan">
         </div>
         <textarea id="keterangan" class="mt-1em pt-1em pl-1em" name="keterangan" placeholder="Keterangan lain (opsional)"></textarea>
     </div>
