@@ -43,11 +43,12 @@ $htmlLogError = $htmlLogError . "</div>";
         </div>
     </div>
 
-    <div class="ml-1em mr-1em mt-2em">
+    <form action="05-06-edit-ekspedisi-2.php" method="POST" class="ml-1em mr-1em mt-2em">
+        <input type="hidden" name="id_ekspedisi" value="<?= $id; ?>">
         <div class="grid-2-auto grid-column-gap-1em">
             <div class="bb-0_5px-grey pb-1em">
                 <label for="selectBentukPerusahaan">Bentuk:</label><br>
-                <select class="b-none" name="bentuk-perusahaan" id="selectBentukPerusahaan">
+                <select class="b-none" name="bentuk_perusahaan" id="selectBentukPerusahaan">
                     <option value="" disabled>Bentuk</option>
                     <option value="" <?php if ($row["bentuk"] == "") {
                                             echo "selected";
@@ -62,19 +63,20 @@ $htmlLogError = $htmlLogError . "</div>";
             </div>
             <div>
                 <label for="namaEdited">Nama Ekspedisi:</label>
-                <input id="namaEdited" class="input-1 pb-1em" type="text" placeholder="Nama Ekspedisi" value="<?= $row['nama']; ?>">
+                <input id="namaEdited" class="input-1 pb-1em" name="nama_ekspedisi" type="text" placeholder="Nama Ekspedisi" value="<?= $row['nama']; ?>">
             </div>
         </div>
 
         <br>
         <label for="alamatEdited">Alamat:</label>
-        <textarea id="alamatEdited" class="text-area-mode-1 mt-1em pt-1em pl-1em" name="alamat" placeholder="Alamat"><?= $row['alamat']; ?></textarea>
+        <textarea id="alamatEdited" class="text-area-mode-1 mt-1em pt-1em pl-1em" name="alamat_ekspedisi" placeholder="Alamat"><?= $row['alamat']; ?></textarea>
 
         <div class="mt-1em">
             <label for="kontakEdited">Kontak:</label>
-            <input id="kontakEdited" class="input-1 pb-1em" type="text" placeholder="No. Kontak" value="<?= $row['kontak']; ?>">
+            <input id="kontakEdited" name="kontak_ekspedisi" class="input-1 pb-1em" type="text" placeholder="No. Kontak" value="<?= $row['kontak']; ?>">
         </div>
 
+        <br>
         <label for="divTujuanEkspedisi">Tujuan Ekspedisi:</label>
         <div id="divTujuanEkspedisi" class="mt-1em grid-2-auto grid-column-gap-1em">
             <input id="pulauTujuan" class="input-1 pb-1em" type="text" placeholder="Pulau Tujuan Ekspedisi" name="pulau_tujuan">
@@ -84,15 +86,17 @@ $htmlLogError = $htmlLogError . "</div>";
         <br>
         <label for="keteranganEdited">Keterangan:</label>
         <textarea id="keteranganEdited" class="text-area-mode-1 mt-1em pt-1em pl-1em" name="keterangan" placeholder="Keterangan lain (opsional)" value="<?= $row['keterangan']; ?>"></textarea>
-    </div>
-    <div id="peringatan" class="d-none color-red p-1em">
 
-    </div>
-    <div>
-        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="simpanPerubahan();">
-            <span class="justify-self-center font-weight-bold">Simpan Perubahan</span>
+        <div id="peringatan" class="d-none color-red p-1em">
+
         </div>
-    </div>
+
+        <div class="m-1em">
+            <button type="submit" class="h-4em bg-color-orange-2 grid-1-auto w-100">
+                <span class="justify-self-center font-weight-bold">Simpan Perubahan</span>
+            </button>
+        </div>
+    </form>
 
 </div>
 
@@ -126,55 +130,49 @@ $htmlLogError = $htmlLogError . "</div>";
         $('.divLogOK').show();
     }
 
-    function simpanPerubahan() {
-        $bentuk = $("#selectBentukPerusahaan").val();
-        $nama = $("#namaEdited").val();
-        $alamat = $("#alamatEdited").val();
-        $kontak = $("#kontakEdited").val();
-        $keterangan = $("#keteranganEdited").val();
-        $peringatan = $("#peringatan");
+    // function simpanPerubahan() {
+    //     $bentuk = $("#selectBentukPerusahaan").val();
+    //     $nama = $("#namaEdited").val();
+    //     $alamat = $("#alamatEdited").val();
+    //     $kontak = $("#kontakEdited").val();
+    //     $keterangan = $("#keteranganEdited").val();
+    //     $peringatan = $("#peringatan");
 
-        console.log($alamat);
-        if ($nama == "") {
-            $peringatan.html("Nama Ekspedisi harus diisi!");
-            if ($peringatan.css("display") == "none") {
-                $peringatan.toggle(100);
-            }
-        } else if ($nama != "" && $peringatan.css("display") != "none") {
-            $peringatan.toggle(100);
-        }
+    //     console.log($alamat);
+    //     if ($nama == "") {
+    //         $peringatan.html("Nama Ekspedisi harus diisi!");
+    //         if ($peringatan.css("display") == "none") {
+    //             $peringatan.toggle(100);
+    //         }
+    //     } else if ($nama != "" && $peringatan.css("display") != "none") {
+    //         $peringatan.toggle(100);
+    //     }
 
-        $.ajax({
-            url: "05-04-insert-edit-ekspedisi.php",
-            type: "POST",
-            async: false,
-            data: {
-                id: $id,
-                nama: $nama,
-                bentuk: $bentuk,
-                alamat: $alamat,
-                kontak: $kontak,
-                keterangan: $keterangan,
-                type: 'update_ekspedisi'
-            },
-            success: function(responseText) {
-                console.log(responseText);
-                responseText = JSON.parse(responseText);
-                if (responseText[0] === "Data updated successfully.") {
-                    alert('Data ekspedisi berhasil di-update!');
-                    setTimeout(() => {
-                        window.history.back();
-                    }, 500);
-                }
-            }
-        });
-    }
-
-    window.onpopstate = function() {
-        // history.back();
-        $("#pageDetailEkspedisi").toggle(1000);
-        $("#pageEditEkspedisi").toggle(1000);
-    }
+    //     $.ajax({
+    //         url: "05-04-insert-edit-ekspedisi.php",
+    //         type: "POST",
+    //         async: false,
+    //         data: {
+    //             id: $id,
+    //             nama: $nama,
+    //             bentuk: $bentuk,
+    //             alamat: $alamat,
+    //             kontak: $kontak,
+    //             keterangan: $keterangan,
+    //             type: 'update_ekspedisi'
+    //         },
+    //         success: function(responseText) {
+    //             console.log(responseText);
+    //             responseText = JSON.parse(responseText);
+    //             if (responseText[0] === "Data updated successfully.") {
+    //                 alert('Data ekspedisi berhasil di-update!');
+    //                 setTimeout(() => {
+    //                     window.history.back();
+    //                 }, 500);
+    //             }
+    //         }
+    //     });
+    // }
 
     function backButton() {
         history.back();

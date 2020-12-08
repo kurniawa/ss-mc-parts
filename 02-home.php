@@ -136,10 +136,16 @@ $res_cek_produk = mysqli_query($con, $query_cek_produk);
 if (empty($res_cek_produk)) {
     $query_create_produk = "CREATE TABLE produk (
         id int(11) AUTO_INCREMENT PRIMARY KEY,
-        id_ekspedisi int(11) NOT NULL,
-        id_pelanggan int(11) NOT NULL,
-        ekspedisi_transit char(1) NOT NULL DEFAULT 'n',
-        ekspedisi_utama char(1) NOT NULL DEFAULT 'n'
+        tipe varchar(20) NOT NULL,
+        bahan varchar(20) DEFAULT NULL,
+        varia varchar(20) DEFAULT NULL,
+        ukuran varchar(20) DEFAULT NULL,
+        logo varchar(20) DEFAULT NULL,
+        tato varchar(20) DEFAULT NULL,
+        jahit varchar(20) DEFAULT NULL,
+        nama_lengkap varchar(100) DEFAULT NULL,
+        japstyle int(11) DEFAULT NULL,
+        harga_price_list int(11) DEFAULT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
 
     $res_create_produk = mysqli_query($con, $query_create_produk);
@@ -233,7 +239,7 @@ $htmlSucceedReport = $htmlSucceedReport . "</div>";
 <div id="homeScreen">
     <div id="gridMenu">
         <div class="gridMenuItem">
-            <a href="03-01-spk.php" class="menuIcons">
+            <a href="03-01-spk-v3.php" class="menuIcons">
                 <img src="img/icons/pencil.svg" alt="Icon SPK">
                 <div>
                     SPK
@@ -360,7 +366,7 @@ $htmlSucceedReport = $htmlSucceedReport . "</div>";
     } else {
         $('#containerSucceedReport').show();
     }
-    initSPK();
+    // initSPK();
 </script>
 <?php
 include_once "01-footer.php";
