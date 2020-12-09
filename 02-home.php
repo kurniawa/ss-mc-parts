@@ -15,7 +15,7 @@ if (!$conn) {
 // Create database
 $sql = "CREATE DATABASE mcparts";
 if (mysqli_query($conn, $sql)) {
-    $htmlSucceedReport = $htmlSucceedReport . "Database created successfully<br><br>.";
+    $htmlSucceedReport = $htmlSucceedReport . "Database created successfully.<br><br>";
 } else {
     if (mysqli_error($conn) === "Can't create database 'mcparts'; database exists") {
         $htmlSucceedReport = $htmlSucceedReport . mysqli_error($conn) . "<br><br>";
@@ -50,6 +50,21 @@ if (empty($res_cek_ekspedisi)) {
         $htmlErrorReport = $htmlErrorReport . $query_create_ekspedisi . " : FAILED! " . mysqli_error($con) . "<br><br>";
     } else {
         $htmlSucceedReport = $htmlSucceedReport .  "Create table ekspedisi SUCCEED!<br><br>";
+
+        $file_ekspedisi = fopen("sql/ekspedisi.sql", "r");
+        if (!$file_ekspedisi) {
+            $htmlErrorReport = $htmlErrorReport . "Open/read file ekspedisi.sql - FAILED!<br><br>";
+        } else {
+            $htmlSucceedReport = $htmlSucceedReport . "Open/read file ekspedisi.sql - SUCCEED!<br><br>";
+            $query_retreive_backup_data_ekspedisi = fread($file_ekspedisi, filesize("sql/ekspedisi.sql"));
+            $htmlSucceedReport = $htmlSucceedReport . "INITIAL BACK-UP EKSPEDISI:<br>" . $query_retreive_backup_data_ekspedisi . "<br><br>";
+            $res_query_retrieve_backup_data_ekspedisi = mysqli_query($con, $query_retreive_backup_data_ekspedisi);
+            if (!$res_query_retrieve_backup_data_ekspedisi) {
+                $htmlErrorReport = $htmlErrorReport . $query_retreive_backup_data_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
+            } else {
+                $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data ekspedisi - SUCCEED!<br><br>";
+            }
+        }
     }
     // INSERT INTO ekspedisi
 } else {

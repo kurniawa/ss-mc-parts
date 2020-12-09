@@ -55,6 +55,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $htmlLogError = $htmlLogError . $query_input_ekspedisi_baru . " - FAILED! " . mysqli_error($con) . "<br><br>";
             } else {
                 $htmlLogOK = $htmlLogOK . $query_input_ekspedisi_baru . " - SUCCEED!<br><br>";
+
+                // BACK-UP SYSTEM
+                $file_ekspedisi = fopen('sql/ekspedisi.sql', 'w');
+                if (!$file_ekspedisi) {
+                    $htmlLogError = $htmlLogError . "Open file ekspedisi.sql - FAILED!<br><br>";
+                } else {
+                    $htmlLogOK = $htmlLogOK . "Open file ekspedisi.sql - SUCCEED!<br><br>";
+
+                    $query_select_all_ekspedisi = "SELECT * FROM ekspedisi";
+                    $res_query_select_all_ekspedisi = mysqli_query($con, $query_select_all_ekspedisi);
+
+                    if (!$res_query_select_all_ekspedisi) {
+                        $htmlLogError = $htmlLogError . $query_select_all_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
+                    } else {
+                        $htmlLogOK = $htmlLogOK . $query_select_all_ekspedisi . " - SUCCEED!<br><br>";
+
+                        // TOTAL DATA YANG ADA DI DB
+                        $query_count_all_ekspedisi = "SELECT count(*) as jumlah_ekspedisi FROM ekspedisi";
+                        $res_query_count_all_ekspedisi = mysqli_query($con, $query_count_all_ekspedisi);
+
+                        if (!$res_query_count_all_ekspedisi) {
+                            $htmlLogError = $htmlLogError . $query_count_all_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
+                        } else {
+                            $htmlLogOK = $htmlLogOK . $query_count_all_ekspedisi . " - SUCCEED!<br><br>";
+                            $jumlah_ekspedisi = mysqli_fetch_assoc($res_query_count_all_ekspedisi);
+
+                            $htmlLogOK = $htmlLogOK . "Jumlah data ekspedisi: " . $jumlah_ekspedisi['jumlah_ekspedisi'] . "<br><br>";
+                            $sql_insert_all_ekspedisi = "INSERT INTO ekspedisi (id, nama, bentuk, alamat, kontak, keterangan) VALUES ";
+                            $i = 0;
+                            while ($ekspedisi = mysqli_fetch_assoc($res_query_select_all_ekspedisi)) {
+                                $sql_insert_all_ekspedisi = $sql_insert_all_ekspedisi . "(" . $ekspedisi['id'] . ",'" .  $ekspedisi['nama'] . "','" .
+                                    $ekspedisi['bentuk'] . "','" . $ekspedisi['alamat'] . "','" . $ekspedisi['kontak'] . "','" . $ekspedisi['keterangan'] . "')";
+                                if ($i !== $jumlah_ekspedisi['jumlah_ekspedisi'] - 1) {
+                                    $sql_insert_all_ekspedisi = $sql_insert_all_ekspedisi . ",";
+                                }
+                                $i++;
+                            }
+                            $htmlLogOK = $htmlLogOK . $sql_insert_all_ekspedisi . "<br><br>";
+                            fwrite($file_ekspedisi, $sql_insert_all_ekspedisi);
+                            fclose($file_ekspedisi);
+                        }
+                    }
+                }
             }
         }
     }
