@@ -40,7 +40,6 @@ $htmlLogOK = $htmlLogOK . "</div>";
 </header>
 
 <div class="divLogError"></div>
-
 <div class="divLogOK"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">

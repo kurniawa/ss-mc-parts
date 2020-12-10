@@ -2,7 +2,9 @@
 include_once "01-header.php";
 ?>
 
-<div class="header"></div>
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+</header>
 
 <div class="mt-1em ml-1em">
     <div class="d-inline">
@@ -13,83 +15,85 @@ include_once "01-header.php";
     </div>
 </div>
 
-<div class="ml-1em mr-1em mt-2em">
-    <input id="nama" class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik">
-    <textarea class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" id="alamat" placeholder="Alamat"></textarea>
-    <div class="grid-2-auto grid-column-gap-1em mt-1em">
-        <input id="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau">
-        <input id="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah">
-    </div>
-    <div class="grid-2-auto grid-column-gap-1em mt-1em">
-        <input id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak">
-        <input id="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
+<form action="04-03-pelanggan-baru-2.php" method="POST">
+    <div class="ml-1em mr-1em mt-2em">
+        <input name="nama_pelanggan" id="nama" class="input-1 pb-1em" type="text" placeholder="Nama/Perusahaan/Pabrik">
+        <textarea class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat_pelanggan" id="alamat" placeholder="Alamat"></textarea>
+        <div class="grid-2-auto grid-column-gap-1em mt-1em">
+            <input name="pulau" id="pulau" class="input-1 pb-1em" type="text" placeholder="Pulau">
+            <input name="daerah" id="daerah" class="input-1 pb-1em" type="text" placeholder="Daerah">
+        </div>
+        <div class="grid-2-auto grid-column-gap-1em mt-1em">
+            <input name="kontak_pelanggan" id="kontak" class="input-1 pb-1em" type="text" placeholder="No. Kontak">
+            <input name="singkatan_pelanggan" id="singkatan" class="input-1 pb-1em" type="text" placeholder="Singkatan (opsional)">
+        </div>
+
+        <div id="divInputEkspedisi" class="mt-1em">
+        </div>
+
+        <!-- DROPDOWN MENU -->
+
+        <div class="grid-1-auto justify-items-center">
+            <div class="bg-color-orange-1 pl-1em pr-1em pt-0_5em pb-0_5em b-radius-50px" onclick="showPertanyaanEkspedisiTransit();">+ Tambah Ekspedisi</div>
+        </div>
+        <textarea id="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="keterangan" placeholder="Keterangan lain (opsional)"></textarea>
     </div>
 
-    <div id="divInputEkspedisi" class="mt-1em">
+    <div class="grid-2-10_auto_auto mt-1em ml-1em mr-1em">
+        <div class="">
+            <img class="w-2em" src="img/icons/speech-bubble.svg" alt="Reseller?">
+        </div>
+        <div class="font-weight-bold">
+            Apakah Pelanggan ini memiliki Reseller?
+        </div>
+        <div>
+            <div id="divToggleReseller" class="position-relative b-radius-50px b-1px-solid-grey bg-color-grey w-4_5em" onclick="showInputReseller();">
+                <div id="toggleReseller" class="position-absolute w-3em text-center b-radius-50px b-1px-solid-grey color-grey bg-color-white">tidak</div>
+            </div>
+        </div>
     </div>
 
-    <!-- DROPDOWN MENU -->
+    <div id="divInputNamaReseller" class="d-none ml-2em mr-2em mt-1em b-1px-solid-grey p-1em">
+        <input id="inputReseller" name="nama_reseller" class="input-1 pb-1em" type="text" placeholder="Nama Reseller">
 
-    <div class="grid-1-auto justify-items-center">
-        <div class="bg-color-orange-1 pl-1em pr-1em pt-0_5em pb-0_5em b-radius-50px" onclick="showPertanyaanEkspedisiTransit();">+ Tambah Ekspedisi</div>
     </div>
-    <textarea id="keterangan" class="mt-1em pt-1em pl-1em text-area-mode-1" name="alamat" placeholder="Keterangan lain (opsional)"></textarea>
-</div>
 
-<div class="grid-2-10_auto_auto mt-1em ml-1em mr-1em">
-    <div class="">
-        <img class="w-2em" src="img/icons/speech-bubble.svg" alt="Reseller?">
-    </div>
-    <div class="font-weight-bold">
-        Apakah Pelanggan ini memiliki Reseller?
-    </div>
+    <br><br>
+
+    <!-- Warning apabila ada yang kurang -->
+
+    <div id="warning" class="d-none"></div>
+
     <div>
-        <div id="divToggleReseller" class="position-relative b-radius-50px b-1px-solid-grey bg-color-grey w-4_5em" onclick="showInputReseller();">
-            <div id="toggleReseller" class="position-absolute w-3em text-center b-radius-50px b-1px-solid-grey color-grey bg-color-white">tidak</div>
-        </div>
+        <button type="submit" class="m-1em h-4em bg-color-orange-2 grid-1-auto">
+            <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
+        </button>
     </div>
-</div>
 
-<div id="divInputNamaReseller" class="d-none ml-2em mr-2em mt-1em b-1px-solid-grey p-1em">
-    <input class="input-1 pb-1em" type="text" placeholder="Nama Reseller">
-
-</div>
-
-<br><br>
-
-<!-- Warning apabila ada yang kurang -->
-
-<div id="warning" class="d-none"></div>
-
-<div>
-    <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="inputPelangganBaru();">
-        <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
+    <div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
     </div>
-</div>
 
-<div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
-</div>
-
-<div class="position-absolute z-index-3 top-50vh grid-1-auto w-100vw">
-    <div id="pertanyaanEkspedisiTransit" class="d-none justify-self-center bg-color-white p-1em">
-        <div class="grid-2-auto">
-            <div><img class="w-2em" src="img/icons/speech-bubble.svg" alt=""></div>
-            <div>
-                <h3>
-                    Apakah Anda ingin menambahkan Ekspedisi Transit?
-                </h3>
+    <div class="position-absolute z-index-3 top-50vh grid-1-auto w-100vw">
+        <div id="pertanyaanEkspedisiTransit" class="d-none justify-self-center bg-color-white p-1em">
+            <div class="grid-2-auto">
+                <div><img class="w-2em" src="img/icons/speech-bubble.svg" alt=""></div>
+                <div>
+                    <h3>
+                        Apakah Anda ingin menambahkan Ekspedisi Transit?
+                    </h3>
+                </div>
             </div>
-        </div>
-        <div class="grid-2-auto justify-items-center">
-            <div class="color-soft-red" onclick="addInputEkspedisi('tidak')">
-                <h3>Tidak</h3>
-            </div>
-            <div class="color-bright-green" onclick="addInputEkspedisi('ya')">
-                <h3>Ya</h3>
+            <div class="grid-2-auto justify-items-center">
+                <div class="color-soft-red" onclick="addInputEkspedisi('tidak')">
+                    <h3>Tidak</h3>
+                </div>
+                <div class="color-bright-green" onclick="addInputEkspedisi('ya')">
+                    <h3>Ya</h3>
+                </div>
             </div>
         </div>
     </div>
-</div>
+</form>
 
 <script>
     function showInputReseller() {
@@ -110,18 +114,19 @@ include_once "01-header.php";
             $("#toggleReseller").html("tidak");
 
             $("#divInputNamaReseller").toggle(200);
+            $("#inputReseller").val("");
         }
     }
 
     function showPertanyaanEkspedisiTransit() {
-        history.pushState(null, null, "./pertanyaan-ekspedisi-transit");
+        // history.pushState(null, null, "./pertanyaan-ekspedisi-transit");
         $("#closingAreaPertanyaan").toggle(300);
         $("#pertanyaanEkspedisiTransit").toggle(300);
     }
-    window.onpopstate = function() {
-        $("#closingAreaPertanyaan").css("display", "none");
-        $("#pertanyaanEkspedisiTransit").css("display", "none");
-    }
+    // window.onpopstate = function() {
+    //     $("#closingAreaPertanyaan").css("display", "none");
+    //     $("#pertanyaanEkspedisiTransit").css("display", "none");
+    // }
 
     $i = 0;
 
@@ -131,14 +136,16 @@ include_once "01-header.php";
         if ($jawaban == 'tidak') {
             $placeholder = "Ekspedisi";
             $tipeEkspedisi = "inputEkspedisiNormal";
+            $namaEkspedisi = "ekspedisi_normal[]";
         } else {
             $placeholder = "Ekspedisi Transit";
             $tipeEkspedisi = "inputEkspedisiTransit";
+            $namaEkspedisi = "ekspedisi_transit[]";
         }
 
         $newDiv = '<div id="divInputID-' + $i + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
             '<div class="bb-1px-solid-grey">' +
-            '<input id="inputID-' + $i + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $i + ');">' +
+            '<input name="' + $namaEkspedisi + '" id="inputID-' + $i + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $i + ');">' +
             '<div id="searchResults-' + $i + '" class="d-none b-1px-solid-grey bb-none"></div>' +
             '</div>' +
             '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $i + ');">' +
@@ -148,7 +155,7 @@ include_once "01-header.php";
 
         $("#divInputEkspedisi").append($newDiv);
         $i++;
-        history.back();
+        // history.back();
     }
 
     function btnKurangEkspedisi($id) {

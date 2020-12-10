@@ -1,5 +1,33 @@
 <?php
 include_once "01-header.php";
+
+// GET PELANGGAN
+include_once "01-config.php";
+
+$query_get_pelanggan = "SELECT * FROM pelanggan ORDER BY nama ASC";
+$res_get_pelanggan = mysqli_query($con, $query_get_pelanggan);
+
+$htmlLogError = "<div class='logError'>";
+$htmlLogOK = "<div class='logOK'>";
+
+$continue = "";
+$listPelanggan = array();
+
+if (!$res_get_pelanggan) {
+    $htmlLogError = $htmlLogError . $query_get_pelanggan . " FAILED! " . mysqli_error($con) . "<br><br>";
+} else {
+    $htmlLogOK = $htmlLogOK . $query_get_pelanggan . " SUCCEED!<br><br>";
+    $continue = "yes";
+
+    while ($row = mysqli_fetch_assoc($res_get_pelanggan)) {
+        array_push($listPelanggan, $row);
+    }
+
+    // var_dump($listPelanggan);
+}
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
 ?>
 
 <header class="header grid-2-auto">
@@ -10,6 +38,9 @@ include_once "01-header.php";
         </a>
     </div>
 </header>
+
+<div class="divLogError"></div>
+<div class="divLogOK"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em div-cari-filter">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
@@ -30,50 +61,108 @@ include_once "01-header.php";
 </div>
 
 <script>
-    $arrayBgColors = ["#FFB08E", "#DEDEDE", "#D1FFCA", "#FFB800"];
+    // ERROR REPORT
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
 
-    $.ajax({
-        type: "POST",
-        url: "04-02-get-pelanggan.php",
-        async: false,
-        success: function(responseText) {
-            console.log(responseText);
-            responseText = JSON.parse(responseText);
-            console.log(responseText);
-            for (const pelanggan of responseText) {
-                $randomIndex = Math.floor(Math.random() * 4);
-                console.log("$randomIndex: " + $randomIndex);
+    $('.divLogError').html(htmlLogError);
+    $('.divLogOK').html(htmlLogOK);
 
-                $newElement = "<div class='ml-1em mr-1em pb-1em bb-1px-solid-grey pt-1em font-size-0_9em'>" +
-                    "<div class='grid-3-10_80_10'>" +
-                    "<div class='singkatan circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: " + $arrayBgColors[$randomIndex] + "'>" + pelanggan.singkatan + "</div>" +
-                    "<div class='justify-self-left font-weight-bold'>" + pelanggan.nama + " - " + pelanggan.daerah + "</div>" +
-                    "<div id='divDropdown-" + pelanggan.id + "' class='justify-self-right' onclick='showDropDown(" + pelanggan.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
-                    "</div>" +
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
 
-                    // DROPDOWN
-                    "<div id='divDetailDropDown-" + pelanggan.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
+    // ----- END OF: ERROR REPORT -----
 
-                    "<div class='grid-2-10_auto'>" +
+    var listPelanggan = <?= json_encode($listPelanggan); ?>;
 
-                    "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
-                    "<div>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
-                    "<div><img class='w-2em' src='img/icons/phonebook.svg'></div>" +
-                    "<div>" + pelanggan.kontak + "</div>" +
+    if (listPelanggan == undefined || listPelanggan.length == 0) {
+        console.log("Tidak ada list pelanggan di database!");
+    } else {
+        $arrayBgColors = ["#FFB08E", "#DEDEDE", "#D1FFCA", "#FFB800"];
+        for (const pelanggan of listPelanggan) {
+            $randomIndex = Math.floor(Math.random() * 4);
+            console.log("$randomIndex: " + $randomIndex);
 
-                    "</div>" +
+            $htmlPelanggan = "<div class='ml-1em mr-1em pb-1em bb-1px-solid-grey pt-1em font-size-0_9em'>" +
+                "<div class='grid-3-10_80_10'>" +
+                "<div class='singkatan circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: " + $arrayBgColors[$randomIndex] + "'>" + pelanggan.singkatan + "</div>" +
+                "<div class='justify-self-left font-weight-bold'>" + pelanggan.nama + " - " + pelanggan.daerah + "</div>" +
+                "<div id='divDropdown-" + pelanggan.id + "' class='justify-self-right' onclick='showDropDown(" + pelanggan.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+                "</div>" +
 
-                    "<div class='grid-1-auto justify-items-right mt-1em'>" +
-                    "<a href='04-06-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
-                    "</div>" +
-                    "</div>" +
-                    // END OF DROPDOWN
+                // DROPDOWN
+                "<div id='divDetailDropDown-" + pelanggan.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
 
-                    "</div>";
-                $("#div-daftar-spk").append($newElement);
-            }
+                "<div class='grid-2-10_auto'>" +
+
+                "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+                "<div>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+                "<div><img class='w-2em' src='img/icons/phonebook.svg'></div>" +
+                "<div>" + pelanggan.kontak + "</div>" +
+
+                "</div>" +
+
+                "<div class='grid-1-auto justify-items-right mt-1em'>" +
+                "<a href='04-06-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+                "</div>" +
+                "</div>" +
+                // END OF DROPDOWN
+
+                "</div>";
+            $("#div-daftar-spk").append($htmlPelanggan);
         }
-    });
+    }
+
+    // $.ajax({
+    //     type: "POST",
+    //     url: "04-02-get-pelanggan.php",
+    //     async: false,
+    //     success: function(responseText) {
+    //         console.log(responseText);
+    //         responseText = JSON.parse(responseText);
+    //         console.log(responseText);
+    //         for (const pelanggan of responseText) {
+    //             $randomIndex = Math.floor(Math.random() * 4);
+    //             console.log("$randomIndex: " + $randomIndex);
+
+    //             $htmlPelanggan = "<div class='ml-1em mr-1em pb-1em bb-1px-solid-grey pt-1em font-size-0_9em'>" +
+    //                 "<div class='grid-3-10_80_10'>" +
+    //                 "<div class='singkatan circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: " + $arrayBgColors[$randomIndex] + "'>" + pelanggan.singkatan + "</div>" +
+    //                 "<div class='justify-self-left font-weight-bold'>" + pelanggan.nama + " - " + pelanggan.daerah + "</div>" +
+    //                 "<div id='divDropdown-" + pelanggan.id + "' class='justify-self-right' onclick='showDropDown(" + pelanggan.id + ");'><img class='w-0_7em' src='img/icons/dropdown.svg'></div>" +
+    //                 "</div>" +
+
+    //                 // DROPDOWN
+    //                 "<div id='divDetailDropDown-" + pelanggan.id + "' class='d-none b-1px-solid-grey p-0_5em mt-1em'>" +
+
+    //                 "<div class='grid-2-10_auto'>" +
+
+    //                 "<div><img class='w-2em' src='img/icons/real-estate.svg'></div>" +
+    //                 "<div>" + pelanggan.alamat.replace(new RegExp('\r?\n', 'g'), '<br />') + "</div>" +
+    //                 "<div><img class='w-2em' src='img/icons/phonebook.svg'></div>" +
+    //                 "<div>" + pelanggan.kontak + "</div>" +
+
+    //                 "</div>" +
+
+    //                 "<div class='grid-1-auto justify-items-right mt-1em'>" +
+    //                 "<a href='04-06-detail-pelanggan.php?id=" + pelanggan.id + "' class='bg-color-orange-1 b-radius-50px pl-1em pr-1em'>Lebih Detail >></a>" +
+    //                 "</div>" +
+    //                 "</div>" +
+    //                 // END OF DROPDOWN
+
+    //                 "</div>";
+    //             $("#div-daftar-spk").append($htmlPelanggan);
+    //         }
+    //     }
+    // });
 </script>
 
 <style>
