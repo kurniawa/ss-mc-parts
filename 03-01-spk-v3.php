@@ -5,6 +5,8 @@ include_once "01-header.php";
 
 $htmlLogOK = "<div class='logOK'>";
 $htmlLogError = "<div class='logError'>";
+$htmlLogWarning = "<div class='logWarning'>";
+$status = "";
 
 $query_all_spk = "SELECT * FROM spk ORDER BY tgl_pembuatan DESC";
 $res_query_all_spk = mysqli_query($con, $query_all_spk);
@@ -49,19 +51,21 @@ if (mysqli_num_rows($res_query_all_spk) <= 0) {
 
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogError = $htmlLogError . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
 
 ?>
 
 <header class="header grid-2-auto">
     <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
     <div class="justify-self-right pr-0_5em">
-        <div id="btn-spk-baru" class="btn-atas-kanan2" onclick="addNewSPK();">
+        <a href="03-03-spk-baru.php" id="btn-spk-baru" class="btn-atas-kanan2" onclick="addNewSPK();">
             + Buat SPK Baru
-        </div>
+        </a>
     </div>
 </header>
 
 <div class="divLogError"></div>
+<div class="divLogWarning"></div>
 <div class="divLogOK"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em bb-0_5px-solid-grey">
@@ -88,14 +92,22 @@ $htmlLogError = $htmlLogError . "</div>";
     // LOG ERROR DAN OK
     var htmlLogError = `<?= $htmlLogError; ?>`;
     var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
 
     $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
     $('.divLogOK').html(htmlLogOK);
 
     if ($('.logError').html() === '') {
         $('.divLogError').hide();
     } else {
         $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
     }
 
     if ($('.logOK').html() === '') {
@@ -236,10 +248,10 @@ $htmlLogError = $htmlLogError . "</div>";
         });
     }
 
-    function addNewSPK() {
-        localStorage.setItem('SPKItems', '');
-        window.location.href = '03-03-spk-baru.php';
-    }
+    // function addNewSPK() {
+    //     localStorage.setItem('SPKItems', '');
+    //     window.location.href = '03-03-spk-baru.php';
+    // }
 
     // set keadaan awal dimana JSON SPKToEdit dihilangkan
     if (localStorage.getItem('dataSPKToEdit') !== null || localStorage.getItem('dataSPKBefore') !== null) {

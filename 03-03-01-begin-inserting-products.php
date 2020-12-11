@@ -1,3 +1,32 @@
+<?php
+
+include_once "01-header.php";
+include_once "01-config.php";
+
+$htmlLogError = "<div class='logError'>";
+$htmlLogOK = "<div class='logOK'>";
+$htmlLogWarning = "<div class='logWarning'>";
+$status = "";
+
+$nama_pelanggan = "";
+$id_pelanggan = "";
+$tanggal = "";
+$daerah = "";
+$ket_judul = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $nama_pelanggan = $_POST["nama_pelanggan"];
+    $id_pelanggan = $_POST["id_pelanggan"];
+    $tanggal = $_POST["tanggal"];
+    $daerah = $_POST["daerah"];
+    $ket_judul = $_POST["ket_judul"];
+}
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
+?>
+
 <div id="containerBeginSPK" class="m-0_5em">
 
     <div class="b-1px-solid-grey">
@@ -7,10 +36,10 @@
         <div class="grid-3-25_10_auto m-0_5em grid-row-gap-1em">
             <div>No.</div>
             <div>:</div>
-            <div class="divSPKNumber font-weight-bold">8888</div>
+            <div class="divSPKNumber font-weight-bold">(Auto Generated)</div>
             <div>Tanggal</div>
             <div>:</div>
-            <div class="divSPKDate font-weight-bold">15-10-2020</div>
+            <div class="divSPKDate font-weight-bold"><?= $tanggal; ?></div>
             <div>Untuk</div>
             <div>:</div>
             <div class="divSPKCustomer font-weight-bold">Akong - Pluit</div>
@@ -58,7 +87,37 @@
 
 </div>
 
+<div class="divLogError"></div>
+<div class="divLogWarning"></div>
+<div class="divLogOK"></div>
+
 <script>
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
+
+    $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
+    $('.divLogOK').html(htmlLogOK);
+
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
+    }
+
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
+
     $("#containerBeginSPK").css("display", "none");
     $('#btnProsesSPK').hide();
     let SPKItems = localStorage.getItem('SPKItems');

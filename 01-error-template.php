@@ -1,11 +1,14 @@
 <?php
 
-$htmlLogOK = "<div class='logOK'>";
 $htmlLogError = "<div class='logError'>";
+$htmlLogOK = "<div class='logOK'>";
+$htmlLogWarning = "<div class='logWarning'>";
+$status = "";
 
 
-$htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
 
 ?>
 
@@ -15,14 +18,22 @@ $htmlLogError = $htmlLogError . "</div>";
 <script>
     var htmlLogError = `<?= $htmlLogError; ?>`;
     var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
 
     $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
     $('.divLogOK').html(htmlLogOK);
 
     if ($('.logError').html() === '') {
         $('.divLogError').hide();
     } else {
         $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
     }
 
     if ($('.logOK').html() === '') {

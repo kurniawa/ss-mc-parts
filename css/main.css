@@ -517,3 +517,10 @@ option{
     border: 2px solid green;
     background: rgba(63, 191, 63, 0.5);
 }
+
+.divLogWarning {
+    margin: 1em;
+    padding: 1em;
+    border: 2px solid yellow;
+    background: rgba(251, 255, 20, 0.5);
+}

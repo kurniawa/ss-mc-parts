@@ -1,5 +1,6 @@
 <?php
 include_once "01-header.php";
+include_once "01-config.php";
 ?>
 
 <header class="header grid-2-auto">
@@ -10,7 +11,7 @@ include_once "01-header.php";
         </a> -->
     </div>
 </header>
-<div id="SPKBaru">
+<form action="03-03-01-begin-inserting-products.php" method="POST" id="SPKBaru">
 
     <div class="mt-1em ml-1em grid-2-10_auto">
         <div class="">
@@ -25,19 +26,19 @@ include_once "01-header.php";
 
         <div class="grid-2-auto grid-column-gap-1em mt-1em">
             <input id="SPKNo" class="input-1 pb-1em" type="text" placeholder="No." disabled>
-            <input type="date" class="input-select-option-1 pb-1em" name="date" id="date" value="<?php echo date('Y-m-d'); ?>">
+            <input type="date" class="input-select-option-1 pb-1em" name="tanggal" id="date" value="<?php echo date('Y-m-d'); ?>">
         </div>
 
         <div id="divInputCustomerName" class="containerInputEkspedisi mt-1em mb-1em">
             <div class="bb-1px-solid-grey">
-                <input id="inputCustomerName" class="input-1 pb-1em bb-none" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
+                <input id="inputCustomerName" class="input-1 pb-1em bb-none" name="nama_pelanggan" type="text" placeholder="Pelanggan" onkeyup="findCustomer(this.value);">
                 <div id="searchResults" class="d-none b-1px-solid-grey bb-none"></div>
-                <input id="daerahCust" type="hidden" name="daerahCust">
-                <input id="inputIDCust" type="hidden" name="">
+                <input id="daerahCust" type="hidden" name="daerah">
+                <input id="inputIDCust" type="hidden" name="id_pelanggan">
             </div>
         </div>
 
-        <input id="titleDesc" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
+        <input name="ket_judul" id="titleDesc" class="input-1 mt-1em pb-1em" type="text" placeholder="Keterangan Judul (opsional)">
 
 
     </div>
@@ -47,37 +48,38 @@ include_once "01-header.php";
 
     <div id="warning" class="d-none"></div>
 
-    <div>
-        <div class="m-1em h-4em bg-color-orange-2 grid-1-auto" onclick="beginInsertingProducts();">
+    <div class="m-1em">
+        <!-- <button type="submit" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="beginInsertingProducts();"> -->
+        <button type="submit" class="w-100 h-4em bg-color-orange-2 grid-1-auto">
             <span class="justify-self-center font-weight-bold">Mulai Proses SPK >></span>
-        </div>
+        </button>
     </div>
 
     <div id="closingAreaPertanyaan" class="d-none position-absolute z-index-2 w-100vw h-100vh bg-color-grey top-0 opacity-0_5">
     </div>
 
-</div>
+</form>
 
 
 <script>
-    // history.pushState({
-    //     page: 'newSPK'
-    // }, null);
+    // // history.pushState({
+    // //     page: 'newSPK'
+    // // }, null);
 
-    // $(document).ready(function() {
-    let lastID = getLastID("spk");
-    console.log(lastID);
-    lastID = JSON.parse(lastID);
-    console.log('lastID for SPK Number: ' + lastID[1]);
+    // // $(document).ready(function() {
+    // let lastID = getLastID("spk");
+    // console.log(lastID);
+    // lastID = JSON.parse(lastID);
+    // console.log('lastID for SPK Number: ' + lastID[1]);
 
-    let SPKNo = lastID[1];
+    // let SPKNo = lastID[1];
 
-    $("#SPKNo").val(SPKNo);
-    // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
-    $(".divSPKNumber").html(SPKNo);
-    // });
+    // $("#SPKNo").val(SPKNo);
+    // // Set juga untuk halaman berikutnya ketika mau mulai masukkan produk
+    // $(".divSPKNumber").html(SPKNo);
+    // // });
 
-    $i = 0;
+    // $i = 0;
 
     function cekEkspedisi(params) {
         console.log(params);

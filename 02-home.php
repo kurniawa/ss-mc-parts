@@ -51,13 +51,13 @@ if (empty($res_cek_ekspedisi)) {
     } else {
         $htmlSucceedReport = $htmlSucceedReport .  "Create table ekspedisi SUCCEED!<br><br>";
 
-        $file_ekspedisi = fopen("sql/ekspedisi.sql", "r");
+        $file_ekspedisi = fopen("back-up/ekspedisi.sql", "r");
         if (!$file_ekspedisi) {
             $htmlErrorReport = $htmlErrorReport . "Open/read file ekspedisi.sql - FAILED!<br><br>";
         } else {
             $htmlSucceedReport = $htmlSucceedReport . "Open/read file ekspedisi.sql - SUCCEED!<br><br>";
-            $query_retreive_backup_data_ekspedisi = fread($file_ekspedisi, filesize("sql/ekspedisi.sql"));
-            $htmlSucceedReport = $htmlSucceedReport . "INITIAL BACK-UP EKSPEDISI:<br>" . $query_retreive_backup_data_ekspedisi . "<br><br>";
+            $query_retreive_backup_data_ekspedisi = fread($file_ekspedisi, filesize("back-up/ekspedisi.sql"));
+            $htmlSucceedReport = $htmlSucceedReport . "INITIAL RETRIEVE BACK-UP EKSPEDISI:<br>" . $query_retreive_backup_data_ekspedisi . "<br><br>";
             $res_query_retrieve_backup_data_ekspedisi = mysqli_query($con, $query_retreive_backup_data_ekspedisi);
             if (!$res_query_retrieve_backup_data_ekspedisi) {
                 $htmlErrorReport = $htmlErrorReport . $query_retreive_backup_data_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
@@ -95,6 +95,21 @@ if (empty($res_cek_pelanggan)) {
         $htmlErrorReport = $htmlErrorReport . $query_create_pelanggan . " : FAILED! " . mysqli_error($con) . "<br><br>";
     } else {
         $htmlSucceedReport = $htmlSucceedReport .  "Create table pelanggan SUCCEED!<br><br>";
+
+        $file_pelanggan = fopen("back-up/pelanggan.sql", "r");
+        if (!$file_pelanggan) {
+            $htmlErrorReport = $htmlErrorReport . "Open/read file pelanggan.sql - FAILED!<br><br>";
+        } else {
+            $htmlSucceedReport = $htmlSucceedReport . "Open/read file pelanggan.sql - SUCCEED!<br><br>";
+            $query_retreive_backup_data_pelanggan = fread($file_pelanggan, filesize("back-up/pelanggan.sql"));
+            $htmlSucceedReport = $htmlSucceedReport . "INITIAL RETRIEVE BACK-UP pelanggan:<br>" . $query_retreive_backup_data_pelanggan . "<br><br>";
+            $res_query_retrieve_backup_data_pelanggan = mysqli_query($con, $query_retreive_backup_data_pelanggan);
+            if (!$res_query_retrieve_backup_data_pelanggan) {
+                $htmlErrorReport = $htmlErrorReport . $query_retreive_backup_data_pelanggan . " - FAILED! " . mysqli_error($con) . "<br><br>";
+            } else {
+                $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data pelanggan - SUCCEED!<br><br>";
+            }
+        }
     }
     // INSERT INTO
 } else {
@@ -134,6 +149,22 @@ if (empty($res_cek_pelanggan_use_ekspedisi)) {
             $htmlErrorReport = $htmlErrorReport . $query_fk_pelanggan_use_ekspedisi . " : FAILED!" . mysqli_error($con) . "<br><br>";
         } else {
             $htmlSucceedReport = $htmlSucceedReport . $query_fk_pelanggan_use_ekspedisi . " : SUCCEED!<br><br>";
+
+            // RETRIEVE BACK-UP DATA pelanggan_use_ekspedisi
+            $file_pelanggan_use_ekspedisi = fopen("back-up/pelanggan_use_ekspedisi.sql", "r");
+            if (!$file_pelanggan_use_ekspedisi) {
+                $htmlErrorReport = $htmlErrorReport . "Open/read file pelanggan_use_ekspedisi.sql - FAILED!<br><br>";
+            } else {
+                $htmlSucceedReport = $htmlSucceedReport . "Open/read file pelanggan_use_ekspedisi.sql - SUCCEED!<br><br>";
+                $query_retreive_backup_data_pelanggan_use_ekspedisi = fread($file_pelanggan_use_ekspedisi, filesize("back-up/pelanggan_use_ekspedisi.sql"));
+                $htmlSucceedReport = $htmlSucceedReport . "INITIAL RETRIEVE BACK-UP pelanggan_use_ekspedisi:<br>" . $query_retreive_backup_data_pelanggan_use_ekspedisi . "<br><br>";
+                $res_query_retrieve_backup_data_pelanggan_use_ekspedisi = mysqli_query($con, $query_retreive_backup_data_pelanggan_use_ekspedisi);
+                if (!$res_query_retrieve_backup_data_pelanggan_use_ekspedisi) {
+                    $htmlErrorReport = $htmlErrorReport . $query_retreive_backup_data_pelanggan_use_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
+                } else {
+                    $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data pelanggan_use_ekspedisi - SUCCEED!<br><br>";
+                }
+            }
         }
     }
     // INSERT INTO pelanggan_use_ekspedisi
@@ -384,5 +415,8 @@ $htmlSucceedReport = $htmlSucceedReport . "</div>";
     // initSPK();
 </script>
 <?php
+fclose($file_ekspedisi);
+fclose($file_pelanggan);
+fclose($file_pelanggan_use_ekspedisi);
 include_once "01-footer.php";
 ?>

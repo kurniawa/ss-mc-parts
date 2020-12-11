@@ -1,10 +1,48 @@
 <?php
 include_once "01-header.php";
+include_once "01-config.php";
+
+$htmlLogError = "<div class='logError'>";
+$htmlLogOK = "<div class='logOK'>";
+$htmlLogWarning = "<div class='logWarning'>";
+$status = "";
+
+// GET ALL EKSPEDISI untuk feature live-search ekspedisi
+$query_get_all_ekspedisi = "SELECT * FROM ekspedisi";
+$res_query_get_all_ekspedisi = mysqli_query($con, $query_get_all_ekspedisi);
+
+if (!$res_query_get_all_ekspedisi) {
+    $status = "NOT OK";
+    $htmlLogError = $htmlLogError . $query_get_all_ekspedisi . " - FAILED! " . mysqli_error($con) . "<br><br>";
+} else {
+    if (empty($res_query_get_all_ekspedisi)) {
+        $status = "NOT OK";
+        $htmlLogWarning = $htmlLogWarning . "Belum ada Ekspedisi yang diinput!<br><br>";
+    } else {
+        $status = "OK";
+        $htmlLogOK = $htmlLogOK . $query_get_all_ekspedisi . " - SUCCEED!<br><br>";
+    }
+}
+
+$list_ekspedisi = array();
+if ($status == "OK") {
+    while ($row = mysqli_fetch_assoc($res_query_get_all_ekspedisi)) {
+        array_push($list_ekspedisi, $row);
+    }
+}
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
 ?>
 
 <header class="header grid-2-auto">
     <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
 </header>
+
+<div class="divLogError"></div>
+<div class="divLogWarning"></div>
+<div class="divLogOK"></div>
 
 <div class="mt-1em ml-1em">
     <div class="d-inline">
@@ -64,8 +102,8 @@ include_once "01-header.php";
 
     <div id="warning" class="d-none"></div>
 
-    <div>
-        <button type="submit" class="m-1em h-4em bg-color-orange-2 grid-1-auto">
+    <div class="m-1em">
+        <button type="submit" class="h-4em bg-color-orange-2 w-100 grid-1-auto">
             <span class="justify-self-center font-weight-bold">Input Pelanggan Baru</span>
         </button>
     </div>
@@ -96,6 +134,48 @@ include_once "01-header.php";
 </form>
 
 <script>
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
+
+    $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
+    $('.divLogOK').html(htmlLogOK);
+
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
+    }
+
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
+
+    var status = `<?= $status; ?>`;
+    console.log(`Status: ${status}`);
+
+    var list_ekspedisi = new Array();
+    var list_id_nama_ekspedisi = new Array();
+
+    if (status == 'OK') {
+        list_ekspedisi = <?= json_encode($list_ekspedisi); ?>;
+        console.log(list_ekspedisi);
+        for (const ekspedisi of list_ekspedisi) {
+            var strToPush = `${ekspedisi.id}---${ekspedisi.nama}`;
+            list_id_nama_ekspedisi.push(strToPush);
+        }
+        console.log(list_id_nama_ekspedisi);
+    }
+
     function showInputReseller() {
         if ($("#toggleReseller").html() == "tidak") {
             $("#toggleReseller").animate({
@@ -137,15 +217,18 @@ include_once "01-header.php";
             $placeholder = "Ekspedisi";
             $tipeEkspedisi = "inputEkspedisiNormal";
             $namaEkspedisi = "ekspedisi_normal[]";
+            $idEkspedisi = 'id_ekspedisi_normal[]';
         } else {
             $placeholder = "Ekspedisi Transit";
             $tipeEkspedisi = "inputEkspedisiTransit";
             $namaEkspedisi = "ekspedisi_transit[]";
+            $idEkspedisi = "id_ekspedisi_transit[]";
         }
 
         $newDiv = '<div id="divInputID-' + $i + '" class="containerInputEkspedisi grid-2-auto_15 mb-1em">' +
             '<div class="bb-1px-solid-grey">' +
-            '<input name="' + $namaEkspedisi + '" id="inputID-' + $i + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '" onkeyup="searchEkspedisi(' + $i + ');">' +
+            '<input name="' + $namaEkspedisi + '" id="inputID-' + $i + '" class="inputEkspedisiAll ' + $tipeEkspedisi + ' input-1 pb-1em bb-none" type="text" placeholder="' + $placeholder + '">' +
+            `<input id='inputIDHidden-${$i}' type='hidden' name='${$idEkspedisi}'>` +
             '<div id="searchResults-' + $i + '" class="d-none b-1px-solid-grey bb-none"></div>' +
             '</div>' +
             '<div class="btnTambahKurangEkspedisi justify-self-right grid-1-auto circle-medium bg-color-soft-red" onclick="btnKurangEkspedisi(' + $i + ');">' +
@@ -154,6 +237,24 @@ include_once "01-header.php";
             '</div>';
 
         $("#divInputEkspedisi").append($newDiv);
+
+        // SET AUTOCOMPLETE
+        var elementToSetAutoComplete = `#inputID-${$i}`;
+        var inputIDHidden = `#inputIDHidden-${$i}`;
+
+        $(elementToSetAutoComplete).autocomplete({
+            source: list_id_nama_ekspedisi,
+            select: function(event, ui) {
+                console.log(ui);
+                console.log(ui.item.value);
+                $value = ui.item.value.split('---');
+                console.log($value);
+                $id = $value[0];
+                console.log('chosen ID: ' + $id);
+                $(inputIDHidden).val($id);
+                console.log($(inputIDHidden).val());
+            }
+        });
         $i++;
         // history.back();
     }

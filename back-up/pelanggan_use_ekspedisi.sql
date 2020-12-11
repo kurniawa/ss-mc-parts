@@ -1,0 +1,1 @@
+INSERT INTO pelanggan_use_ekspedisi (id, id_ekspedisi, id_pelanggan, ekspedisi_transit, ekspedisi_utama) VALUES (1,'1','1','n','y'),(2,'2','2','n','y')
