@@ -1,5 +1,6 @@
 <?php
 include_once "01-header.php";
+include_once "01-config.php";
 if (isset($_GET['i'])) {
     $m = $_GET['i'];
 } else {
@@ -7,7 +8,7 @@ if (isset($_GET['i'])) {
 }
 ?>
 
-<div id="containerSJVaria">
+<form action="03-03-02-sj-varia-2.php" method="POST" id="containerSJVaria">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
@@ -41,10 +42,12 @@ if (isset($_GET['i'])) {
             </div>
 
         </div>
-        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
+        <div class="position-absolute bottom-0_5em w-calc-100-1em">
+            <button type="submit" id="bottomDiv" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
 
-            <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
+                <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
+            </button>
         </div>
         <div id="bottomDiv2" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
 
@@ -53,7 +56,7 @@ if (isset($_GET['i'])) {
         </div>
 
     </div>
-</div>
+</form>
 
 <script>
     // codingan untuk antisipasi editing item
@@ -204,12 +207,12 @@ if (isset($_GET['i'])) {
 
     var htmlDivInputJumlah =
         `<div id="divInputJumlah-${indexSJVaria}" class="mt-1em">
-            <input type="number" name="jumlah-${indexSJVaria}" id="inputJumlah-${indexSJVaria}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
+            <input type="number" name="jumlah" id="inputJumlah-${indexSJVaria}" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
         </div>`;
 
     var htmlDivSelectUkuran =
         `<div id='divSelectUkuran-${indexSJVaria}' class="grid-2-auto_10 mt-1em">
-            <select name="selectUkuran-${indexSJVaria}" id="selectUkuran-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange='namaDanHargaUkuran(this.value)'>
+            <select name="ukuran" id="selectUkuran-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange='namaDanHargaUkuran(this.value)'>
                 <option value="" disabled selected>Pilih Jenis Ukuran</option>
             </select>
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][3][1]}","${elementSystem[2][3][0]}","${elementSystem[2][3][1]}", 2, 3);'></span>
@@ -217,7 +220,7 @@ if (isset($_GET['i'])) {
 
     var htmlDivSelectJht =
         `<div id='divSelectJht-${indexSJVaria}' class="grid-2-auto_10 mt-1em">
-            <select name="selectJht-${indexSJVaria}" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em">
+            <select name="jahit" id="selectJht-${indexSJVaria}" class="pt-0_5em pb-0_5em">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
             </select>
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[3][1][1]}","${elementSystem[2][1][0]}","${elementSystem[2][1][1]}", 2, 1);'></span>
@@ -226,18 +229,18 @@ if (isset($_GET['i'])) {
     var htmlDivTADesc =
         `<div id="divTADesc-${indexSJVaria}" class="mt-1em">
             <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[3][2][1]}", "${elementSystem[2][2][0]}","${elementSystem[2][2][1]}", 2, 2);'></span></div>
-            <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc-${indexSJVaria}" id="taDesc-${indexSJVaria}" placeholder="Keterangan"></textarea>
+            <textarea class="pt-1em pl-1em text-area-mode-1" name="ktrg" id="taDesc-${indexSJVaria}" placeholder="Keterangan"></textarea>
         </div>`;
 
 
     var elementHTML = [
-        `<input id="inputBahan-${indexSJVaria}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">`,
+        `<input name="bahan" id="inputBahan-${indexSJVaria}" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Bahan" onkeyup="cekBahanAddSelectVariasi(this.value);">`,
 
         `<div id='divSelectVaria-${indexSJVaria}' class="grid-1-auto mt-1em mb-0_5em">
-            <select name="selectVaria-${indexSJVaria}" id="selectVaria-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange="cekVariaAddBoxes(this.value);">
+            <select name="varia" id="selectVaria-${indexSJVaria}" class="pt-0_5em pb-0_5em" onchange="cekVariaAddBoxes(this.value);">
                 <option value="" disabled selected>Pilih Variasi</option>
             </select>
-            <input id='inputHargaBahan-${indexSJVaria}' type='hidden'>
+            <input name="harga_bahan" id='inputHargaBahan-${indexSJVaria}' type='hidden'>
         </div>`,
 
         [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc, htmlBoxUkuran],

@@ -14,18 +14,27 @@ $tanggal = "";
 $daerah = "";
 $ket_judul = "";
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nama_pelanggan = $_POST["nama_pelanggan"];
-    $id_pelanggan = $_POST["id_pelanggan"];
-    $tanggal = $_POST["tanggal"];
-    $daerah = $_POST["daerah"];
-    $ket_judul = $_POST["ket_judul"];
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $nama_pelanggan = $_GET["nama_pelanggan"];
+    $id_pelanggan = $_GET["id_pelanggan"];
+    $tanggal = $_GET["tanggal"];
+    $daerah = $_GET["daerah"];
+    $ket_judul = $_GET["ket_judul"];
 }
 
 $htmlLogError = $htmlLogError . "</div>";
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogWarning = $htmlLogWarning . "</div>";
 ?>
+
+<header class="header grid-2-auto">
+    <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
+    <div class="justify-self-right pr-0_5em">
+        <!-- <a href="06-02-produk-baru.php" id="btnNewProduct" class="btn-atas-kanan2">
+            + Tambah Produk Baru
+        </a> -->
+    </div>
+</header>
 
 <div id="containerBeginSPK" class="m-0_5em">
 
@@ -42,8 +51,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             <div class="divSPKDate font-weight-bold"><?= $tanggal; ?></div>
             <div>Untuk</div>
             <div>:</div>
-            <div class="divSPKCustomer font-weight-bold">Akong - Pluit</div>
-            <input id="inputIDCustomer" type="hidden" name="inputIDCustomer">
+            <div class="divSPKCustomer font-weight-bold"><?= $nama_pelanggan; ?> - <?= $daerah; ?></div>
+            <input id="inputIDCustomer" type="hidden" name="inputIDCustomer" value="<?= $id_pelanggan; ?>">
         </div>
         <div class="grid-1-auto justify-items-right m-0_5em">
             <div>
@@ -52,15 +61,15 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
     </div>
 
-    <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em">Kirim Ke Biran Bangka</div>
+    <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em"><?= $ket_judul; ?></div>
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
     <input id="inputHargaTotalSPK" type="hidden">
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
-        <div class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center" onclick="toggleSJVaria();">
+        <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
-        </div>
+        </a>
         <div class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
         </div>
@@ -118,10 +127,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         $('.divLogOK').show();
     }
 
-    $("#containerBeginSPK").css("display", "none");
+    // $("#containerBeginSPK").css("display", "none");
     $('#btnProsesSPK').hide();
     let SPKItems = localStorage.getItem('SPKItems');
-    getSPKItems();
+    // getSPKItems();
 
     function getSPKItems() {
         SPKItems = localStorage.getItem('SPKItems');

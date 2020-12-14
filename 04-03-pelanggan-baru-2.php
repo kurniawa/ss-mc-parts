@@ -197,7 +197,8 @@ if ($status == "OK") {
                     $sql_insert_all_pelanggan = $sql_insert_all_pelanggan . "(" . $pelanggan['id'] . ",'" .  $pelanggan['nama'] . "','" .
                         $pelanggan['alamat'] . "','" . $pelanggan['pulau'] . "','" . $pelanggan['daerah'] . "','" . $pelanggan['kontak'] . "','" . $pelanggan['keterangan'] . "','" . $pelanggan['singkatan'] . "','" . $pelanggan['id_reseller'] . "')";
                     if ($i !== $jumlah_pelanggan['jumlah_pelanggan'] - 1) {
-                        $sql_insert_all_pelanggan = $sql_insert_all_pelanggan . ",";
+                        $sql_insert_all_pelanggan = $sql_insert_all_pelanggan . ",
+                        ";
                     }
                     $i++;
                 }

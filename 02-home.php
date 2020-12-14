@@ -65,6 +65,7 @@ if (empty($res_cek_ekspedisi)) {
                 $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data ekspedisi - SUCCEED!<br><br>";
             }
         }
+        fclose($file_ekspedisi);
     }
     // INSERT INTO ekspedisi
 } else {
@@ -110,6 +111,7 @@ if (empty($res_cek_pelanggan)) {
                 $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data pelanggan - SUCCEED!<br><br>";
             }
         }
+        fclose($file_pelanggan);
     }
     // INSERT INTO
 } else {
@@ -165,6 +167,7 @@ if (empty($res_cek_pelanggan_use_ekspedisi)) {
                     $htmlSucceedReport = $htmlSucceedReport . "Retrieve back-up data pelanggan_use_ekspedisi - SUCCEED!<br><br>";
                 }
             }
+            fclose($file_pelanggan_use_ekspedisi);
         }
     }
     // INSERT INTO pelanggan_use_ekspedisi
@@ -274,6 +277,78 @@ if (empty($res_cek_spk_contains_produk)) {
     }
 } else {
     $htmlSucceedReport = $htmlSucceedReport . "Table spk_contains_produk exist.<br><br>";
+}
+
+// ----- END -----
+
+// TABEL temp_produk
+
+$query_cek_temp_produk = "SELECT id FROM temp_produk";
+$res_cek_temp_produk = mysqli_query($con, $query_cek_temp_produk);
+
+if (empty($res_cek_temp_produk)) {
+    $query_create_temp_produk = "CREATE TABLE temp_produk (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        tipe varchar(20) NOT NULL,
+        bahan varchar(20) DEFAULT NULL,
+        varia varchar(20) DEFAULT NULL,
+        ukuran varchar(20) DEFAULT NULL,
+        logo varchar(20) DEFAULT NULL,
+        tato varchar(20) DEFAULT NULL,
+        jahit varchar(20) DEFAULT NULL,
+        nama_lengkap varchar(100) DEFAULT NULL,
+        japstyle int(11) DEFAULT NULL,
+        harga_price_list int(11) DEFAULT NULL
+      )ENGINE=InnoDB DEFAULT CHARSET=latin1";
+
+    $res_create_temp_produk = mysqli_query($con, $query_create_temp_produk);
+    if (!$res_create_temp_produk) {
+        $htmlErrorReport = $htmlErrorReport .  $query_create_temp_produk . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table temp_produk SUCCEED!<br><br>";
+    }
+    // INSERT INTO temp_produk
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table temp_produk exist.<br><br>";
+}
+
+// ----- END -----
+
+// TABEL temp_spk_contains_produk
+
+$query_cek_temp_spk_contains_produk = "SELECT id FROM temp_spk_contains_produk";
+$res_cek_temp_spk_contains_produk = mysqli_query($con, $query_cek_temp_spk_contains_produk);
+if (empty($res_cek_temp_spk_contains_produk)) {
+    $query_create_temp_spk_contains_produk = "CREATE TABLE temp_spk_contains_produk (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        id_spk int(11) NOT NULL,
+        id_produk int(11) NOT NULL,
+        ktrg varchar(256) DEFAULT NULL,
+        jumlah int(11) DEFAULT NULL,
+        harga_item int(11) DEFAULT NULL,
+        koreksi_harga int(11) DEFAULT NULL
+      )ENGINE=InnoDB DEFAULT CHARSET=latin1;";
+
+    $res_create_temp_spk_contains_produk = mysqli_query($con, $query_create_temp_spk_contains_produk);
+    if (!$res_create_temp_spk_contains_produk) {
+        $htmlErrorReport = $htmlErrorReport . $query_create_temp_spk_contains_produk . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table temp_spk_contains_produk SUCCEED!<br><br>";
+        $query_fk_temp_spk_contains_produk = "
+        ALTER TABLE temp_spk_contains_produk
+        ADD CONSTRAINT temp_spk_contains_produk_ibfk_1 FOREIGN KEY (id_spk) REFERENCES spk (id) ON DELETE CASCADE ON UPDATE CASCADE,
+        ADD CONSTRAINT temp_spk_contains_produk_ibfk_2 FOREIGN KEY (id_produk) REFERENCES produk (id) ON DELETE CASCADE ON UPDATE CASCADE;";
+
+        $res_fk_temp_spk_contains_produk = mysqli_query($con, $query_fk_temp_spk_contains_produk);
+
+        if (!$res_fk_temp_spk_contains_produk) {
+            $htmlErrorReport = $htmlErrorReport . $query_fk_temp_spk_contains_produk . " : FAILED!<br>" . mysqli_error($con) . "<br><br>";
+        } else {
+            $htmlSucceedReport = $htmlSucceedReport . $query_fk_temp_spk_contains_produk . " : SUCCEED!<br><br>";
+        }
+    }
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table temp_spk_contains_produk exist.<br><br>";
 }
 
 // ----- END -----
@@ -415,8 +490,6 @@ $htmlSucceedReport = $htmlSucceedReport . "</div>";
     // initSPK();
 </script>
 <?php
-fclose($file_ekspedisi);
-fclose($file_pelanggan);
-fclose($file_pelanggan_use_ekspedisi);
+
 include_once "01-footer.php";
 ?>

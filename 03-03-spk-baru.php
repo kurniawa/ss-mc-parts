@@ -11,7 +11,7 @@ include_once "01-config.php";
         </a> -->
     </div>
 </header>
-<form action="03-03-01-begin-inserting-products.php" method="POST" id="SPKBaru">
+<form action="03-03-01-begin-inserting-products.php" method="GET" id="SPKBaru">
 
     <div class="mt-1em ml-1em grid-2-10_auto">
         <div class="">

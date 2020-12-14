@@ -58,7 +58,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 <header class="header grid-2-auto">
     <img class="w-0_8em ml-1_5em" src="img/icons/back-button-white.svg" alt="" onclick="goBack();">
     <div class="justify-self-right pr-0_5em">
-        <a href="03-03-spk-baru.php" id="btn-spk-baru" class="btn-atas-kanan2" onclick="addNewSPK();">
+        <a href="03-03-spk-baru.php" id="btn-spk-baru" class="btn-atas-kanan2">
             + Buat SPK Baru
         </a>
     </div>
