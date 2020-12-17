@@ -1,11 +1,24 @@
 <?php
 include_once "01-header.php";
 include_once "01-config.php";
-if (isset($_GET['i'])) {
-    $m = $_GET['i'];
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+    $table = $_GET['table'];
+
+    $item_to_edit = dbGet($table);
+
+    if ($item_to_edit[0] !== "ERROR") {
+        $status = "OK";
+    } else {
+        $status = "ERROR";
+    }
 } else {
-    $m = 'undefined';
+    $id = 'undefined';
 }
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
 ?>
 
 <form action="03-03-02-sj-varia-2.php" method="POST" id="containerSJVaria">
@@ -49,16 +62,52 @@ if (isset($_GET['i'])) {
 
             </button>
         </div>
-        <div id="bottomDiv2" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
+        <div class="position-absolute bottom-0_5em w-calc-100-1em">
+            <input id="inputIDItemToEdit" type="hidden" name="id_item_to_edit">
+            <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
 
-            <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
+                <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
+
+            </button>
 
         </div>
 
     </div>
 </form>
 
+<div class="divLogError"></div>
+<div class="divLogWarning"></div>
+<div class="divLogOK"></div>
+
 <script>
+    // LOG REPORT
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
+
+    $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
+    $('.divLogOK').html(htmlLogOK);
+
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
+    }
+
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
+    // END: LOG REPORT
+
     // codingan untuk antisipasi editing item
 
     var indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
@@ -89,64 +138,62 @@ if (isset($_GET['i'])) {
     // let testArray = ["test1", "test1", "test1", "test1", "test1", "test1", "test1", "test1"];
 
     // console.log(testArray);
-    $(document).ready(function() {
 
-        fetch('json/products.json').then(response => response.json()).then(data => {
-            console.log(data);
-            for (const bahan of data[0].bahan) {
-                // console.log(bahan.nama_bahan);
-                arrayBahan.push({
-                    bahan: bahan.nama_bahan,
-                    harga: bahan.harga
-                });
-                arrayNamaBahan.push(bahan.nama_bahan);
-            }
-            console.log(arrayBahan);
-            for (const variasi of data[0].variasi[0].jenis_variasi) {
-                // console.log(variasi.nama);
-                arrayVariasi.push(variasi.nama);
-            }
-            for (const jenisLG of data[0].variasi[0].jenis_variasi[1].jenis_logo) {
-                // console.log(jenisLG.nama);
-                arrayJenisLG.push(jenisLG.nama);
-            }
-            for (const gambarLGBludru of data[0].variasi[0].jenis_variasi[1].jenis_logo[0].gambar) {
-                arrayGambarLGBludru.push(gambarLGBludru);
-            }
-            for (const gambarLGPolimas of data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar) {
-                // console.log(data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar);
-                arrayGambarLGPolimas.push(gambarLGPolimas);
-            }
-            for (const gambarLGSablon of data[0].variasi[0].jenis_variasi[1].jenis_logo[2].gambar) {
-                arrayGambarLGSablon.push(gambarLGSablon);
-            }
-            for (const gambarLGBayang of data[0].variasi[0].jenis_variasi[1].jenis_logo[3].gambar) {
-                arrayGambarLGBayang.push(gambarLGBayang);
-            }
-            for (const gambarLGStiker of data[0].variasi[0].jenis_variasi[1].jenis_logo[4].gambar) {
-                arrayGambarLGStiker.push(gambarLGStiker);
-            }
-            for (const jht of data[0].jahit[0].tipe_jht) {
-                arrayJht.push(jht);
-            }
-            for (const ukuran of data[0].ukuran) {
-                arrayTipeUkuran.push(ukuran.tipe_ukuran);
-                arrayNamaNotaUkuran.push(ukuran.nama_nota);
-                arrayHargaUkuran.push(ukuran.harga);
-            }
-        });
 
-        // console.log(arrayBahan);
-
-        $('#divPilihanTambahItemSejenis').hide();
-
-        // $("#variasi2").autocomplete({
-        //     source: arrayVariasi
-        // });
-
-        // $('#variasi').selectmenu();
-
+    fetch('json/products.json').then(response => response.json()).then(data => {
+        console.log(data);
+        for (const bahan of data[0].bahan) {
+            // console.log(bahan.nama_bahan);
+            arrayBahan.push({
+                bahan: bahan.nama_bahan,
+                harga: bahan.harga
+            });
+            arrayNamaBahan.push(bahan.nama_bahan);
+        }
+        console.log(arrayBahan);
+        for (const variasi of data[0].variasi[0].jenis_variasi) {
+            // console.log(variasi.nama);
+            arrayVariasi.push(variasi.nama);
+        }
+        for (const jenisLG of data[0].variasi[0].jenis_variasi[1].jenis_logo) {
+            // console.log(jenisLG.nama);
+            arrayJenisLG.push(jenisLG.nama);
+        }
+        for (const gambarLGBludru of data[0].variasi[0].jenis_variasi[1].jenis_logo[0].gambar) {
+            arrayGambarLGBludru.push(gambarLGBludru);
+        }
+        for (const gambarLGPolimas of data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar) {
+            // console.log(data[0].variasi[0].jenis_variasi[1].jenis_logo[1].gambar);
+            arrayGambarLGPolimas.push(gambarLGPolimas);
+        }
+        for (const gambarLGSablon of data[0].variasi[0].jenis_variasi[1].jenis_logo[2].gambar) {
+            arrayGambarLGSablon.push(gambarLGSablon);
+        }
+        for (const gambarLGBayang of data[0].variasi[0].jenis_variasi[1].jenis_logo[3].gambar) {
+            arrayGambarLGBayang.push(gambarLGBayang);
+        }
+        for (const gambarLGStiker of data[0].variasi[0].jenis_variasi[1].jenis_logo[4].gambar) {
+            arrayGambarLGStiker.push(gambarLGStiker);
+        }
+        for (const jht of data[0].jahit[0].tipe_jht) {
+            arrayJht.push(jht);
+        }
+        for (const ukuran of data[0].ukuran) {
+            arrayTipeUkuran.push(ukuran.tipe_ukuran);
+            arrayNamaNotaUkuran.push(ukuran.nama_nota);
+            arrayHargaUkuran.push(ukuran.harga);
+        }
     });
+
+    // console.log(arrayBahan);
+
+    $('#divPilihanTambahItemSejenis').hide();
+
+    // $("#variasi2").autocomplete({
+    //     source: arrayVariasi
+    // });
+
+    // $('#variasi').selectmenu();
 
     function addSJVaria() {
         var elementsToAppend =
@@ -265,7 +312,7 @@ if (isset($_GET['i'])) {
         console.log('pilih fungsi dijalankan: ' + namaFungsi + '\n' + divID + '\n' + elementHTML);
     }
 
-    async function createElement(divID, elementID, elementHTML) {
+    function createElement(divID, elementID, elementHTML) {
         console.log('running create Element');
         console.log(divID + ' ' + elementHTML);
         console.log('elementID: ' + elementID);
@@ -312,6 +359,7 @@ if (isset($_GET['i'])) {
                 $("#selectJenisTato-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
             });
         }
+
     }
 
     addSJVaria();
@@ -534,67 +582,89 @@ if (isset($_GET['i'])) {
         window.history.back();
     }
 
-    var m = <?php echo $m ?>;
-    console.log(m);
-    $('#bottomDiv2').hide();
-    setTimeout(() => {
+    // var id = php echo $id ;
+    // console.log(id);
+    // $('#bottomDiv2').hide();
+    // setTimeout(() => {
 
-        if (m !== undefined) {
+    //     if (id !== undefined) {
+    //         editMode();
+    //         $('#bottomDiv2').show();
+    //         $('#bottomDiv').hide();
+    //     }
+
+    // }, 300);
+
+    var status = '<?= $status; ?>';
+    setTimeout(() => {
+        if (status == "OK") {
             editMode();
-            $('#bottomDiv2').show();
-            $('#bottomDiv').hide();
+        } else {
+            console.log("BUKAN MODE EDIT");
         }
 
-    }, 300);
+    }, 100);
 
     function editMode() {
-        console.log('edit mode');
-        let newSPK = localStorage.getItem('dataSPKToEdit');
-        newSPK = JSON.parse(newSPK);
+        console.log('MASUK KE edit mode');
+        // let newSPK = localStorage.getItem('dataSPKToEdit');
+        // newSPK = JSON.parse(newSPK);
+        // addSJVaria();
+        // createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
+        var spkItem = <?= json_encode($item_to_edit); ?>;
+        var id = <?= $id ?>;
 
-        if (newSPK.item[m].bahan !== '') {
-            console.log(newSPK.item[m].bahan);
-            $(`#inputBahan-${indexSJVaria}`).val(newSPK.item[m].bahan);
+        console.log(`spkItem[0]: `);
+        console.log(spkItem[0]);
+
+        $('#bottomDiv2').show();
+        $('#bottomDiv').hide();
+
+        $("#inputIDItemToEdit").val(id);
+
+        if (spkItem[0].bahan !== '') {
+            console.log(spkItem[0].bahan);
+            $(`#inputBahan-${indexSJVaria}`).val(spkItem[0].bahan);
         }
 
-        if (newSPK.item[m].varia !== '') {
+        if (spkItem[0].varia !== '') {
             console.log(elementSystem[1][1]);
-            cekBahanAddSelectVariasi(newSPK.item[m].bahan);
-            $(`#selectVaria-${indexSJVaria}`).val(newSPK.item[m].varia);
+            cekBahanAddSelectVariasi(spkItem[0].bahan);
+            $(`#selectVaria-${indexSJVaria}`).val(spkItem[0].varia);
         }
 
-        console.log(newSPK.item[m].jahit);
-        // if (newSPK.item[m].jht !== '' || newSPK.item[m].desc !== '' || newSPK.item[m].jumlah !== '') {
-        //     if (newSPK.item[m].jht !== '') {
+        console.log(spkItem[0].jahit);
+        // if (spkItem[0].jht !== '' || spkItem[0].desc !== '' || spkItem[0].jumlah !== '') {
+        //     if (spkItem[0].jht !== '') {
         //         addLvl3ElementFromBox('Jht');
-        //         $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jht);
+        //         $(`#selectJht-${indexSJVaria}`).val(spkItem[0].jht);
 
         //     }
-        //     if (newSPK.item[m].desc !== '') {
+        //     if (spkItem[0].desc !== '') {
         //         addLvl3ElementFromBox('Desc');
-        //         $(`#taDesc-${indexSJVaria}`).val(newSPK.item[m].desc);
+        //         $(`#taDesc-${indexSJVaria}`).val(spkItem[0].desc);
         //     }
-        //     if (newSPK.item[m].jumlah !== '') {
+        //     if (spkItem[0].jumlah !== '') {
         //         addLvl3ElementFromBox('Jumlah');
-        //         $(`#inputJumlah-${indexSJVaria}`).val(newSPK.item[m].jumlah);
+        //         $(`#inputJumlah-${indexSJVaria}`).val(spkItem[0].jumlah);
         //     }
         // }
 
-        if (newSPK.item[m].jahit !== '') {
+        if (spkItem[0].jahit !== '') {
             addLvl3ElementFromBox('Jht');
-            $(`#selectJht-${indexSJVaria}`).val(newSPK.item[m].jahit);
+            $(`#selectJht-${indexSJVaria}`).val(spkItem[0].jahit);
         }
-        if (newSPK.item[m].desc !== '') {
+        if (spkItem[0].ktrg !== '') {
             addLvl3ElementFromBox('Desc');
-            $(`#taDesc-${indexSJVaria}`).val(newSPK.item[m].desc);
+            $(`#taDesc-${indexSJVaria}`).val(spkItem[0].ktrg);
         }
 
-        if (newSPK.item[m].jumlah !== '') {
+        if (spkItem[0].jumlah !== '') {
             addLvl3ElementFromBox('Jumlah');
-            $(`#inputJumlah-${indexSJVaria}`).val(newSPK.item[m].jumlah);
+            $(`#inputJumlah-${indexSJVaria}`).val(spkItem[0].jumlah);
         }
 
-        if (newSPK.item[m].ukuran_tipe !== '' || newSPK.item[m].ukuran_tipe !== null) {
+        if (spkItem[0].ukuran !== '') {
             addLvl3ElementFromBox('Ukuran');
             // $(`#boxUkuran`).remove();
             var selectUkuran = document.getElementById(`selectUkuran-${indexSJVaria}`);
@@ -604,13 +674,13 @@ if (isset($_GET['i'])) {
                 if (selectUkuran.options[i].value !== '') {
                     var valueSelectUkuran = JSON.parse(selectUkuran.options[i].value);
                     var tipeUkuran = valueSelectUkuran.tipeUkuran;
-                    if (tipeUkuran === newSPK.item[m].ukuran_tipe) {
+                    if (tipeUkuran === spkItem[0].ukuran) {
                         selectUkuran.selectedIndex = i;
                         break;
                     }
                 }
             }
-            // $(`#selectUkuran-${indexSJVaria}`).val(newSPK.item[m].ukuran_tipe);
+            // $(`#selectUkuran-${indexSJVaria}`).val(spkItem[0].ukuran);
         }
 
         cekVariaAddBoxes2();
@@ -634,7 +704,7 @@ if (isset($_GET['i'])) {
         $varia = $(`#selectVaria-${indexSJVaria}`).val();
         $jht = '';
         $plusJahit = '';
-        $desc = '';
+        $ktrg = '';
         $namaLengkap = '';
         $jumlah = 0;
         var ukuran = '';
@@ -646,7 +716,7 @@ if (isset($_GET['i'])) {
         console.log('$bahan: ' + $bahan);
         console.log('$varia: ' + $varia);
         console.log('$jht: ' + $jht);
-        console.log('$desc: ' + $desc);
+        console.log('$ktrg: ' + $ktrg);
         console.log('$jumlah: ' + $jumlah);
 
         if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
@@ -664,7 +734,7 @@ if (isset($_GET['i'])) {
             }
         }
         if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
-            $desc = $(`#taDesc-${indexSJVaria}`).val();
+            $ktrg = $(`#taDesc-${indexSJVaria}`).val();
         }
         if ($(`#divInputJumlah-${indexSJVaria}`).length !== 0) {
             $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
@@ -714,7 +784,7 @@ if (isset($_GET['i'])) {
             bahan: $bahan,
             varia: $varia,
             jahit: $jht,
-            desc: $desc,
+            ktrg: $ktrg,
             jumlah: $jumlah,
             namaLengkap: $namaLengkap,
             hargaBahan: $hargaBahan,
@@ -726,15 +796,15 @@ if (isset($_GET['i'])) {
             ukuran_harga: ukuran.hargaUkuran
         }
         console.log(itemObj);
-        var newSPK = localStorage.getItem('dataSPKToEdit');
-        newSPK = JSON.parse(newSPK);
-        console.log(newSPK);
+        // var newSPK = localStorage.getItem('dataSPKToEdit');
+        // newSPK = JSON.parse(newSPK);
+        // console.log(newSPK);
 
-        newSPK.item[m] = itemObj;
-        console.log(newSPK);
-        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        // location.href = '03-03-01-inserting-items.php';
-        window.history.back();
+        // newSPK.item[m] = itemObj;
+        // console.log(newSPK);
+        // localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
+        // // location.href = '03-03-01-inserting-items.php';
+        // window.history.back();
     }
 </script>
 

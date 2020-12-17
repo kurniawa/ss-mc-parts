@@ -3,10 +3,10 @@
 include_once "01-header.php";
 include_once "01-config.php";
 
-$htmlLogError = "<div class='logError'>";
-$htmlLogOK = "<div class='logOK'>";
-$htmlLogWarning = "<div class='logWarning'>";
-$status = "";
+// $htmlLogError = "<div class='logError'>";
+// $htmlLogOK = "<div class='logOK'>";
+// $htmlLogWarning = "<div class='logWarning'>";
+// $status = "";
 
 $nama_pelanggan = "";
 $id_pelanggan = "";
@@ -15,11 +15,20 @@ $daerah = "";
 $ket_judul = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $status = "OK";
     $nama_pelanggan = $_GET["nama_pelanggan"];
     $id_pelanggan = $_GET["id_pelanggan"];
     $tanggal = $_GET["tanggal"];
     $daerah = $_GET["daerah"];
     $ket_judul = $_GET["ket_judul"];
+}
+
+// CEK APAKAH ADA ITEM YANG SUDAH SEMPAT DIINPUT
+$item_spk;
+if ($status == "OK") {
+    $table = "spk_item";
+    $item_spk = dbGet($table);
+    // var_dump($item_spk);
 }
 
 $htmlLogError = $htmlLogError . "</div>";
@@ -90,6 +99,14 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     </div>
 
+    <!-- EDIT ITEM SPK -->
+    <div id="divBtnShowEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
+    </div>
+    <div id="divBtnHideEditOptItemSPK" class="text-center">
+        <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
+    </div>
+    <!-- END - EDIT ITEM SPK -->
     <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
@@ -132,40 +149,109 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     let SPKItems = localStorage.getItem('SPKItems');
     // getSPKItems();
 
-    function getSPKItems() {
-        SPKItems = localStorage.getItem('SPKItems');
-        if (SPKItems === '') {
-            return false;
-        }
-        SPKItems = JSON.parse(SPKItems);
-        console.log(SPKItems);
-        let htmlItemList = '';
-        let totalHarga = 0;
-        for (const item of SPKItems) {
-            var textItemJht = item.jht;
-            if (textItemJht != '') {
-                textItemJht = '+ jht ' + textItemJht;
-            }
+    var item_spk = <?= json_encode($item_spk); ?>;
+    console.log(item_spk);
+
+    var status = '<?= $status; ?>';
+
+    if (status == "OK") {
+        var htmlItemList = '';
+        var totalHarga = 0;
+        for (var i = 0; i < item_spk.length; i++) {
             htmlItemList = htmlItemList +
-                `<div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
-                <div class=''>${item.bahan} ${item.varia} ${textItemJht}</div>
+                `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+                <div class='divItemName grid-2-15_auto'>
+                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${item_spk[i].id});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                        ${item_spk[i].nama_lengkap}
+                    </div>
                 <div class='grid-1-auto'>
-                <div class='color-green justify-self-right font-size-1_2em'>${item.jumlah}</div>
-                <div class='color-grey justify-self-right'>Jumlah</div>
+                <div class='color-green justify-self-right font-size-1_2em'>
+                    ${item_spk[i].jumlah}
                 </div>
-                <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
+                    <div class='color-grey justify-self-right'>Jumlah</div>
+                </div>
+                <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem("${item_spk[i].id}", "${item_spk[i].tipe}");'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
+                <div class='pl-0_5em color-blue-purple'>${item_spk[i].ktrg.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
                 </div>`;
 
             // kita jumlah harga semua item untuk satu SPK
-            totalHarga = totalHarga + item.hargaItem;
+            totalHarga = totalHarga + item_spk.harga_item;
         }
         $('#inputHargaTotalSPK').val(totalHarga);
         $('#divItemList').html(htmlItemList);
         $('#btnProsesSPK').show();
     }
-    history.pushState({
-        page: 'SPKBegin'
-    }, null);
+
+    function showEditOptItemSPK(params) {
+        $('.divItem').removeClass('grid-2-auto').addClass('grid-3-auto_auto_10');
+        $('.divItemName').addClass('grid-2-15_auto');
+        $('.btnRemoveItem').show();
+        $('.btnEditItem').show();
+        $('#divBtnShowEditOptItemSPK').hide();
+        $('#divBtnHideEditOptItemSPK').show();
+    }
+
+    function hideEditOptItemSPK() {
+        $('.divItem').removeClass('grid-3-auto_auto_10').addClass('grid-2-auto');
+        $('.divItemName').removeClass('grid-2-15_auto');
+        $('.btnRemoveItem').hide();
+        $('.btnEditItem').hide();
+        $('#divBtnShowEditOptItemSPK').show();
+        $('#divBtnHideEditOptItemSPK').hide();
+    }
+
+    hideEditOptItemSPK();
+
+    function editSPKItem(id, tipe) {
+        console.log(id);
+        console.log(tipe);
+
+        if (tipe === 'sj-varia') {
+            console.log(tipe);
+            location.href = '03-03-02-sj-varia3.php?id=' + id + '&table=' + 'spk_item';
+        } else if (tipe === 'sj-kombi') {
+            console.log(tipe);
+            location.href = '03-03-03-sj-kombi.php?id=' + id + '&table=' + 'spk_item';
+        } else if (tipe === 'sj-std') {
+            console.log(tipe);
+            location.href = '03-03-04-sj-std.php?id=' + id + '&table=' + 'spk_item';
+        }
+    }
+
+    // function getSPKItems() {
+    //     SPKItems = localStorage.getItem('SPKItems');
+    //     if (SPKItems === '') {
+    //         return false;
+    //     }
+    //     SPKItems = JSON.parse(SPKItems);
+    //     console.log(SPKItems);
+    //     let htmlItemList = '';
+    //     let totalHarga = 0;
+    //     for (const item of SPKItems) {
+    //         var textItemJht = item.jht;
+    //         if (textItemJht != '') {
+    //             textItemJht = '+ jht ' + textItemJht;
+    //         }
+    //         htmlItemList = htmlItemList +
+    //             `<div class='grid-2-auto p-0_5em bb-1px-solid-grey'>
+    //             <div class=''>${item.bahan} ${item.varia} ${textItemJht}</div>
+    //             <div class='grid-1-auto'>
+    //             <div class='color-green justify-self-right font-size-1_2em'>${item.jumlah}</div>
+    //             <div class='color-grey justify-self-right'>Jumlah</div>
+    //             </div>
+    //             <div class='pl-0_5em color-blue-purple'>${item.desc}</div>
+    //             </div>`;
+
+    //         // kita jumlah harga semua item untuk satu SPK
+    //         totalHarga = totalHarga + item.hargaItem;
+    //     }
+    //     $('#inputHargaTotalSPK').val(totalHarga);
+    //     $('#divItemList').html(htmlItemList);
+    //     $('#btnProsesSPK').show();
+    // }
+    // history.pushState({
+    //     page: 'SPKBegin'
+    // }, null);
     $(document).ready(function() {
         $(".productType").css("display", "none");
         $("#containerSJVaria").css("display", "none");
@@ -184,22 +270,22 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         $("#containerBeginSPK").toggle();
     }
 
-    window.addEventListener('popstate', (event) => {
-        // console.log(event.state.page);
-        // console.log(event)
-        $('#SPKBaru').hide();
-        $("#containerBeginSPK").hide();
-        $('#containerSJVaria').hide();
-        if (event.state == null) {
-            history.go(-1);
-        } else if (event.state.page == 'SJVaria') {
-            $("#containerSJVaria").show();
-        } else if (event.state.page == 'newSPK') {
-            $('#SPKBaru').show();
-        } else if (event.state.page == 'SPKBegin') {
-            $('#containerBeginSPK').show();
-        }
-    });
+    // window.addEventListener('popstate', (event) => {
+    //     // console.log(event.state.page);
+    //     // console.log(event)
+    //     $('#SPKBaru').hide();
+    //     $("#containerBeginSPK").hide();
+    //     $('#containerSJVaria').hide();
+    //     if (event.state == null) {
+    //         history.go(-1);
+    //     } else if (event.state.page == 'SJVaria') {
+    //         $("#containerSJVaria").show();
+    //     } else if (event.state.page == 'newSPK') {
+    //         $('#SPKBaru').show();
+    //     } else if (event.state.page == 'SPKBegin') {
+    //         $('#containerBeginSPK').show();
+    //     }
+    // });
 
     async function proceedSPK() {
         // cek apakah produk sudah ada atau blm
