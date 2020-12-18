@@ -150,3 +150,61 @@ function dbUpdate($table, $column, $value, $key, $key_value)
         $htmlLogWarning = $htmlLogWarning . $sql . " - SUCCEED!<br><br>";
     }
 }
+
+function dbDelete($table, $column, $value)
+{
+    global $con;
+    global $htmlLogOK;
+    global $htmlLogWarning;
+    global $htmlLogError;
+    global $status;
+
+    $sql = "DELETE FROM $table WHERE $column=$value";
+    $res = mysqli_query($con, $sql);
+    if (!$res) {
+        $status = "ERROR";
+        $htmlLogError = $htmlLogError . $sql . " - FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $status = "OK";
+        $htmlLogOK = $htmlLogOK . $sql . " - SUCCEED!<br><br>";
+    }
+}
+
+function dbCheck($table, $column, $value)
+{
+    global $con;
+    global $htmlLogOK;
+    global $htmlLogWarning;
+    global $htmlLogError;
+    global $status;
+
+    $data_length = count($column);
+
+    $sql = "SELECT * FROM $table WHERE ";
+    for ($i = 0; $i < $data_length; $i++) {
+        // $value[$i] = mysqli_real_escape_string($con, $value[$i]);
+        if ($i === ($data_length - 1)) {
+            $sql = $sql . "$column[$i]='$value[$i]'";
+        } else {
+            $sql = $sql . "$column[$i]='$value[$i]' AND ";
+        }
+    }
+
+    $res = mysqli_query($con, $sql);
+
+    if (!$res) {
+        $status = "ERROR";
+        $htmlLogError = $htmlLogError . $sql . " - FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $status = "OK";
+        $htmlLogOK = $htmlLogOK . $sql . " - SUCCEED!<br><br>";
+        if (mysqli_num_rows($res) == 0) {
+            $htmlLogOK = $htmlLogOK . "BELUM ADA DI DATABASE<br><br>";
+            return "BELUM ADA";
+        } else {
+            $htmlLogWarning = $htmlLogWarning . "UDAH ADA DI DATABASE<br><br>";
+            $row = mysqli_fetch_assoc($res);
+            return array("UDAH ADA", $row["id"]);
+        }
+    }
+}

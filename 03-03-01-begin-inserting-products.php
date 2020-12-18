@@ -45,7 +45,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     </div>
 </header>
 
-<div id="containerBeginSPK" class="m-0_5em">
+<form action="03-03-01-proceed-spk.php" method="POST" id="containerBeginSPK" class="m-0_5em">
 
     <div class="b-1px-solid-grey">
         <div class="text-center">
@@ -61,19 +61,26 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             <div>Untuk</div>
             <div>:</div>
             <div class="divSPKCustomer font-weight-bold"><?= $nama_pelanggan; ?> - <?= $daerah; ?></div>
-            <input id="inputIDCustomer" type="hidden" name="inputIDCustomer" value="<?= $id_pelanggan; ?>">
+            <input id="inputIDCustomer" type="hidden" name="id_pelanggan" value="<?= $id_pelanggan; ?>">
         </div>
         <div class="grid-1-auto justify-items-right m-0_5em">
             <div>
                 <img class="w-1em" src="img/icons/edit-grey.svg" alt="">
             </div>
         </div>
+        <input type="hidden" name="tgl_pembuatan" value="<?= $tanggal; ?>">
     </div>
 
     <div class="divTitleDesc grid-1-auto justify-items-center mt-0_5em"><?= $ket_judul; ?></div>
+    <input type="hidden" name="ket_judul" value="<?= $ket_judul; ?>">
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
     <input id="inputHargaTotalSPK" type="hidden">
+
+    <div id="divJmlTotal" class="text-right">
+        <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
+        <div class="font-weight-bold color-red font-size-1_5em">Total</div>
+    </div>
 
     <div id="divAddItems" class="h-9em position-relative mt-1em">
         <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -107,11 +114,13 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
     </div>
     <!-- END - EDIT ITEM SPK -->
-    <div id="btnProsesSPK" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
-        <span class="justify-self-center font-weight-900">PROSES SPK</span>
+    <div class="position-absolute bottom-0_5em w-calc-100-1em">
+        <button type="submit" id="btnProsesSPK" class="w-100 h-4em bg-color-orange-2 grid-1-auto">
+            <span class="justify-self-center font-weight-900">PROSES SPK</span>
+        </button>
     </div>
 
-</div>
+</form>
 
 <div class="divLogError"></div>
 <div class="divLogWarning"></div>
@@ -146,6 +155,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     // $("#containerBeginSPK").css("display", "none");
     $('#btnProsesSPK').hide();
+    $('#divJmlTotal').hide();
     let SPKItems = localStorage.getItem('SPKItems');
     // getSPKItems();
 
@@ -157,11 +167,12 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     if (status == "OK") {
         var htmlItemList = '';
         var totalHarga = 0;
+        var jumlahTotalItem = 0;
         for (var i = 0; i < item_spk.length; i++) {
             htmlItemList = htmlItemList +
                 `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
                 <div class='divItemName grid-2-15_auto'>
-                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${item_spk[i].id});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem("${item_spk[i].id}");'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
                         ${item_spk[i].nama_lengkap}
                     </div>
                 <div class='grid-1-auto'>
@@ -175,9 +186,14 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
                 </div>`;
 
             // kita jumlah harga semua item untuk satu SPK
-            totalHarga = totalHarga + item_spk.harga_item;
+            totalHarga = totalHarga + parseFloat(item_spk[i].harga_item);
+            jumlahTotalItem = jumlahTotalItem + parseFloat(item_spk[i].jumlah);
         }
         $('#inputHargaTotalSPK').val(totalHarga);
+        if (totalHarga !== 0) {
+            $('#divJmlTotal2').html(jumlahTotalItem);
+            $('#divJmlTotal').show();
+        }
         $('#divItemList').html(htmlItemList);
         $('#btnProsesSPK').show();
     }
@@ -216,6 +232,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             console.log(tipe);
             location.href = '03-03-04-sj-std.php?id=' + id + '&table=' + 'spk_item';
         }
+    }
+
+    function removeSPKItem(id) {
+        location.href = `03-03-07-remove-item-spk.php?id=${id}`;
     }
 
     // function getSPKItems() {
