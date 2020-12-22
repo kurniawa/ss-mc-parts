@@ -1,5 +1,5 @@
 <?php
-
+// test ah
 define('host', 'localhost');
 define('user', 'root');
 define('pw', '');
