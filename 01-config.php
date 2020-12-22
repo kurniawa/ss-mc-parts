@@ -1,5 +1,5 @@
 <?php
-// test ah
+
 define('host', 'localhost');
 define('user', 'root');
 define('pw', '');
@@ -49,6 +49,8 @@ function nextID($table, $column)
 
         $htmlLogOK = $htmlLogOK . "next_id $table ==> $column: $next_id<br><br>";
         return $next_id;
+    } else {
+        return "ERROR";
     }
 
     // $obj_next_id = array(
@@ -120,6 +122,31 @@ function dbGet($table)
     }
 }
 
+function dbGetWithFilter($table, $filter, $filter_value)
+{
+    global $con;
+    global $htmlLogOK;
+    global $htmlLogWarning;
+    global $status;
+
+    $query = "SELECT * FROM $table WHERE $filter=$filter_value";
+    $res = mysqli_query($con, $query);
+
+    if (!$res) {
+        $status = "ERROR";
+        $htmlLogWarning = $htmlLogWarning . $query . " - FAILED! " . mysqli_error($con) . "<br><br>";
+        return array("ERROR");
+    } else {
+        $status = "OK";
+        $htmlLogOK = $htmlLogOK . $query . " - SUCCEED!<br><br>";
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($res)) {
+            array_push($rows, $row);
+        }
+        return $rows;
+    }
+}
+
 function dbUpdate($table, $column, $value, $key, $key_value)
 {
     global $con;
@@ -160,6 +187,25 @@ function dbDelete($table, $column, $value)
     global $status;
 
     $sql = "DELETE FROM $table WHERE $column=$value";
+    $res = mysqli_query($con, $sql);
+    if (!$res) {
+        $status = "ERROR";
+        $htmlLogError = $htmlLogError . $sql . " - FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $status = "OK";
+        $htmlLogOK = $htmlLogOK . $sql . " - SUCCEED!<br><br>";
+    }
+}
+
+function dbDeleteAllFromTable($table)
+{
+    global $con;
+    global $htmlLogOK;
+    global $htmlLogWarning;
+    global $htmlLogError;
+    global $status;
+
+    $sql = "DELETE FROM $table";
     $res = mysqli_query($con, $sql);
     if (!$res) {
         $status = "ERROR";

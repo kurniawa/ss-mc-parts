@@ -14,6 +14,7 @@ if (isset($_GET['id'])) {
     }
 } else {
     $id = 'undefined';
+    $item_to_edit = "none";
 }
 
 $htmlLogError = $htmlLogError . "</div>";
@@ -56,7 +57,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
         </div>
         <div class="position-absolute bottom-0_5em w-calc-100-1em">
-            <button type="submit" id="bottomDiv" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
+            <button type="submit" id="bottomDiv" class="w-100 h-4em bg-color-orange-2 grid-1-auto">
 
                 <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
@@ -596,11 +597,15 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     // }, 300);
 
     var status = '<?= $status; ?>';
+    console.log(status);
     setTimeout(() => {
         if (status == "OK") {
             editMode();
         } else {
             console.log("BUKAN MODE EDIT");
+            $('#inputIDItemToEdit').remove();
+            $('#bottomDiv2').hide();
+            $('#bottomDiv').show();
         }
 
     }, 100);

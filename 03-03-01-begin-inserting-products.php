@@ -75,7 +75,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     <input type="hidden" name="ket_judul" value="<?= $ket_judul; ?>">
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
-    <input id="inputHargaTotalSPK" type="hidden">
+    <input id="inputHargaTotalSPK" type="hidden" name="total_harga">
 
     <div id="divJmlTotal" class="text-right">
         <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
@@ -190,7 +190,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             jumlahTotalItem = jumlahTotalItem + parseFloat(item_spk[i].jumlah);
         }
         $('#inputHargaTotalSPK').val(totalHarga);
-        if (totalHarga !== 0) {
+        if (jumlahTotalItem !== 0) {
             $('#divJmlTotal2').html(jumlahTotalItem);
             $('#divJmlTotal').show();
         }

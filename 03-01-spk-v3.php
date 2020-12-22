@@ -44,7 +44,7 @@ if (mysqli_num_rows($res_query_all_spk) <= 0) {
                 }
             }
         }
-        array_push($spk, $row);
+        array_push($spk, $row_spk);
     }
 }
 
