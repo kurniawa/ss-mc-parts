@@ -8,46 +8,7 @@ $htmlLogError = "<div class='logError'>";
 $htmlLogWarning = "<div class='logWarning'>";
 $status = "";
 
-$query_all_spk = "SELECT * FROM spk ORDER BY tgl_pembuatan DESC";
-$res_query_all_spk = mysqli_query($con, $query_all_spk);
-
-if (!$res_query_all_spk) {
-    $htmlLogError = $htmlLogError . $query_all_spk . ": FAILED! " . mysqli_error($con) . "<br><br>";
-}
-
-$spk = array();
-$spk_item = array();
-
-if (mysqli_num_rows($res_query_all_spk) <= 0) {
-    $htmlLogOK = $htmlLogOK . $query_all_spk . ": NOT FOUND! ";
-} else {
-    while ($row_spk = mysqli_fetch_assoc($res_query_all_spk)) {
-        $id_spk = $row_spk['id'];
-        $query_get_spk_contains_produk = "SELECT * FROM spk_contains_produk WHERE id_spk=$id_spk";
-        $res_query_get_spk_contains_produk = mysqli_query($con, $query_get_spk_contains_produk);
-
-        if (!$res_query_get_spk_contains_produk) {
-            $htmlLogError = $htmlLogError . $query_get_spk_contains_produk . " - FAILED! " . mysqli_error($con) . "<br><br>";
-        } else {
-            $htmlLogOK = $htmlLogOK . $query_get_spk_contains_produk . " - SUCCEED!<br><br>";
-            while ($row_spk_contains_produk = mysqli_fetch_assoc($res_query_get_spk_contains_produk)) {
-                $id_produk = $row_spk_contains_produk['id_produk'];
-                $query_get_produk = "SELECT * FROM produk WHERE id=$id_produk";
-                $res_query_get_produk = mysqli_query($con, $query_get_produk);
-
-                if (!$res_query_get_produk) {
-                    $htmlLogError = $htmlLogError . $query_get_produk . " - FAILED! " . mysqli_error($con) . "<br><br>";
-                } else {
-                    $htmlLogOK = $htmlLogOK . $query_get_produk . " - SUCCEED!<br><br>";
-                    $row_produk = mysqli_fetch_assoc($res_query_get_produk);
-                    array_push($spk_item, $row_produk);
-                }
-            }
-        }
-        array_push($spk, $row_spk);
-    }
-}
-
+include_once "03-02-get-spk.php";
 
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogError = $htmlLogError . "</div>";
@@ -63,10 +24,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </a>
     </div>
 </header>
-
-<div class="divLogError"></div>
-<div class="divLogWarning"></div>
-<div class="divLogOK"></div>
 
 <div class="grid-2-auto mt-1em ml-1em mr-1em pb-1em bb-0_5px-solid-grey">
     <div class="justify-self-left grid-2-auto b-1px-solid-grey b-radius-50px mr-1em pl-1em pr-0_4em w-11em">
@@ -85,6 +42,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
 <div id="div-daftar-spk" class='ml-0_5em mr-0_5em'>
 </div>
+
+<div class="divLogError"></div>
+<div class="divLogWarning"></div>
+<div class="divLogOK"></div>
 
 <script>
     // initSPK();
@@ -119,12 +80,121 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
 
     var spk = <?= json_encode($spk); ?>;
+    console.log("spk:");
     console.log(spk);
+
+    var pelanggan = <?= json_encode($pelanggan); ?>;
+    console.log("pelanggan:")
+    console.log(pelanggan);
+
+    var spk_item = <?= json_encode($spk_item); ?>;
+    console.log("spk_item:");
+    console.log(spk_item);
+
+    var spk_contains_item = <?= json_encode($spk_contains_item); ?>;
+    console.log("spk_contains_item:");
+    console.log(spk_contains_item);
 
     if (spk == undefined || spk.length == 0) {
         console.log('Belum ada daftar SPK');
     } else {
+        for (var i = 0; i < spk.length; i++) {
+            var arrayDate = spk[i].tgl_pembuatan.split('-');
+            var getYear = arrayDate[0];
+            var getMonth = arrayDate[1];
+            var getDay = arrayDate[2];
+            console.log('getYear: ' + getYear);
+            console.log('getMonth: ' + getMonth);
+            console.log('getDay: ' + getDay);
+            var subGetYear = getYear.substr(2);
+            console.log('subGetYear: ' + subGetYear);
+            var warnaTglPembuatan = 'bg-color-soft-red';
 
+            // apabila tanggal selesai telah ada
+            var arrayDateSls = '';
+            var getYearSls = '';
+            var getMonthSls = '';
+            var getDaySls = '';
+            var warnaTglSls = '';
+            var subGetYearSls = '';
+
+            if (spk[i].tgl_selesai !== '' && spk[i].tgl_selesai !== null) {
+                arrayDateSls = spk[i].tgl_selesai.split('-');
+                getYearSls = arrayDateSls[0];
+                getMonthSls = arrayDateSls[1];
+                getDaySls = arrayDateSls[2];
+
+                console.log('getYearSls: ' + getYearSls);
+                console.log('getMonthSls: ' + getMonthSls);
+                console.log('getDaySls: ' + getDaySls);
+                subGetYearSls = getYearSls.substr(2);
+                console.log('subGetYearSls: ' + subGetYearSls);
+                warnaTglSls = 'bg-color-orange-2';
+                warnaTglPembuatan = 'bg-color-purple-blue';
+            }
+
+            // MENGHITUNG Jumlah total
+            var jumlah_total_item_spk = 0;
+            for (let j = 0; j < spk_contains_item[i].length; j++) {
+                jumlah_total_item_spk = jumlah_total_item_spk + parseFloat(spk_contains_item[i][j].jumlah);
+            }
+            console.log("jumlah total item spk:");
+            console.log(jumlah_total_item_spk);
+
+            // ELEMENT to toggle
+            var element_to_toggle = [{
+                id: `#divSPKItems-${i}`,
+                time: 300
+            }];
+            console.log('element_to_toggle:');
+            console.log(element_to_toggle);
+            element_to_toggle = JSON.stringify(element_to_toggle);
+            console.log(element_to_toggle);
+
+            // HTML Item each SPK
+            var htmlItemsEachSPK = '';
+
+            for (var k = 0; k < spk_item[i].length; k++) {
+                htmlItemsEachSPK = htmlItemsEachSPK +
+                    `<div>${spk_item[i][k].nama_lengkap}</div><div>${spk_contains_item[i][k].jumlah}</div>`;
+            }
+
+
+            var htmlDaftarSPK =
+                `<form method='GET' action='03-03-01-detail-spk.php' class='pb-0_5em pt-0_5em bb-1px-solid-grey'>
+                    <div class='grid-5-9_45_25_18_5'>
+                    <div class='circle-medium grid-1-auto justify-items-center font-weight-bold' style='background-color: ${randomColor()}'>${pelanggan[i].singkatan}</div>
+                    <div>${pelanggan[i].nama} - ${pelanggan[i].daerah}</div>
+                    <div class='grid-3-auto'>
+                    <div class='grid-1-auto justify-items-center ${warnaTglPembuatan} color-white b-radius-5px w-3_5em'>
+                    <div class='font-size-2_5em'>${getDay}</div><div>${getMonth}-${subGetYear}</div>
+                    </div>
+                    -
+                    <div class='grid-1-auto justify-items-center ${warnaTglSls} color-white b-radius-5px w-3_5em'>
+                    <div class='font-size-2_5em'>${getDaySls}</div><div>${getMonthSls}-${subGetYearSls}</div>
+                    </div>
+                    </div>
+                    <div class='grid-1-auto'>
+                    <div class='color-green justify-self-right font-size-1_2em font-weight-bold'>${jumlah_total_item_spk}</div>
+                    <div class='color-grey justify-self-right'>Jumlah</div>
+                    </div>
+                    <div class='justify-self-center'><img class='w-0_7em' src='img/icons/dropdown.svg' onclick='elementToToggle(${element_to_toggle});'></div>
+                    </div>` +
+                // DROPDOWN
+                `<div id='divSPKItems-${i}' class='p-0_5em b-1px-solid-grey' style='display: none'>
+                <div class='font-weight-bold color-grey'>No. ${spk[i].id}</div>
+                <input type='hidden' name='id_spk' value=${spk[i].id}>
+                <div class='grid-2-auto'>${htmlItemsEachSPK}</div>
+                <div class='text-right'>
+                <button type='submit' class="d-inline-block bg-color-orange-1 pl-1em pr-1em b-radius-50px" style='border: none'>
+                Lebih Detail >>
+                </button>
+                </div>
+                </div>
+                </form>`;
+
+            $('#div-daftar-spk').append(htmlDaftarSPK);
+        }
     }
 
     function daftarSPK() {
