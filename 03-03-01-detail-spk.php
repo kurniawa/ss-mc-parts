@@ -22,9 +22,27 @@ if ($status == "OK") {
     $spk = dbGetWithFilter($table, $filter, $filter_value);
 }
 
-if ($status == "OK" && $spk != "ERROR") {
-    var_dump($spk);
+if ($status == "OK" && $spk !== "ERROR") {
+    // var_dump($spk);
+    // GET pelanggan
+    $pelanggan = dbGetWithFilter("pelanggan", "id", $spk[0]["id_pelanggan"]);
 }
+
+if ($status == "OK" && $pelanggan !== "ERROR") {
+    // var_dump($pelanggan);
+    $spk_item = dbGetWithFilter("spk_contains_produk", "id_spk", $spk[0]["id"]);
+}
+
+$array_produk = array();
+if ($status == "OK" && $spk_item !== "ERROR") {
+    // var_dump($spk_item);
+    for ($i = 0; $i < count($spk_item); $i++) {
+        $produk = dbGetWithFilter("produk", "id", $spk_item[$i]["id_produk"]);
+        array_push($array_produk, $produk[0]);
+    }
+    // var_dump($array_produk);
+}
+
 
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogError = $htmlLogError . "</div>";
@@ -94,7 +112,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     }
 </style>
 
-<div id="containerBeginSPK" class="m-0_5em">
+<form action="03-03-01-spk-selesai.php" method="POST" id="containerBeginSPK" class="m-0_5em">
 
     <div class="b-1px-solid-grey">
         <div class="text-center">
@@ -103,13 +121,13 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         <div class="grid-3-25_10_auto m-0_5em grid-row-gap-1em">
             <div>No.</div>
             <div>:</div>
-            <div id="divSPKNumber" class="font-weight-bold">8888</div>
+            <div id="divSPKNumber" class="font-weight-bold"></div>
             <div>Tanggal</div>
             <div>:</div>
-            <div id="divTglPembuatan" class="font-weight-bold">15-10-2020</div>
+            <div id="divTglPembuatan" class="font-weight-bold"></div>
             <div>Untuk</div>
             <div>:</div>
-            <div id="divSPKCustomer" class="font-weight-bold">Akong - Pluit</div>
+            <div id="divSPKCustomer" class="font-weight-bold"></div>
             <input id="inputIDCustomer" type="hidden" name="inputIDCustomer">
         </div>
         <div class="grid-1-auto justify-items-right m-0_5em">
@@ -119,7 +137,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
     </div>
 
-    <div id="divTitleDesc" class="grid-1-auto justify-items-center mt-0_5em">Kirim Ke Biran Bangka</div>
+    <div id="divTitleDesc" class="grid-1-auto justify-items-center mt-0_5em"></div>
 
     <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
     <input id="inputHargaTotalSPK" type="hidden">
@@ -195,11 +213,12 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
         <br><br>
         <div class="text-center">
-            <input id="inputTglSelesaiSPK" type="date" class="input-select-option-1 w-12em" name="date" value="<?php echo date('Y-m-d'); ?>">
+            <input id="inputTglSelesaiSPK" type="date" class="input-select-option-1 w-12em" name="tgl_selesai" value="<?php echo date('Y-m-d'); ?>">
         </div>
         <br><br>
+        <input type="hidden" name="id_spk" value=<?= $id_spk; ?>>
         <div class="text-center">
-            <div id="btnSPKSelesai" class="btn-tipis bg-color-orange-1 d-inline-block">Lanjutkan >></div>
+            <button type="submit" id="btnSPKSelesai" class="btn-tipis bg-color-orange-1 d-inline-block">Lanjutkan >></button>
         </div>
     </div>
 
@@ -208,7 +227,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     <div class="divLogOK"></div>
 
 
-</div>
+</form>
 <style>
     .closingGreyArea {
         position: absolute;
@@ -260,6 +279,58 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     }
     // ----- END -----
 
+    var spk = <?= json_encode($spk); ?>;
+    console.log(spk);
+
+    var pelanggan = <?= json_encode($pelanggan); ?>;
+    console.log(pelanggan);
+
+    var spk_contains_item = <?= json_encode($spk_item); ?>;
+    console.log(spk_contains_item);
+
+    var produk = <?= json_encode($array_produk); ?>;
+    console.log(produk);
+
+    $jmlTotalSPK = 0;
+    var htmlSPKItem = '';
+    for (var i = 0; i < spk_contains_item.length; i++) {
+        htmlSPKItem = htmlSPKItem +
+            `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+                <div class='divItemName grid-2-15_auto'>
+                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                    ${produk[i].nama_lengkap}
+                </div>
+            <div class='grid-1-auto'>
+            <div class='color-green justify-self-right font-size-1_2em'>
+                ${spk_contains_item[i].jumlah}
+            </div>
+            <div class='color-grey justify-self-right'>Jumlah</div>
+            </div>
+            <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
+            <div class='pl-0_5em color-blue-purple'>${spk_contains_item[i].ktrg.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
+            </div>`;
+
+        $jmlTotalSPK = $jmlTotalSPK + parseFloat(spk_contains_item[i].jumlah);
+    }
+
+    $('#divSPKNumber').html(spk[0].id);
+    $('#divTitleDesc').html(spk[0].ktrg);
+    $('#divItemList').html(htmlSPKItem);
+    console.log($jmlTotalSPK);
+
+    setTimeout(function() {
+        if ($jmlTotalSPK !== 0) {
+            $('#divJmlTotal2').html($jmlTotalSPK);
+            $('#divJmlTotal').show();
+        }
+
+    }, 100);
+
+    $('#divTglPembuatan').html(spk[0].tgl_pembuatan);
+    $('#divSPKCustomer').html(`${pelanggan[0].nama} - ${pelanggan[0].daerah}`);
+    $('#divTitleDesc').html(spk[0].ket_judul);
+    $('#taKeteranganTambahan').html(spk[0].ktrg);
+
     // keadaan awal apa aja yang di hide
     $('.divThreeDotMenuContent').hide();
     $('.threeDotMenu').css('display', 'none'); // -> untuk new SPK
@@ -268,24 +339,24 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     $('#divKeteranganTambahan').hide();
     $('#btnProsesSPK').hide();
     $('#divJmlTotal').hide();
-    $('#divBtnSPKSelesai').hide();
+    // $('#divBtnSPKSelesai').hide();
     $('#btnEditSPKItem').hide();
 
-    if (mode == 'EDIT SPK') {
-        SPKBefore = localStorage.getItem('dataSPKBefore');
-        if (SPKBefore != null) {
-            SPKBefore = JSON.parse(SPKBefore);
-        }
-        runningModeEdit();
-    } else {
-        // IF MODE === 'NEW SPK'
-        let statusCekMode = cekMode();
-        console.log(statusCekMode);
-        if (statusCekMode == false) {
-            newSPK = localStorage.getItem('dataSPKToEdit');
-            getSPKItems();
-        }
-    }
+    // if (mode == 'EDIT SPK') {
+    //     SPKBefore = localStorage.getItem('dataSPKBefore');
+    //     if (SPKBefore != null) {
+    //         SPKBefore = JSON.parse(SPKBefore);
+    //     }
+    //     runningModeEdit();
+    // } else {
+    //     // IF MODE === 'NEW SPK'
+    //     let statusCekMode = cekMode();
+    //     console.log(statusCekMode);
+    //     if (statusCekMode == false) {
+    //         newSPK = localStorage.getItem('dataSPKToEdit');
+    //         getSPKItems();
+    //     }
+    // }
 
     function cekMode() {
         console.log('menjalankan cek mode');
@@ -515,37 +586,37 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         $('.lightBox').hide();
     });
 
-    document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
-        let tglSelesai = $('#inputTglSelesaiSPK').val();
-        let noNota = `N${custID}-${SPKID}`;
-        let noSrjalan = `SJ${custID}-${SPKID}`;
-        console.log(tglSelesai);
-        $.ajax({
-            type: 'POST',
-            url: '01-crud.php',
-            async: false,
-            cache: false,
-            data: {
-                type: 'UPDATE',
-                table: 'spk',
-                column: ['tgl_selesai', 'no_nota', 'tgl_nota', 'no_surat_jalan', 'tgl_surat_jalan'],
-                value: [tglSelesai, noNota, tglSelesai, noSrjalan, tglSelesai],
-                dateIndex: [0, 2, 4],
-                key: 'id',
-                keyValue: SPKID
-            },
-            success: function(res) {
-                res = JSON.parse(res);
-                console.log(res);
-                console.log(res[0]);
-                if (res[0] === 'UPDATE SUCCEED') {
-                    console.log('goToMainMenu');
-                    window.history.go(1 - (history.length));
-                }
+    // document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
+    //     let tglSelesai = $('#inputTglSelesaiSPK').val();
+    //     let noNota = `N${custID}-${SPKID}`;
+    //     let noSrjalan = `SJ${custID}-${SPKID}`;
+    //     console.log(tglSelesai);
+    //     $.ajax({
+    //         type: 'POST',
+    //         url: '01-crud.php',
+    //         async: false,
+    //         cache: false,
+    //         data: {
+    //             type: 'UPDATE',
+    //             table: 'spk',
+    //             column: ['tgl_selesai', 'no_nota', 'tgl_nota', 'no_surat_jalan', 'tgl_surat_jalan'],
+    //             value: [tglSelesai, noNota, tglSelesai, noSrjalan, tglSelesai],
+    //             dateIndex: [0, 2, 4],
+    //             key: 'id',
+    //             keyValue: SPKID
+    //         },
+    //         success: function(res) {
+    //             res = JSON.parse(res);
+    //             console.log(res);
+    //             console.log(res[0]);
+    //             if (res[0] === 'UPDATE SUCCEED') {
+    //                 console.log('goToMainMenu');
+    //                 window.history.go(1 - (history.length));
+    //             }
 
-            }
-        });
-    });
+    //         }
+    //     });
+    // });
 
     document.getElementById('downloadExcel').addEventListener('click', (event) => {
         console.log(event);
