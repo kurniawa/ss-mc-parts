@@ -1,6 +1,13 @@
 <?php
 include_once "01-header.php";
 include_once "01-config.php";
+
+$mode = "";
+$id_spk = "none";
+$id_spk_contains_item = "none";
+$id_produk = "none";
+$action = "03-03-02-sj-varia-2.php";
+
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
     $table = $_GET['table'];
@@ -12,6 +19,19 @@ if (isset($_GET['id'])) {
     } else {
         $status = "ERROR";
     }
+} else if (isset($_GET["id_spk"]) && isset($_GET["id_spk_contains_item"]) && isset($_GET["id_produk"])) {
+    $mode = "edit";
+    $id_spk = $_GET["id_spk"];
+    $id_spk_contains_item = $_GET["id_spk_contains_item"];
+    $id_produk = $_GET["id_produk"];
+    $action = "03-03-02-sj-varia-3.php";
+
+    $htmlLogOK = $htmlLogOK .
+        "
+    id_spk: $id_spk<br>
+    id_spk_contains_item: $id_spk_contains_item<br>
+    id_produk: $id_produk<br><br>
+    ";
 } else {
     $id = 'undefined';
     $item_to_edit = "none";
@@ -22,7 +42,7 @@ $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogWarning = $htmlLogWarning . "</div>";
 ?>
 
-<form action="03-03-02-sj-varia-2.php" method="POST" id="containerSJVaria">
+<form action="<?= $action; ?>" method="POST" id="containerSJVaria">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
@@ -74,6 +94,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
 
     </div>
+    <input type="hidden" name="mode" value="<?= $mode; ?>">
+    <input type="hidden" name="id_spk" value="<?= $id_spk ?>">
+    <input type="hidden" name="id_spk_contains_item" value="<?= $id_spk_contains_item ?>">
+    <input type="hidden" name="id_produk" value="<?= $id_produk ?>">
 </form>
 
 <div class="divLogError"></div>

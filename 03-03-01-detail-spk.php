@@ -62,9 +62,9 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     </div>
     <div class="divThreeDotMenuContent">
         <div id="editKopSPK" class="threeDotMenuItem">
-            <img src="img/icons/edit.svg" alt=""><span>Edit Data SPK</span>
+            <img src="img/icons/edit.svg" alt=""><span>Edit Kop SPK</span>
         </div>
-        <div id="downloadExcel" class="threeDotMenuItem">
+        <div id="downloadExcel" class="threeDotMenuItem" onclick="goToPrintOutSPK();">
             <img src="img/icons/download.svg" alt=""><span>Download Excel</span>
         </div>
     </div>
@@ -222,12 +222,12 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
     </div>
 
-    <div class="divLogError"></div>
-    <div class="divLogWarning"></div>
-    <div class="divLogOK"></div>
-
-
 </form>
+
+<div class="divLogError"></div>
+<div class="divLogWarning"></div>
+<div class="divLogOK"></div>
+
 <style>
     .closingGreyArea {
         position: absolute;
@@ -294,21 +294,41 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     $jmlTotalSPK = 0;
     var htmlSPKItem = '';
     for (var i = 0; i < spk_contains_item.length; i++) {
+        var action = "";
+
+        if (spk[i].tipe == "sj-varia") {
+            action = "03-03-02-sj-varia3.php";
+        } else if (spk[i].tipe == "sj-kombi") {
+            action = "03-03-03-sj-kombi.php";
+        } else if (spk[i].tipe == "sj-std") {
+            action = "03-03-04-sj-std.php";
+        } else if (spk[i].tipe == "tankpad") {
+            action = "03-03-05-tankpad.php";
+        } else if (spk[i].tipe == "busa-stang") {
+            action = '03-03-06-busa-stang.php';
+        }
+
         htmlSPKItem = htmlSPKItem +
-            `<div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
+            `<form action='${action}' method="GET">
+            <div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
                 <div class='divItemName grid-2-15_auto'>
                     <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
                     ${produk[i].nama_lengkap}
                 </div>
-            <div class='grid-1-auto'>
-            <div class='color-green justify-self-right font-size-1_2em'>
-                ${spk_contains_item[i].jumlah}
+                <div class='grid-1-auto'>
+                    <div class='color-green justify-self-right font-size-1_2em'>
+                        ${spk_contains_item[i].jumlah}
+                    </div>
+                    <div class='color-grey justify-self-right'>Jumlah</div>
+                </div>
+                <button type='submit' id='btnEditItem-${spk_contains_item[i].id}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></button>
+                <div class='pl-0_5em color-blue-purple'>${spk_contains_item[i].ktrg.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
             </div>
-            <div class='color-grey justify-self-right'>Jumlah</div>
-            </div>
-            <div id='btnEditItem-${i}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue' onclick='editSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></div>
-            <div class='pl-0_5em color-blue-purple'>${spk_contains_item[i].ktrg.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
-            </div>`;
+            <input type="hidden" name="id_spk" value="${spk[0].id}">
+            <input type="hidden" name="id_spk_contains_item" value="${spk_contains_item[i].id}">
+            <input type="hidden" name="id_produk" value="${produk[i].id}">
+            </form>
+            `;
 
         $jmlTotalSPK = $jmlTotalSPK + parseFloat(spk_contains_item[i].jumlah);
     }
@@ -333,7 +353,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     // keadaan awal apa aja yang di hide
     $('.divThreeDotMenuContent').hide();
-    $('.threeDotMenu').css('display', 'none'); // -> untuk new SPK
+    // $('.threeDotMenu').css('display', 'none'); // -> untuk new SPK
     $('.productType').hide();
     $('#boxKeteranganTambahan').hide();
     $('#divKeteranganTambahan').hide();
@@ -341,6 +361,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     $('#divJmlTotal').hide();
     // $('#divBtnSPKSelesai').hide();
     $('#btnEditSPKItem').hide();
+
+    function goToPrintOutSPK() {
+        location.href = `03-06-print-out-spk.php?id_spk=${spk[0].id}`;
+    }
 
     // if (mode == 'EDIT SPK') {
     //     SPKBefore = localStorage.getItem('dataSPKBefore');
@@ -573,7 +597,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     document.getElementById('editKopSPK').addEventListener('click', function() {
         console.log('clicked');
-        window.location.href = '03-05-edit-data-spk.php';
+        window.location.href = `03-05-edit-kop-spk.php?id_spk=${spk[0].id}`;
     });
 
     function finishSPK() {
@@ -618,40 +642,40 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     //     });
     // });
 
-    document.getElementById('downloadExcel').addEventListener('click', (event) => {
-        console.log(event);
-        let itemToPrint = new Array();
-        console.log(SPKItem);
+    // document.getElementById('downloadExcel').addEventListener('click', (event) => {
+    //     console.log(event);
+    //     let itemToPrint = new Array();
+    //     console.log(SPKItem);
 
-        for (let i = 0; i < SPKItem.length; i++) {
-            console.log('Masukkan data item - ' + i);
-            itemToPrint.push({
-                namaLengkap: SPKItem[i],
-                desc: descEachItem[i],
-                jumlah: jmlItem[i]
-            });
-        }
+    //     for (let i = 0; i < SPKItem.length; i++) {
+    //         console.log('Masukkan data item - ' + i);
+    //         itemToPrint.push({
+    //             namaLengkap: SPKItem[i],
+    //             desc: descEachItem[i],
+    //             jumlah: jmlItem[i]
+    //         });
+    //     }
 
-        let spkToPrint = {
-            custID: custID,
-            custName: custName,
-            daerah: daerah,
-            tglPembuatan: tglPembuatan,
-            ketSPK: ketSPK,
-            id: SPKID,
-            keteranganTambahan: keteranganTambahan,
-            item: itemToPrint
-        }
+    //     let spkToPrint = {
+    //         custID: custID,
+    //         custName: custName,
+    //         daerah: daerah,
+    //         tglPembuatan: tglPembuatan,
+    //         ketSPK: ketSPK,
+    //         id: SPKID,
+    //         keteranganTambahan: keteranganTambahan,
+    //         item: itemToPrint
+    //     }
 
-        localStorage.setItem('dataSPKToPrint', JSON.stringify(spkToPrint));
+    //     localStorage.setItem('dataSPKToPrint', JSON.stringify(spkToPrint));
 
-        var moveToPrintOutSPK = confirm('Lanjut ke print-out SPK: ');
-        if (moveToPrintOutSPK === true) {
-            location.href = '03-06-print-out-spk.php';
-        } else {
-            console.log(moveToPrintOutSPK);
-        }
-    });
+    //     var moveToPrintOutSPK = confirm('Lanjut ke print-out SPK: ');
+    //     if (moveToPrintOutSPK === true) {
+    //         location.href = '03-06-print-out-spk.php';
+    //     } else {
+    //         console.log(moveToPrintOutSPK);
+    //     }
+    // });
 
     document.querySelector('.threeDot').addEventListener('click', function() {
         let element = [{

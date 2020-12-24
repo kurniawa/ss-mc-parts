@@ -3,6 +3,9 @@
 include_once "01-config.php";
 include_once "01-header.php";
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+}
+
 $htmlLogError = $htmlLogError . "</div>";
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogWarning = $htmlLogWarning . "</div>";
