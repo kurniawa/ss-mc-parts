@@ -6,6 +6,8 @@ $mode = "";
 $id_spk = "none";
 $id_spk_contains_item = "none";
 $id_produk = "none";
+$item_to_edit = "none";
+$id = "undefined";
 $action = "03-03-02-sj-varia-2.php";
 
 if (isset($_GET['id'])) {
@@ -34,8 +36,9 @@ if (isset($_GET['id'])) {
     ";
 } else {
     $id = 'undefined';
-    $item_to_edit = "none";
 }
+
+var_dump($item_to_edit);
 
 $htmlLogError = $htmlLogError . "</div>";
 $htmlLogOK = $htmlLogOK . "</div>";
@@ -621,9 +624,12 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     // }, 300);
 
     var status = '<?= $status; ?>';
+    var spkItem = <?= json_encode($item_to_edit); ?>;
+    var id = <?= $id_produk; ?>;
     console.log(status);
+    var mode = '<?= $mode; ?>';
     setTimeout(() => {
-        if (status == "OK") {
+        if (mode == "edit") {
             editMode();
         } else {
             console.log("BUKAN MODE EDIT");
@@ -640,8 +646,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         // newSPK = JSON.parse(newSPK);
         // addSJVaria();
         // createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
-        var spkItem = <?= json_encode($item_to_edit); ?>;
-        var id = <?= $id ?>;
 
         console.log(`spkItem[0]: `);
         console.log(spkItem[0]);

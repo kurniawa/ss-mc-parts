@@ -139,54 +139,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     <div id="divTitleDesc" class="grid-1-auto justify-items-center mt-0_5em"></div>
 
-    <div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
-    <input id="inputHargaTotalSPK" type="hidden">
-
-    <div id="divKeteranganTambahan" class="mt-1em">
-        <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='removeKeteranganTambahan();'></span></div>
-        <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc" id="taKeteranganTambahan" placeholder="Keterangan"></textarea>
-    </div>
-
-    <div id="divJmlTotal" class="text-right">
-        <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
-        <div class="font-weight-bold color-red font-size-1_5em">Total</div>
-    </div>
-
-    <div id="divAddItems" class="h-9em position-relative mt-1em">
-        <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
-            <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
-        </a>
-        <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
-            <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
-        </a>
-        <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
-            <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
-        </a>
-        <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
-            <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
-        </a>
-        <a href="03-03-06-busa-stang.php" class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
-            <span class="font-size-0_8em text-center font-weight-bold">Busa<br>Stang</span>
-        </a>
-        <div class="position-absolute top-5em left-50 transform-translate--50_0 grid-1-auto justify-items-center" onclick="toggleProductType();">
-            <div class="circle-medium bg-color-orange-2 grid-1-auto justify-items-center">
-                <span class="color-white font-weight-bold font-size-1_5em">+</span>
-            </div>
-        </div>
-
-    </div>
-
-    <div id="divBtnShowEditOptItemSPK" class="text-center">
-        <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
-    </div>
-    <div id="divBtnHideEditOptItemSPK" class="text-center">
-        <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
-    </div>
-
-    <div id="boxKeteranganTambahan" class="position-fixed bottom-5em d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='showKeteranganTambahan();'>
-        + Ktrgn Tambahan
-    </div>
-
     <div id="btnProsesSPK" class="position-fixed bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="proceedSPK();">
         <span class="justify-self-center font-weight-900">PROSES SPK</span>
     </div>
@@ -199,10 +151,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         <div class="h-4em bg-color-orange-2 grid-1-auto" onclick="finishSPK();">
             <span class="justify-self-center font-weight-900">SPK SELESAI</span>
         </div>
-    </div>
-
-    <div id="divMarginBottom" style="height: 20vh;">
-
     </div>
 
     <div id="closingGreyArea" class="closingGreyArea" style="display: none;"></div>
@@ -223,6 +171,56 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     </div>
 
 </form>
+
+<div id="divItemList" class="bt-1px-solid-grey font-weight-bold"></div>
+<input id="inputHargaTotalSPK" type="hidden">
+
+<div id="divKeteranganTambahan" class="mt-1em">
+    <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='removeKeteranganTambahan();'></span></div>
+    <textarea class="pt-1em pl-1em text-area-mode-1" name="taDesc" id="taKeteranganTambahan" placeholder="Keterangan"></textarea>
+</div>
+
+<div id="divJmlTotal" class="text-right">
+    <div id="divJmlTotal2" class="font-weight-bold font-size-2em color-green"></div>
+    <div class="font-weight-bold color-red font-size-1_5em">Total</div>
+</div>
+
+<div id="divAddItems" class="h-9em position-relative mt-1em">
+    <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
+    </a>
+    <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
+    </a>
+    <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
+    </a>
+    <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
+        <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
+    </a>
+    <a href="03-03-06-busa-stang.php" class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
+        <span class="font-size-0_8em text-center font-weight-bold">Busa<br>Stang</span>
+    </a>
+    <div class="position-absolute top-5em left-50 transform-translate--50_0 grid-1-auto justify-items-center" onclick="toggleProductType();">
+        <div class="circle-medium bg-color-orange-2 grid-1-auto justify-items-center">
+            <span class="color-white font-weight-bold font-size-1_5em">+</span>
+        </div>
+    </div>
+
+</div>
+
+<div id="divBtnShowEditOptItemSPK" class="text-center">
+    <div class="d-inline-block btn-1 bg-color-purple-blue font-weight-bold color-white" onclick="showEditOptItemSPK();">Edit Item</div>
+</div>
+<div id="divBtnHideEditOptItemSPK" class="text-center">
+    <div class="d-inline-block btn-1 font-weight-bold color-white" style="background-color: gray;" onclick="hideEditOptItemSPK();">Finish Editing</div>
+</div>
+
+<div id="boxKeteranganTambahan" class="position-fixed bottom-5em d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='showKeteranganTambahan();'>
+    + Ktrgn Tambahan
+</div>
+
+<div id="divMarginBottom" style="height: 20vh;"></div>
 
 <div class="divLogError"></div>
 <div class="divLogWarning"></div>
@@ -296,15 +294,15 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     for (var i = 0; i < spk_contains_item.length; i++) {
         var action = "";
 
-        if (spk[i].tipe == "sj-varia") {
+        if (produk[i].tipe == "sj-varia") {
             action = "03-03-02-sj-varia3.php";
-        } else if (spk[i].tipe == "sj-kombi") {
+        } else if (produk[i].tipe == "sj-kombi") {
             action = "03-03-03-sj-kombi.php";
-        } else if (spk[i].tipe == "sj-std") {
+        } else if (produk[i].tipe == "sj-std") {
             action = "03-03-04-sj-std.php";
-        } else if (spk[i].tipe == "tankpad") {
+        } else if (produk[i].tipe == "tankpad") {
             action = "03-03-05-tankpad.php";
-        } else if (spk[i].tipe == "busa-stang") {
+        } else if (produk[i].tipe == "busa-stang") {
             action = '03-03-06-busa-stang.php';
         }
 
