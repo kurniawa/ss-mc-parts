@@ -129,7 +129,7 @@ function dbGetWithFilter($table, $filter, $filter_value)
     global $htmlLogWarning;
     global $status;
 
-    $query = "SELECT * FROM $table WHERE $filter=$filter_value";
+    $query = "SELECT * FROM $table WHERE $filter='$filter_value'";
     $res = mysqli_query($con, $query);
 
     if (!$res) {

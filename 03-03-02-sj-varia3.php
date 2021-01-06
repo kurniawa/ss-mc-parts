@@ -7,6 +7,7 @@ $id_spk = "none";
 $id_spk_contains_item = "none";
 $id_produk = "none";
 $item_to_edit = "none";
+$spk_contains_item = "none";
 $id = "undefined";
 $action = "03-03-02-sj-varia-2.php";
 
@@ -34,11 +35,14 @@ if (isset($_GET['id'])) {
     id_spk_contains_item: $id_spk_contains_item<br>
     id_produk: $id_produk<br><br>
     ";
+
+    $item_to_edit = dbGetWithFilter("produk", "id", $id_produk);
+    $spk_contains_item = dbGetWithFilter("spk_contains_produk", "id", $id_spk_contains_item);
 } else {
     $id = 'undefined';
 }
 
-var_dump($item_to_edit);
+// var_dump($item_to_edit);
 
 $htmlLogError = $htmlLogError . "</div>";
 $htmlLogOK = $htmlLogOK . "</div>";
@@ -88,7 +92,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         </div>
         <div class="position-absolute bottom-0_5em w-calc-100-1em">
             <input id="inputIDItemToEdit" type="hidden" name="id_item_to_edit">
-            <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
+            <!-- <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();"> -->
+            <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto">
 
                 <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
 
@@ -101,6 +106,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     <input type="hidden" name="id_spk" value="<?= $id_spk ?>">
     <input type="hidden" name="id_spk_contains_item" value="<?= $id_spk_contains_item ?>">
     <input type="hidden" name="id_produk" value="<?= $id_produk ?>">
+    <input type="hidden" name="harga_jahit">
+    <input type="hidden" name="harga_ukuran">
 </form>
 
 <div class="divLogError"></div>
@@ -625,6 +632,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     var status = '<?= $status; ?>';
     var spkItem = <?= json_encode($item_to_edit); ?>;
+    var spk_contains_item = <?= json_encode($spk_contains_item); ?>;
     var id = <?= $id_produk; ?>;
     console.log(status);
     var mode = '<?= $mode; ?>';
@@ -687,14 +695,14 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             addLvl3ElementFromBox('Jht');
             $(`#selectJht-${indexSJVaria}`).val(spkItem[0].jahit);
         }
-        if (spkItem[0].ktrg !== '') {
+        if (spk_contains_item[0].ktrg !== '') {
             addLvl3ElementFromBox('Desc');
-            $(`#taDesc-${indexSJVaria}`).val(spkItem[0].ktrg);
+            $(`#taDesc-${indexSJVaria}`).val(spk_contains_item[0].ktrg);
         }
 
-        if (spkItem[0].jumlah !== '') {
+        if (spk_contains_item[0].jumlah !== '') {
             addLvl3ElementFromBox('Jumlah');
-            $(`#inputJumlah-${indexSJVaria}`).val(spkItem[0].jumlah);
+            $(`#inputJumlah-${indexSJVaria}`).val(spk_contains_item[0].jumlah);
         }
 
         if (spkItem[0].ukuran !== '') {

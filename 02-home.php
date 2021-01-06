@@ -317,6 +317,31 @@ if (empty($res_cek_spk_item)) {
 
 // ----- END -----
 
+// TABEL harga_lain
+
+$query_cek_harga_lain = "SELECT id FROM harga_lain";
+$res_cek_harga_lain = mysqli_query($con, $query_cek_harga_lain);
+
+if (empty($res_cek_harga_lain)) {
+    $query_create_harga_lain = "CREATE TABLE harga_lain (
+        id int(11) AUTO_INCREMENT PRIMARY KEY,
+        keterangan varchar(20) NOT NULL,
+        harga int(11) NOT NULL
+      )ENGINE=InnoDB DEFAULT CHARSET=latin1";
+
+    $res_create_harga_lain = mysqli_query($con, $query_create_harga_lain);
+    if (!$res_create_harga_lain) {
+        $htmlErrorReport = $htmlErrorReport .  $query_create_harga_lain . " : FAILED! " . mysqli_error($con) . "<br><br>";
+    } else {
+        $htmlSucceedReport = $htmlSucceedReport . "Create table harga_lain SUCCEED!<br><br>";
+    }
+    // INSERT INTO harga_lain
+} else {
+    $htmlSucceedReport = $htmlSucceedReport . "Table harga_lain exist.<br><br>";
+}
+
+// ----- END -----
+
 // TABEL temp_spk_contains_produk
 
 // $query_cek_temp_spk_contains_produk = "SELECT id FROM temp_spk_contains_produk";
