@@ -646,7 +646,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             $('#bottomDiv').show();
         }
 
-    }, 100);
+    }, 500);
 
     function editMode() {
         console.log('MASUK KE edit mode');

@@ -235,8 +235,8 @@
                 "harga": 3250
             },
             {
-                "tipe_ukuran": "Super-JB 97x53",
-                "nama_nota": "Super-JB",
+                "tipe_ukuran": "S-JB 97x53",
+                "nama_nota": "S-JB",
                 "harga": 4500
             }
         ],
@@ -253,7 +253,7 @@
         "jahit": [
             {
                 "tipe_jht": [
-                    "univ",
+                    "Univ",
                     "JB",
                     "JB2",
                     "NMAX",

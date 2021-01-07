@@ -248,7 +248,7 @@ function dbCheck($table, $column, $value)
             $htmlLogOK = $htmlLogOK . "BELUM ADA DI DATABASE<br><br>";
             return "BELUM ADA";
         } else {
-            $htmlLogWarning = $htmlLogWarning . "UDAH ADA DI DATABASE<br><br>";
+            $htmlLogWarning = $htmlLogWarning . "UDAH ADA DI DATABASE $table<br><br>";
             $row = mysqli_fetch_assoc($res);
             return array("UDAH ADA", $row["id"]);
         }
