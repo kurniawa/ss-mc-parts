@@ -2,7 +2,7 @@
 
 include_once "01-config.php";
 include_once "01-header.php";
-
+include_once "01-backUpSQLTable.php";
 // CEK REQUEST_METHOD GET
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET["id_spk"])) {
@@ -42,7 +42,6 @@ if ($status == "OK" && $spk_item !== "ERROR") {
     }
     // var_dump($array_produk);
 }
-
 
 $htmlLogOK = $htmlLogOK . "</div>";
 $htmlLogError = $htmlLogError . "</div>";
@@ -186,7 +185,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 </div>
 
 <div id="divAddItems" class="h-9em position-relative mt-1em">
-    <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+    <a href="03-03-02-sj-varia-add_item.php?id_spk=<?= $id_spk ?>" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
     </a>
     <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -306,6 +305,13 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             action = '03-03-06-busa-stang.php';
         }
 
+        var ktrg = spk_contains_item[i].ktrg;
+        if (ktrg == null) {
+            ktrg = "";
+        } else {
+            ktrg = ktrg.replace(new RegExp('\n?\r', 'g'), '<br />');
+        }
+
         htmlSPKItem = htmlSPKItem +
             `<form action='${action}' method="GET">
             <div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
@@ -320,7 +326,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
                     <div class='color-grey justify-self-right'>Jumlah</div>
                 </div>
                 <button type='submit' id='btnEditItem-${spk_contains_item[i].id}' class='btnEditItem grid-1-auto justify-items-center circle-medium bg-color-purple-blue'><img style='width: 1.3em;' src='img/icons/pencil2-white.svg'></button>
-                <div class='pl-0_5em color-blue-purple'>${spk_contains_item[i].ktrg.replace(new RegExp('\r?\n', 'g'), '<br />')}</div>
+                <div class='pl-0_5em color-blue-purple'>${ktrg}</div>
             </div>
             <input type="hidden" name="id_spk" value="${spk[0].id}">
             <input type="hidden" name="id_spk_contains_item" value="${spk_contains_item[i].id}">

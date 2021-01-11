@@ -193,6 +193,7 @@ if (empty($res_cek_produk)) {
         tato varchar(20) DEFAULT NULL,
         jahit varchar(20) DEFAULT NULL,
         nama_lengkap varchar(100) DEFAULT NULL,
+        nama_nota varchar(100) DEFAULT NULL,
         japstyle int(11) DEFAULT NULL,
         harga_price_list int(11) DEFAULT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
@@ -325,7 +326,8 @@ $res_cek_harga_lain = mysqli_query($con, $query_cek_harga_lain);
 if (empty($res_cek_harga_lain)) {
     $query_create_harga_lain = "CREATE TABLE harga_lain (
         id int(11) AUTO_INCREMENT PRIMARY KEY,
-        keterangan varchar(20) NOT NULL,
+        tipe varchar(20) NOT NULL,
+        nama varchar(20) NOT NULL,
         harga int(11) NOT NULL
       )ENGINE=InnoDB DEFAULT CHARSET=latin1";
 

@@ -2,70 +2,7 @@
 include_once "01-header.php";
 include_once "01-config.php";
 
-$tipe = "sj-varia";
-$bahan = "";
-$varia = "";
-$harga_bahan = "";
-$jahit = "";
-
-$ukuran = "";
-$tipe_ukuran = "";
-$nama_nota_ukuran = "";
-$harga_ukuran = 0;
-
-$jumlah = "";
-$ktrg = "";
-
-$nama_lengkap = "";
-$harga_jahit = 0;
-$harga_item = 0;
-$harga_price_list = 0;
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $status = "OK";
-    $htmlLogOK = $htmlLogOK . "REQUEST METHOD: POST<br><br>";
-
-    $bahan = $_POST["bahan"];
-    $varia = $_POST["varia"];
-    $harga_bahan = $_POST["harga_bahan"];
-
-    if (isset($_POST["jahit"])) {
-        $jahit = $_POST["jahit"];
-        $harga_jahit = 1000;
-    }
-    if (isset($_POST["ukuran"])) {
-        $ukuran = $_POST["ukuran"];
-        // var_dump($ukuran);
-        $ukuran = json_decode($ukuran, true);
-        // echo "<br><br>";
-        // var_dump($ukuran);
-        // $tipe_ukuran = $ukuran->tipeUkuran;
-        $tipe_ukuran = $ukuran["tipeUkuran"];
-        $nama_nota_ukuran = $ukuran["namaNotaUkuran"];
-        $harga_ukuran = $ukuran["hargaUkuran"];
-    }
-    if (isset($_POST["ktrg"])) {
-        $ktrg = $_POST["ktrg"];
-    }
-
-    $jumlah = $_POST["jumlah"];
-
-    $htmlLogOK = $htmlLogOK .
-        "bahan: " . $bahan . "<br>" .
-        "varia: " . $varia . "<br>" .
-        "harga_bahan: " . $harga_bahan . "<br>" .
-        "jahit: " . $jahit . "<br>" .
-        "harga_jahit: " . $harga_jahit . "<br>" .
-        "ukuran (encoded): " . json_encode($ukuran) . "<br>" .
-        "tipe_ukuran: " . $tipe_ukuran . "<br>" .
-        "nama_nota_ukuran: " . $nama_nota_ukuran . "<br>" .
-        "harga_ukuran: " . $harga_ukuran . "<br>" .
-        "ktrg: " . $ktrg . "<br>" .
-        "jumlah: " . $jumlah . "<br><br>";
-} else {
-    $status = "NOT OK";
-    $htmlLogError = $htmlLogError . "REQUEST METHOD: ENTAHLAH!<br><br>";
-}
+include_once "03-03-02-sj-varia-add_item-header.php";
 
 // MENENTUKAN ID DARI SPK ITEM, apakah mode edit atau insert baru
 $id_spk_item = 0;

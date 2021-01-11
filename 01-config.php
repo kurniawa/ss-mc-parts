@@ -19,6 +19,11 @@ $htmlLogOK = "<div class='logOK'>";
 $htmlLogWarning = "<div class='logWarning'>";
 $status = "";
 
+function br_2x()
+{
+    echo "<br><br>";
+}
+
 function nextID($table, $column)
 {
     // header("Content-Type: application/json");

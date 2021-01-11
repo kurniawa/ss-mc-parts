@@ -2,44 +2,25 @@
 include_once "01-header.php";
 include_once "01-config.php";
 
-$mode = "";
-$id_spk = "none";
-$id_spk_contains_item = "none";
-$id_produk = "none";
-$item_to_edit = "none";
-$spk_contains_item = "none";
-$id = "undefined";
-$action = "03-03-02-sj-varia-2.php";
+$action = "03-03-02-sj-varia-add_item-2.php";
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $table = $_GET['table'];
+if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    $htmlLogOK .= "REQUEST_METHOD = GET<br><br>";
+    $status = "OK";
+} else {
+    $status = "ERROR";
+    $htmlLogOK .= "REQUEST_METHOD is not GET!<br><br>";
+}
 
-    $item_to_edit = dbGet($table);
-
-    if ($item_to_edit[0] !== "ERROR") {
-        $status = "OK";
+if ($status == "OK") {
+    if (isset($_GET["id_spk"])) {
+        $id_spk = $_GET["id_spk"];
     } else {
         $status = "ERROR";
     }
-} else if (isset($_GET["id_spk"]) && isset($_GET["id_spk_contains_item"]) && isset($_GET["id_produk"])) {
-    $mode = "edit";
-    $id_spk = $_GET["id_spk"];
-    $id_spk_contains_item = $_GET["id_spk_contains_item"];
-    $id_produk = $_GET["id_produk"];
-    $action = "03-03-02-sj-varia-3.php";
+}
 
-    $htmlLogOK = $htmlLogOK .
-        "
-    id_spk: $id_spk<br>
-    id_spk_contains_item: $id_spk_contains_item<br>
-    id_produk: $id_produk<br><br>
-    ";
-
-    $item_to_edit = dbGetWithFilter("produk", "id", $id_produk);
-    $spk_contains_item = dbGetWithFilter("spk_contains_produk", "id", $id_spk_contains_item);
-} else {
-    $id = 'undefined';
+if ($status == "OK") {
 }
 
 // var_dump($item_to_edit);
@@ -64,18 +45,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
         <div id="warningSJVaria" class="d-none"></div>
 
-        <!-- <div id="divBtnKunciItem" class="grid-1-auto justify-items-center">
-            <div id="btnKunciItem" class="b-radius-50px bg-color-orange-1 pt-0_5em pb-0_5em pl-1em pr-1em">
-                <span class="ui-icon ui-icon-locked"></span>
-                <span class="font-weight-bold">kunci item</span>
-            </div>
-        </div>
-
-        <div id="divPilihanTambahItemSejenis" class="grid-1-auto m-1em">
-            <div id="divRadioPilihan" class="justify-self-center b-1px-solid-grey p-1em">
-            </div>
-        </div> -->
-
         <div id="divAvailableOptions" class="position-absolute bottom-5em w-calc-100-1em">
             Available options:
             <div id="availableOptions">
@@ -90,24 +59,9 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
             </button>
         </div>
-        <div class="position-absolute bottom-0_5em w-calc-100-1em">
-            <input id="inputIDItemToEdit" type="hidden" name="id_item_to_edit">
-            <!-- <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();"> -->
-            <button type="submit" id="bottomDiv2" class="w-100 h-4em bg-color-orange-2 grid-1-auto">
-
-                <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
-
-            </button>
-
-        </div>
 
     </div>
-    <input type="hidden" name="mode" value="<?= $mode; ?>">
     <input type="hidden" name="id_spk" value="<?= $id_spk ?>">
-    <input type="hidden" name="id_spk_contains_item" value="<?= $id_spk_contains_item ?>">
-    <input type="hidden" name="id_produk" value="<?= $id_produk ?>">
-    <input type="hidden" name="harga_jahit">
-    <input type="hidden" name="harga_ukuran">
 </form>
 
 <div class="divLogError"></div>
@@ -498,235 +452,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         }
     }
 
-    // document.getElementById('btnKunciItem').addEventListener('click', () => {
-    //     let htmlRadioToAppend = pilihanSJVariaSejenis[0] + pilihanSJVariaSejenis[1];
-    //     $('#divRadioPilihan').html(htmlRadioToAppend);
-    //     $('#divPilihanTambahItemSejenis').show();
-
-    // });
-
-    function insertItemToLocal() {
-        // console.log('clicked');
-        $tipe = 'sj-varia'
-        $bahan = $(`#inputBahan-${indexSJVaria}`).val();
-        $varia = $(`#selectVaria-${indexSJVaria}`).val();
-        $jht = '';
-        $plusJahit = '';
-        $desc = '';
-        $namaLengkap = '';
-        $jumlah = 0;
-        var ukuran = '';
-
-
-        $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
-        var hargaJht = 0;
-        var hargaItem = 0;
-
-        console.log('$bahan: ' + $bahan);
-        console.log('$varia: ' + $varia);
-        console.log('$jht: ' + $jht);
-        console.log('$desc: ' + $desc);
-        console.log('$jumlah: ' + $jumlah);
-
-        if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
-            $jht = $(`#selectJht-${indexSJVaria}`).val();
-            hargaJht = 1000;
-        }
-        if ($(`#divSelectUkuran-${indexSJVaria}`).length !== 0) {
-            ukuran = $(`#selectUkuran-${indexSJVaria}`).val();
-            if (ukuran !== '') {
-                ukuran = JSON.parse(ukuran);
-                console.log(ukuran);
-                console.log(ukuran.tipeUkuran);
-                console.log(ukuran.namaNotaUkuran);
-                console.log(ukuran.hargaUkuran);
-            }
-        }
-        if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
-            $desc = $(`#taDesc-${indexSJVaria}`).val();
-        }
-        if ($(`#divInputJumlah-${indexSJVaria}`).length !== 0) {
-            $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
-        }
-
-        if ($bahan === '') {
-            $textWarning = '<span class="color-red">Bahan masih belum ditentukan!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($varia == undefined) {
-            console.log('warning untuk Select Variasi');
-            $textWarning = '<span class="color-red">Variasi Sarung Jok masih belum ditentukan!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($jumlah <= 0) {
-            console.log('warning untuk jumlah');
-            $textWarning = '<span class="color-red">Jumlah barang masih belum diinput dengan benar!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($jht !== '') {
-            $plusJahit = '+ jht ' + $jht;
-        }
-
-        $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
-        var hargaPcs = 0;
-        if (ukuran !== '') {
-            $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
-            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
-        } else {
-            $namaLengkap = $namaLengkap + ' ' + $plusJahit;
-            hargaPcs = parseFloat($hargaBahan) + hargaJht;
-        }
-
-        hargaItem = hargaPcs * $jumlah;
-        $namaLengkap = $namaLengkap.trim();
-
-        console.log(hargaPcs);
-        console.log(hargaJht);
-        console.log(ukuran.hargaUkuran);
-
-        var itemObj = {
-            tipe: $tipe,
-            bahan: $bahan,
-            varia: $varia,
-            jahit: $jht,
-            desc: $desc,
-            jumlah: $jumlah,
-            namaLengkap: $namaLengkap,
-            hargaBahan: $hargaBahan,
-            hargaJht: hargaJht,
-            hargaPcs: hargaPcs,
-            hargaItem: hargaItem,
-            ukuran_tipe: ukuran.tipeUkuran,
-            ukuran_nama_nota: ukuran.namaNotaUkuran,
-            ukuran_harga: ukuran.hargaUkuran
-        }
-        console.log(itemObj);
-        var newSPK = localStorage.getItem('dataSPKToEdit');
-        newSPK = JSON.parse(newSPK);
-        console.log(newSPK);
-
-        newSPK.item.push(itemObj);
-        console.log(newSPK);
-        localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        window.history.back();
-    }
-
-    // var id = php echo $id ;
-    // console.log(id);
-    // $('#bottomDiv2').hide();
-    // setTimeout(() => {
-
-    //     if (id !== undefined) {
-    //         editMode();
-    //         $('#bottomDiv2').show();
-    //         $('#bottomDiv').hide();
-    //     }
-
-    // }, 300);
-
-    var status = '<?= $status; ?>';
-    var spkItem = <?= json_encode($item_to_edit); ?>;
-    var spk_contains_item = <?= json_encode($spk_contains_item); ?>;
-    var id = '<?= $id_produk; ?>';
-    console.log(status);
-    var mode = '<?= $mode; ?>';
-    setTimeout(() => {
-        if (mode == "edit") {
-            editMode();
-        } else {
-            console.log("BUKAN MODE EDIT");
-            $('#inputIDItemToEdit').remove();
-            $('#bottomDiv2').hide();
-            $('#bottomDiv').show();
-        }
-
-    }, 500);
-
-    function editMode() {
-        console.log('MASUK KE edit mode');
-        // let newSPK = localStorage.getItem('dataSPKToEdit');
-        // newSPK = JSON.parse(newSPK);
-        // addSJVaria();
-        // createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
-
-        console.log(`spkItem[0]: `);
-        console.log(spkItem[0]);
-
-        $('#bottomDiv2').show();
-        $('#bottomDiv').hide();
-
-        $("#inputIDItemToEdit").val(id);
-
-        if (spkItem[0].bahan !== '') {
-            console.log(spkItem[0].bahan);
-            $(`#inputBahan-${indexSJVaria}`).val(spkItem[0].bahan);
-        }
-
-        if (spkItem[0].varia !== '') {
-            console.log(elementSystem[1][1]);
-            cekBahanAddSelectVariasi(spkItem[0].bahan);
-            $(`#selectVaria-${indexSJVaria}`).val(spkItem[0].varia);
-        }
-
-        console.log(spkItem[0].jahit);
-        // if (spkItem[0].jht !== '' || spkItem[0].desc !== '' || spkItem[0].jumlah !== '') {
-        //     if (spkItem[0].jht !== '') {
-        //         addLvl3ElementFromBox('Jht');
-        //         $(`#selectJht-${indexSJVaria}`).val(spkItem[0].jht);
-
-        //     }
-        //     if (spkItem[0].desc !== '') {
-        //         addLvl3ElementFromBox('Desc');
-        //         $(`#taDesc-${indexSJVaria}`).val(spkItem[0].desc);
-        //     }
-        //     if (spkItem[0].jumlah !== '') {
-        //         addLvl3ElementFromBox('Jumlah');
-        //         $(`#inputJumlah-${indexSJVaria}`).val(spkItem[0].jumlah);
-        //     }
-        // }
-
-        if (spkItem[0].jahit !== '') {
-            addLvl3ElementFromBox('Jht');
-            $(`#selectJht-${indexSJVaria}`).val(spkItem[0].jahit);
-        }
-        if (spk_contains_item[0].ktrg !== '') {
-            addLvl3ElementFromBox('Desc');
-            $(`#taDesc-${indexSJVaria}`).val(spk_contains_item[0].ktrg);
-        }
-
-        if (spk_contains_item[0].jumlah !== '') {
-            addLvl3ElementFromBox('Jumlah');
-            $(`#inputJumlah-${indexSJVaria}`).val(spk_contains_item[0].jumlah);
-        }
-
-        if (spkItem[0].ukuran !== '') {
-            addLvl3ElementFromBox('Ukuran');
-            // $(`#boxUkuran`).remove();
-            var selectUkuran = document.getElementById(`selectUkuran-${indexSJVaria}`);
-            for (var i = 0; i < selectUkuran.options.length; i++) {
-                console.log('ukuran:');
-                console.log(selectUkuran.options[i]);
-                if (selectUkuran.options[i].value !== '') {
-                    var valueSelectUkuran = JSON.parse(selectUkuran.options[i].value);
-                    var tipeUkuran = valueSelectUkuran.tipeUkuran;
-                    if (tipeUkuran === spkItem[0].ukuran) {
-                        selectUkuran.selectedIndex = i;
-                        break;
-                    }
-                }
-            }
-            // $(`#selectUkuran-${indexSJVaria}`).val(spkItem[0].ukuran);
-        }
-
-        cekVariaAddBoxes2();
-    }
-
     function cekVariaAddBoxes2() {
         indexElementSystem = 3;
         var elementBoxToShow = indexElementSystem - 1;
@@ -736,116 +461,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
                 createElement(elementSystem[elementBoxToShow][i][0], elementSystem[elementBoxToShow][i][1], elementHTML[elementBoxToShow][i]);
             }
         }
-    }
-
-    function confirmEditItemSPK() {
-        console.log('confirm edit item SPK');
-        $tipe = 'sj-varia'
-        $bahan = $(`#inputBahan-${indexSJVaria}`).val();
-        $varia = $(`#selectVaria-${indexSJVaria}`).val();
-        $jht = '';
-        $plusJahit = '';
-        $ktrg = '';
-        $namaLengkap = '';
-        $jumlah = 0;
-        var ukuran = '';
-
-        $hargaBahan = $(`#inputHargaBahan-${indexSJVaria}`).val();
-        var hargaJht = 0;
-        var hargaItem = 0;
-
-        console.log('$bahan: ' + $bahan);
-        console.log('$varia: ' + $varia);
-        console.log('$jht: ' + $jht);
-        console.log('$ktrg: ' + $ktrg);
-        console.log('$jumlah: ' + $jumlah);
-
-        if ($(`#divSelectJht-${indexSJVaria}`).length !== 0) {
-            $jht = $(`#selectJht-${indexSJVaria}`).val();
-            hargaJht = 1000;
-        }
-        if ($(`#divSelectUkuran-${indexSJVaria}`).length !== 0) {
-            ukuran = $(`#selectUkuran-${indexSJVaria}`).val();
-            if (ukuran !== '') {
-                ukuran = JSON.parse(ukuran);
-                console.log(ukuran);
-                console.log(ukuran.tipeUkuran);
-                console.log(ukuran.namaNotaUkuran);
-                console.log(ukuran.hargaUkuran);
-            }
-        }
-        if ($(`#divTADesc-${indexSJVaria}`).length !== 0) {
-            $ktrg = $(`#taDesc-${indexSJVaria}`).val();
-        }
-        if ($(`#divInputJumlah-${indexSJVaria}`).length !== 0) {
-            $jumlah = $(`#inputJumlah-${indexSJVaria}`).val();
-        }
-
-        if ($bahan === '') {
-            $textWarning = '<span class="color-red">Bahan masih belum ditentukan!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($varia == undefined) {
-            console.log('warning untuk Select Variasi');
-            $textWarning = '<span class="color-red">Variasi Sarung Jok masih belum ditentukan!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($jumlah <= 0) {
-            console.log('warning untuk jumlah');
-            $textWarning = '<span class="color-red">Jumlah barang masih belum diinput dengan benar!</span>';
-            $('#warningSJVaria').html($textWarning).removeClass('d-none');
-            return;
-        }
-
-        if ($jht !== '') {
-            $plusJahit = '+ jht ' + $jht;
-        }
-
-        $namaLengkap = $namaLengkap + $bahan + ' ' + $varia;
-        if (ukuran !== '') {
-            $namaLengkap = $namaLengkap + ' uk. ' + ukuran.tipeUkuran;
-            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
-        } else {
-            $namaLengkap = $namaLengkap + ' ' + $plusJahit;
-            hargaPcs = parseFloat($hargaBahan) + hargaJht + ukuran.hargaUkuran;
-        }
-
-        hargaItem = hargaPcs * $jumlah;
-
-        $namaLengkap = $namaLengkap.trim();
-        var hargaPcs = parseFloat($hargaBahan) + hargaJht;
-        hargaItem = hargaPcs * $jumlah;
-
-        var itemObj = {
-            tipe: $tipe,
-            bahan: $bahan,
-            varia: $varia,
-            jahit: $jht,
-            ktrg: $ktrg,
-            jumlah: $jumlah,
-            namaLengkap: $namaLengkap,
-            hargaBahan: $hargaBahan,
-            hargaJht: hargaJht,
-            hargaPcs: hargaPcs,
-            hargaItem: hargaItem,
-            ukuran_tipe: ukuran.tipeUkuran,
-            ukuran_nama_nota: ukuran.namaNotaUkuran,
-            ukuran_harga: ukuran.hargaUkuran
-        }
-        console.log(itemObj);
-        // var newSPK = localStorage.getItem('dataSPKToEdit');
-        // newSPK = JSON.parse(newSPK);
-        // console.log(newSPK);
-
-        // newSPK.item[m] = itemObj;
-        // console.log(newSPK);
-        // localStorage.setItem('dataSPKToEdit', JSON.stringify(newSPK));
-        // // location.href = '03-03-01-inserting-items.php';
-        // window.history.back();
     }
 </script>
 
