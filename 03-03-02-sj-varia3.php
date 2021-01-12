@@ -9,7 +9,7 @@ $id_produk = "none";
 $item_to_edit = "none";
 $spk_contains_item = "none";
 $id = "undefined";
-$action = "03-03-02-sj-varia-2.php";
+$action = "03-03-02-sj-varia-addItemFromNewSJVaria.php";
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
@@ -160,6 +160,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         arrayJht = [],
         arrayJenisTato = [];
 
+    var arrayHargaJahit = new Array();
+
     var arrayTipeUkuran = new Array();
     var arrayNamaNotaUkuran = new Array();
     var arrayHargaUkuran = new Array();
@@ -210,8 +212,9 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         for (const gambarLGStiker of data[0].variasi[0].jenis_variasi[1].jenis_logo[4].gambar) {
             arrayGambarLGStiker.push(gambarLGStiker);
         }
-        for (const jht of data[0].jahit[0].tipe_jht) {
-            arrayJht.push(jht);
+        for (const jht of data[0].jahit) {
+            arrayJht.push(jht.tipe_jht);
+            arrayHargaJahit.push(jht.harga);
         }
         for (const ukuran of data[0].ukuran) {
             arrayTipeUkuran.push(ukuran.tipe_ukuran);
@@ -221,6 +224,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     });
 
     // console.log(arrayBahan);
+    // console.log(arrayJht);
+    // console.log(arrayHargaJahit);
 
     $('#divPilihanTambahItemSejenis').hide();
 
@@ -378,9 +383,12 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
                 $("#selectVaria-" + indexSJVaria).append('<option value="' + variasi + '">' + variasi + '</option>');
             });
         } else if (elementID === `#divSelectJht-${indexSJVaria}`) {
-            arrayJht.forEach(tipeJht => {
-                $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
-            });
+            for (var i = 0; i < arrayJht.length; i++) {
+                $("#selectJht-" + indexSJVaria).append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit": ${arrayHargaJahit[i]}'>${arrayJht[i]}</option>`);
+            }
+            // arrayJht.forEach(tipeJht => {
+            //     $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+            // });
         } else if (elementID === `#divSelectUkuran-${indexSJVaria}`) {
             for (var i = 0; i < arrayTipeUkuran.length; i++) {
                 $("#selectUkuran-" + indexSJVaria).append(`<option value='{"tipeUkuran":"${arrayTipeUkuran[i]}","namaNotaUkuran":"${arrayNamaNotaUkuran[i]}","hargaUkuran":${arrayHargaUkuran[i]}}'>${arrayTipeUkuran[i]}</option>`);

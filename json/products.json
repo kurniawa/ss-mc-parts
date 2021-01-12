@@ -252,17 +252,32 @@
         ],
         "jahit": [
             {
-                "tipe_jht": [
-                    "Univ",
-                    "JB",
-                    "JB2",
-                    "NMAX",
-                    "abs-REVO",
-                    "RXK",
-                    "RXK-02"
-                ],
-                "harga_1": 1000,
-                "harga_2": 1500
+                "tipe_jht": "Univ",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "JB",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "JB2",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "NMAX",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "abs-REVO",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "RXK",
+                "harga": 1000
+            },
+            {
+                "tipe_jht": "RXK-02",
+                "harga": 1000
             }
         ]
     },

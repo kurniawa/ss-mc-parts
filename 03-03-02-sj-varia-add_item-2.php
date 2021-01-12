@@ -10,6 +10,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
 ?>
 
+<div class="mt-2em text-center">
+    <button id='backToSPK' class="btn-1 d-inline-block bg-color-orange-1" onclick="backToSPK();">Kembali ke SPK</button>
+</div>
+
 <div class="divLogError"></div>
 <div class="divLogOK"></div>
 <div class="divLogWarning"></div>
@@ -39,6 +43,10 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         $('.divLogOK').hide();
     } else {
         $('.divLogOK').show();
+    }
+
+    function backToSPK() {
+        window.history.go(-2);
     }
 </script>
 

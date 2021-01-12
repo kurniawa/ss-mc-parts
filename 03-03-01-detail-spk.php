@@ -316,7 +316,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             `<form action='${action}' method="GET">
             <div class='divItem grid-3-auto_auto_10 pt-0_5em pb-0_5em bb-1px-solid-grey'>
                 <div class='divItemName grid-2-15_auto'>
-                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${i});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
+                    <div id='btnRemoveItem-${i}' class='btnRemoveItem grid-1-auto justify-items-center circle-medium bg-color-soft-red' onclick='removeSPKItem(${spk_contains_item[i].id});'><img style='width: 1.3em;' src='img/icons/minus-white.svg'></div>
                     ${produk[i].nama_lengkap}
                 </div>
                 <div class='grid-1-auto'>
@@ -1058,14 +1058,8 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 
     hideEditOptItemSPK();
 
-    function removeSPKItem(i) {
-        let dataSPK = localStorage.getItem('dataSPKToEdit');
-        dataSPK = JSON.parse(dataSPK);
-        console.log(i);
-        dataSPK.item.splice(i, 1);
-        console.log(dataSPK.item);
-        localStorage.setItem('dataSPKToEdit', JSON.stringify(dataSPK));
-        location.reload();
+    function removeSPKItem(id_spk_contains_item) {
+        window.location.href = `03-03-01-removeItemFromDetailSPK.php?id_spk_contains_item=${id_spk_contains_item}`;
     }
 
     function editSPKItem(i) {
