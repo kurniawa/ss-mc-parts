@@ -75,6 +75,12 @@ function dbInsert($table, $column, $value)
     global $status;
 
     $data_length = count($column);
+    // var_dump($data_length);
+    // br_2x();
+    // var_dump($column);
+    // br_2x();
+    // var_dump($value);
+    // br_2x();
     $sql_part_1 = "INSERT INTO $table(";
     $sql_part_2 = " VALUE(";
 
@@ -90,6 +96,7 @@ function dbInsert($table, $column, $value)
     $sql = $sql_part_1 . $sql_part_2;
 
     // echo $sql;
+    // br_2x();
 
     $res = mysqli_query($con, $sql);
 

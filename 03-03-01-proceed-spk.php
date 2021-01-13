@@ -49,8 +49,8 @@ if ($status == "OK") {
             // CEK apakah produk sudah terdaftar di table produk
             $id_produk_spk_contains_produk = 0;
             $table_cek_produk = "produk";
-            $column_cek_produk = ["tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "harga_price_list"];
-            $value_cek_produk = [$spk_item[$i]["tipe"], $spk_item[$i]["bahan"], $spk_item[$i]["varia"], $spk_item[$i]["ukuran"], $spk_item[$i]["jahit"], $spk_item[$i]["nama_lengkap"], $spk_item[$i]["harga_price_list"]];
+            $column_cek_produk = ["tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "nama_nota", "harga_price_list"];
+            $value_cek_produk = [$spk_item[$i]["tipe"], $spk_item[$i]["bahan"], $spk_item[$i]["varia"], $spk_item[$i]["ukuran"], $spk_item[$i]["jahit"], $spk_item[$i]["nama_lengkap"], $spk_item[$i]["nama_nota"], $spk_item[$i]["harga_price_list"]];
 
             $check_produk = dbCheck($table_cek_produk, $column_cek_produk, $value_cek_produk);
 
@@ -59,8 +59,8 @@ if ($status == "OK") {
                 $next_id_produk = nextID("produk", "id");
                 if ($next_id_produk !== "ERROR") {
                     $table_produk = "produk";
-                    $column_produk = ["id", "tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "harga_price_list"];
-                    $value_produk = [$next_id_produk, $spk_item[$i]["tipe"], $spk_item[$i]["bahan"], $spk_item[$i]["varia"], $spk_item[$i]["ukuran"], $spk_item[$i]["jahit"], $spk_item[$i]["nama_lengkap"], $spk_item[$i]["harga_price_list"]];
+                    $column_produk = ["id", "tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "nama_nota", "harga_price_list"];
+                    $value_produk = [$next_id_produk, $spk_item[$i]["tipe"], $spk_item[$i]["bahan"], $spk_item[$i]["varia"], $spk_item[$i]["ukuran"], $spk_item[$i]["jahit"], $spk_item[$i]["nama_lengkap"], $spk_item[$i]["nama_nota"], $spk_item[$i]["harga_price_list"]];
 
                     dbInsert($table_produk, $column_produk, $value_produk);
                 }

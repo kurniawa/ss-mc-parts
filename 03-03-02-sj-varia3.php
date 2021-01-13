@@ -384,7 +384,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             });
         } else if (elementID === `#divSelectJht-${indexSJVaria}`) {
             for (var i = 0; i < arrayJht.length; i++) {
-                $("#selectJht-" + indexSJVaria).append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit": ${arrayHargaJahit[i]}'>${arrayJht[i]}</option>`);
+                $("#selectJht-" + indexSJVaria).append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit":" ${arrayHargaJahit[i]}"}'>${arrayJht[i]}</option>`);
             }
             // arrayJht.forEach(tipeJht => {
             //     $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
@@ -428,7 +428,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
                     console.log($(`#inputHargaBahan-${indexSJVaria}`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Bahan not found!")
+                    console.log("Nama Bahan not found!");
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }

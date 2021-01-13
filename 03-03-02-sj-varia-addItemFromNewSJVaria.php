@@ -63,17 +63,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST["jahit"])) {
-        $jahit = $_POST["jahit"];
-        $jahit = json_decode($jahit, true);
+        $jahit = json_decode($_POST["jahit"], true);
         $tipe_jahit = $jahit["tipeJahit"];
         $harga_jahit = $jahit["hargaJahit"];
-        // $data_harga_jahit = dbGetWithFilter("harga_lain", "nama", $jahit);
-
-        br_2x();
-        // var_dump($data_harga_jahit);
         // br_2x();
-
-        // var_dump(json_encode($data_harga_jahit));
+        // var_dump($_POST["jahit"]);
+        // br_2x();
+        // var_dump($jahit);
+        // br_2x();
 
         if ($status == "OK") {
             array_push($column_to_check, "jahit");
@@ -113,15 +110,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $id_produk = 0;
 if ($status == "OK") {
     // Cek apakah produk yang diedit tersebut sudah ada atau belum
-    var_dump($column_to_check);
-    echo "<br><br>";
-    var_dump($value_to_check);
-    echo "<br><br>";
+    // var_dump($column_to_check);
+    // echo "<br><br>";
+    // var_dump($column_to_check[0]);
+    // br_2x();
+    // var_dump($value_to_check);
+    // echo "<br><br>";
     $check_produk = dbCheck("produk", $column_to_check, $value_to_check);
-    var_dump($check_produk[0]);
-    br_2x();
-    var_dump($check_produk);
-    br_2x();
+    // var_dump($check_produk[0]);
+    // br_2x();
+    // var_dump($check_produk);
+    // br_2x();
     if ($check_produk == "BELUM ADA") {
         $id_produk = nextID("produk", "id");
         dbInsert("produk", $column_to_check, $value_to_check);
@@ -165,11 +164,10 @@ if ($status == "OK") {
 }
 
 // MULAI INSERT KE spk_item
-// EDIT CODE DISINI!!!!!!!!!!!!!!!!!!!!!!
 if ($status == "OK" && $mode == "INSERT") {
     $table = "spk_item";
-    $column = ["id", "tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "harga_price_list", "ktrg", "jumlah", "harga_item"];
-    $value = [$id_spk_item, "sj-varia", $bahan, $varia, $tipe_ukuran, $jahit, $nama_lengkap, $harga_price_list, $ktrg, $jumlah, $harga_item];
+    $column = ["id", "tipe", "bahan", "varia", "ukuran", "jahit", "nama_lengkap", "nama_nota", "harga_price_list", "ktrg", "jumlah", "harga_item"];
+    $value = [$id_spk_item, "sj-varia", $bahan, $varia, $tipe_ukuran, $tipe_jahit, $nama_lengkap, $nama_nota, $harga_price_list, $ktrg, $jumlah, $harga_kali_jumlah];
     dbInsert($table, $column, $value);
 }
 

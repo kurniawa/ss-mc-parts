@@ -188,7 +188,7 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     <a href="03-03-02-sj-varia-add_item.php?id_spk=<?= $id_spk ?>" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
     </a>
-    <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+    <a href="03-03-03-sjKombiFromDetailSPK?id_spk=<?= $id_spk ?>.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
     </a>
     <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
@@ -369,22 +369,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
     function goToPrintOutSPK() {
         location.href = `03-06-print-out-spk.php?id_spk=${spk[0].id}`;
     }
-
-    // if (mode == 'EDIT SPK') {
-    //     SPKBefore = localStorage.getItem('dataSPKBefore');
-    //     if (SPKBefore != null) {
-    //         SPKBefore = JSON.parse(SPKBefore);
-    //     }
-    //     runningModeEdit();
-    // } else {
-    //     // IF MODE === 'NEW SPK'
-    //     let statusCekMode = cekMode();
-    //     console.log(statusCekMode);
-    //     if (statusCekMode == false) {
-    //         newSPK = localStorage.getItem('dataSPKToEdit');
-    //         getSPKItems();
-    //     }
-    // }
 
     function cekMode() {
         console.log('menjalankan cek mode');
@@ -613,73 +597,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         $('.closingGreyArea').hide();
         $('.lightBox').hide();
     });
-
-    // document.getElementById('btnSPKSelesai').addEventListener('click', (event) => {
-    //     let tglSelesai = $('#inputTglSelesaiSPK').val();
-    //     let noNota = `N${custID}-${SPKID}`;
-    //     let noSrjalan = `SJ${custID}-${SPKID}`;
-    //     console.log(tglSelesai);
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: '01-crud.php',
-    //         async: false,
-    //         cache: false,
-    //         data: {
-    //             type: 'UPDATE',
-    //             table: 'spk',
-    //             column: ['tgl_selesai', 'no_nota', 'tgl_nota', 'no_surat_jalan', 'tgl_surat_jalan'],
-    //             value: [tglSelesai, noNota, tglSelesai, noSrjalan, tglSelesai],
-    //             dateIndex: [0, 2, 4],
-    //             key: 'id',
-    //             keyValue: SPKID
-    //         },
-    //         success: function(res) {
-    //             res = JSON.parse(res);
-    //             console.log(res);
-    //             console.log(res[0]);
-    //             if (res[0] === 'UPDATE SUCCEED') {
-    //                 console.log('goToMainMenu');
-    //                 window.history.go(1 - (history.length));
-    //             }
-
-    //         }
-    //     });
-    // });
-
-    // document.getElementById('downloadExcel').addEventListener('click', (event) => {
-    //     console.log(event);
-    //     let itemToPrint = new Array();
-    //     console.log(SPKItem);
-
-    //     for (let i = 0; i < SPKItem.length; i++) {
-    //         console.log('Masukkan data item - ' + i);
-    //         itemToPrint.push({
-    //             namaLengkap: SPKItem[i],
-    //             desc: descEachItem[i],
-    //             jumlah: jmlItem[i]
-    //         });
-    //     }
-
-    //     let spkToPrint = {
-    //         custID: custID,
-    //         custName: custName,
-    //         daerah: daerah,
-    //         tglPembuatan: tglPembuatan,
-    //         ketSPK: ketSPK,
-    //         id: SPKID,
-    //         keteranganTambahan: keteranganTambahan,
-    //         item: itemToPrint
-    //     }
-
-    //     localStorage.setItem('dataSPKToPrint', JSON.stringify(spkToPrint));
-
-    //     var moveToPrintOutSPK = confirm('Lanjut ke print-out SPK: ');
-    //     if (moveToPrintOutSPK === true) {
-    //         location.href = '03-06-print-out-spk.php';
-    //     } else {
-    //         console.log(moveToPrintOutSPK);
-    //     }
-    // });
 
     document.querySelector('.threeDot').addEventListener('click', function() {
         let element = [{

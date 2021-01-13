@@ -298,6 +298,7 @@ if (empty($res_cek_spk_item)) {
         tato varchar(20) DEFAULT NULL,
         jahit varchar(20) DEFAULT NULL,
         nama_lengkap varchar(100) DEFAULT NULL,
+        nama_nota varchar(100) DEFAULT NULL,
         japstyle int(11) DEFAULT NULL,
         harga_price_list int(11) DEFAULT NULL,
         ktrg varchar(256) DEFAULT NULL,
