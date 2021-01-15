@@ -1,6 +1,6 @@
 <?php
-include_once "01-config.php";
 include_once "01-header.php";
+include_once "01-config.php";
 
 $id_spk = 0;
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -25,20 +25,20 @@ $htmlLogWarning .= "</div>";
 
 ?>
 
-<form action="03-03-03-sjKombiFromDetailSPK-dbInsert.php" method="POST" id="containerSJKombi">
+<form action="03-03-04-sjStdFDetailSPK-db.php" method="POST" id="containerSJStd">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
-            <h2>Tipe: Sarung Jok Kombinasi</h2>
+            <h2>Tipe: Sarung Jok Standard</h2>
         </div>
 
-        <div id="divArraySJKombi">
+        <div id="divArraySJStd">
 
         </div>
 
         <br><br>
 
-        <div id="warningSJVaria" class="d-none"></div>
+        <div id="divWarning" class="d-none"></div>
 
         <div id="divAvailableOptions" class="position-absolute bottom-5em w-calc-100-1em">
             Available options:
@@ -52,10 +52,8 @@ $htmlLogWarning .= "</div>";
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
         </button>
-
     </div>
     <input type="hidden" name="id_spk" value="<?= $id_spk; ?>">
-
 </form>
 
 <div class="divLogError"></div>
@@ -102,21 +100,21 @@ $htmlLogWarning .= "</div>";
 
 <script src="js/variableForNewSPK.js"></script>
 <script>
-    function addSJKombi() {
+    function addSJStd() {
         let elementsToAppend =
-            `<div id="divSJKombi" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
-                <div id='divKombi'></div>
+            `<div id="divSJStd" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
+                <div id='divStd'></div>
                 <div id='divJht'></div>
                 <div id='divDesc'></div>
                 <div id='divJumlah'></div>
             </div>`;
 
-        $('#divArraySJKombi').append(elementsToAppend);
+        $('#divArraySJStd').append(elementsToAppend);
     }
 
     let indexElementSystem = 0;
     let elementSystem = [
-        [`#divKombi`, `#inputKombi`],
+        [`#divStd`, `#inputStd`],
         [
             [`#availableOptions`, `#boxJumlah`],
             [`#availableOptions`, `#boxJht`],
@@ -130,7 +128,6 @@ $htmlLogWarning .= "</div>";
     ];
 
     // console.log(elementSystem);
-    let removeElementSystem = [`#selectPolosLGTato`, 'removeSelectTipeLG', 'removeSelectTipeTato', 'removeSelectTipeJahit', 'removeInputJumlah', 'removeBoxJumlah', 'removeBoxJhtKepala'];
 
     let htmlBoxJumlah =
         `<div id="boxJumlah" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl2ElementFromBox("Jumlah");'>
@@ -168,8 +165,8 @@ $htmlLogWarning .= "</div>";
 
 
     let elementHTML = [
-        `<input id="inputKombi" name="kombi" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Kombinasi" onkeyup="cekKombiAddBoxes(this.value);">
-        <input id='inputHargaKombi' name="harga_kombi" type='hidden'>
+        `<input id="inputStd" name="std" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Standard" onkeyup="cekStdAddBoxes(this.value);">
+        <input id='inputHargaStd' name="harga_std" type='hidden'>
         `,
 
         [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
@@ -189,18 +186,18 @@ $htmlLogWarning .= "</div>";
         }
         $(divID).html(elementHTML);
 
-        if (elementID === `#inputKombi`) {
-            $("#inputKombi").autocomplete({
-                source: arrayTipeKombi,
+        if (elementID === `#inputStd`) {
+            $("#inputStd").autocomplete({
+                source: arrayTipeStd,
                 select: function(event, ui) {
                     console.log(ui);
                     console.log(ui.item.value);
-                    cekKombiAddBoxes(ui.item.value);
+                    cekStdAddBoxes(ui.item.value);
                     // sjVaria.push({
                     //     'nama_bahan': ui.item.value
                     // });
-                    sjVaria['nama_bahan'] = ui.item.value;
-                    console.log('sjVaria: ' + sjVaria);
+                    // sjVaria['nama_bahan'] = ui.item.value;
+                    // console.log('sjVaria: ' + sjVaria);
                 }
             });
 
@@ -215,18 +212,18 @@ $htmlLogWarning .= "</div>";
         }
     }
 
-    addSJKombi();
+    addSJStd();
     createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
 
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
-    function cekKombiAddBoxes(tipeKombi) {
-        console.log('namaKombi1:' + tipeKombi);
+    function cekStdAddBoxes(tipeStd) {
         try {
-            for (const kombi of arrayKombi) {
-                if (tipeKombi === kombi.nama) {
-                    console.log('namaKombi2:' + kombi.nama);
-                    console.log('hargaKombi:' + kombi.harga);
+            for (const std of arrayStd) {
+                if (tipeStd === std.nama) {
+                    console.log('namaStd1:' + tipeStd);
+                    console.log('namaStd2:' + std.nama);
+                    console.log('hargaStd:' + std.harga);
 
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
@@ -236,12 +233,12 @@ $htmlLogWarning .= "</div>";
                             createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
                         }
                     }
-                    $(`#inputHargaKombi`).val(kombi.harga);
-                    console.log('Harga Kombi:');
-                    console.log($(`#inputHargaKombi`).val());
+                    $(`#inputHargaStd`).val(std.harga);
+                    console.log('Harga Std:');
+                    console.log($(`#inputHargaStd`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Kombi not found!")
+                    console.log("Nama Std not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
@@ -316,7 +313,7 @@ $htmlLogWarning .= "</div>";
         }
     }
 
-    function cekKombiAddBoxes2() {
+    function cekStdAddBoxes2() {
         indexElementSystem = 1;
         for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);

@@ -185,13 +185,13 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
 </div>
 
 <div id="divAddItems" class="h-9em position-relative mt-1em">
-    <a href="03-03-02-sj-varia-add_item.php?id_spk=<?= $id_spk ?>" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+    <a href="03-03-02-sj-varia-add_item.php?id_spk=<?= $id_spk; ?>" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
     </a>
-    <a href="03-03-03-sjKombiFromDetailSPK?id_spk=<?= $id_spk ?>.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+    <a href="03-03-03-sjKombiFromDetailSPK.php?id_spk=<?= $id_spk; ?>" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
     </a>
-    <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+    <a href="03-03-04-sjStdFDetailSPK.php?id_spk=<?= $id_spk; ?>" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
         <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
     </a>
     <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">

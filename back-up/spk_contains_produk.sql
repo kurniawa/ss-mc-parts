@@ -1,1 +1,1 @@
-INSERT INTO spk_contains_produk (id, id_spk, id_produk, ktrg, jumlah, harga_item, koreksi_harga) VALUES ('3', '1', '3', NULL, '250', '4187500', NULL), ('4', '1', '2', NULL, '200', '2700000', NULL)
+INSERT INTO spk_contains_produk (id, id_spk, id_produk, ktrg, jumlah, harga_item, koreksi_harga) VALUES ('1', '1', '6', NULL, '150', NULL, NULL), ('2', '1', '7', NULL, '200', '3400000', NULL), ('3', '1', '8', 'test', '200', '3800000', NULL)

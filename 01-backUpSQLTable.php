@@ -38,14 +38,14 @@ function backUpSQLTable($table)
                     $htmlLogOK = $htmlLogOK . $query_select . " - SUCCEED!<br><br>";
                     $rows_count = mysqli_num_rows($res_query_select);
 
-                    var_dump($rows_count);
-                    br_2x();
+                    // var_dump($rows_count);
+                    // br_2x();
 
-                    br_2x();
+                    // br_2x();
 
                     while ($row = mysqli_fetch_assoc($res_query_select)) {
-                        var_dump($row);
-                        br_2x();
+                        // var_dump($row);
+                        // br_2x();
                         $column = array_keys($row);
                         $temp_value = array();
                         for ($i = 0; $i < count($column); $i++) {
@@ -53,10 +53,10 @@ function backUpSQLTable($table)
                         }
                         array_push($value, $temp_value);
                     }
-                    var_dump($column);
-                    br_2x();
-                    var_dump($value);
-                    br_2x();
+                    // var_dump($column);
+                    // br_2x();
+                    // var_dump($value);
+                    // br_2x();
                 }
             }
 
@@ -76,8 +76,8 @@ function backUpSQLTable($table)
                 }
 
                 // LOOPING VALUE
-                var_dump($value[0][0]);
-                br_2x();
+                // var_dump($value[0][0]);
+                // br_2x();
 
                 $sql_insert .= " VALUES (";
                 for ($i = 0; $i < count($value); $i++) {
@@ -110,7 +110,7 @@ function backUpSQLTable($table)
                     }
                 }
 
-                var_dump($sql_insert);
+                // var_dump($sql_insert);
 
                 $htmlLogOK = $htmlLogOK . $sql_insert . "<br><br>";
                 fwrite($file, $sql_insert);
