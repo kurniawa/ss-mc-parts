@@ -27,6 +27,14 @@ var arrayTipeKombi = new Array();
 var arrayStd = new Array();
 var arrayTipeStd = new Array();
 
+// KHUSUS UNTUK TANKPAD
+var arrayTankpad = new Array();
+var arrayTipeTankpad = new Array();
+
+// KHUSUS BUSA_STANG
+var arrayBusaStang = new Array();
+var arrayTipeBusaStang = new Array();
+
 // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
 var idElementToRemove;
 var idElementToReset;
@@ -102,6 +110,25 @@ fetch('json/products.json').then(response => response.json()).then(data => {
         });
         arrayTipeStd.push(std.nama_variasi);
     }
-
     console.log(arrayStd);
+
+    // KHUSUS UNTUK TANKPAD
+    for (const tankpad of data[3].lini_produk) {
+        arrayTankpad.push({
+            nama: tankpad.nama,
+            harga: tankpad.harga
+        });
+        arrayTipeTankpad.push(tankpad.nama);
+    }
+
+    // KHUSUS BUSA_STANG
+    arrayBusaStang.push({
+        nama: data[4].nama,
+        harga: data[4].harga
+    });
+    arrayTipeBusaStang.push(data[4].nama);
+
+    console.log(arrayBusaStang);
+
+    console.log(arrayTankpad);
 });

@@ -22,17 +22,16 @@ if ($status == "OK") {
 $htmlLogError .= "</div>";
 $htmlLogOK .= "</div>";
 $htmlLogWarning .= "</div>";
-
 ?>
 
-<form action="03-03-04-sjStdFDetailSPK-db.php" method="POST" id="containerSJStd">
+<form action="03-03-06-busaStangFDetailSPK-db.php" method="POST" id="containerBusaStang">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
-            <h2>Tipe: Sarung Jok Standard</h2>
+            <h2>Tipe: Busa Stang</h2>
         </div>
 
-        <div id="divArraySJStd">
+        <div id="divArrayBusaStang">
 
         </div>
 
@@ -47,11 +46,12 @@ $htmlLogWarning .= "</div>";
             </div>
 
         </div>
-        <button type="submit" id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto">
+        <button type="submit" id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
 
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
         </button>
+
     </div>
     <input type="hidden" name="id_spk" value="<?= $id_spk; ?>">
 </form>
@@ -99,30 +99,28 @@ $htmlLogWarning .= "</div>";
 </script>
 
 <script src="js/variableForNewSPK.js"></script>
+
 <script>
-    function addSJStd() {
+    function addBusaStang() {
         let elementsToAppend =
-            `<div id="divSJStd" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
-                <div id='divStd'></div>
-                <div id='divJht'></div>
+            `<div id="divBusaStang" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
+                <div id='divBusaStang2'></div>
                 <div id='divDesc'></div>
                 <div id='divJumlah'></div>
             </div>`;
 
-        $('#divArraySJStd').append(elementsToAppend);
+        $('#divArrayBusaStang').append(elementsToAppend);
     }
 
     let indexElementSystem = 0;
     let elementSystem = [
-        [`#divStd`, `#inputStd`],
+        [`#divBusaStang2`, `#inputBusaStang`],
         [
             [`#availableOptions`, `#boxJumlah`],
-            [`#availableOptions`, `#boxJht`],
             [`#availableOptions`, `#boxDesc`]
         ],
         [
             [`#divJumlah`, `#divInputJumlah`],
-            [`#divJht`, `#divSelectJht`],
             [`#divDesc`, `#divTADesc`]
         ]
     ];
@@ -159,19 +157,21 @@ $htmlLogWarning .= "</div>";
 
     let htmlDivTADesc =
         `<div id="divTADesc" class="mt-1em">
-            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][2][1]}", "${elementSystem[1][2][0]}","${elementSystem[1][2][1]}", 1, 2);'></span></div>
+            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][1][1]}", "${elementSystem[1][1][0]}","${elementSystem[1][1][1]}", 1, 1);'></span></div>
             <textarea class="pt-1em pl-1em text-area-mode-1" name="ktrg" id="taDesc" placeholder="Keterangan"></textarea>
         </div>`;
 
 
+    // onkeyup="cekTankpadAddBoxes(this.value)";
+
     let elementHTML = [
-        `<input id="inputStd" name="std" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Standard" onkeyup="cekStdAddBoxes(this.value);">
-        <input id='inputHargaStd' name="harga_std" type='hidden'>
+        `<input id="inputBusaStang" name="busa_stang" class="input-1 mt-1em pb-1em" type="text" value="Busa Stang" readonly>
+        <input id='inputHargaBusaStang' name="harga_busa_stang" type='hidden'>
         `,
 
-        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
+        [htmlBoxJumlah, htmlBoxDesc],
 
-        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
+        [htmlDivInputJumlah, htmlDivTADesc]
 
     ];
 
@@ -186,44 +186,51 @@ $htmlLogWarning .= "</div>";
         }
         $(divID).html(elementHTML);
 
-        if (elementID === `#inputStd`) {
-            $("#inputStd").autocomplete({
-                source: arrayTipeStd,
-                select: function(event, ui) {
-                    console.log(ui);
-                    console.log(ui.item.value);
-                    cekStdAddBoxes(ui.item.value);
-                    // sjVaria.push({
-                    //     'nama_bahan': ui.item.value
-                    // });
-                    // sjVaria['nama_bahan'] = ui.item.value;
-                    // console.log('sjVaria: ' + sjVaria);
-                }
-            });
+        if (elementID === `#inputBusaStang`) {
+            // $("#inputBusaStang").autocomplete({
+            //     source: arrayTipeBusaStang,
+            //     select: function(event, ui) {
+            //         console.log(ui);
+            //         console.log(ui.item.value);
+            //         cekTankpadAddBoxes(ui.item.value);
+            //         // sjVaria.push({
+            //         //     'nama_bahan': ui.item.value
+            //         // });
+            //         // sjVaria['nama_bahan'] = ui.item.value;
+            //         // console.log('sjVaria: ' + sjVaria);
+            //     }
+            // });
+            $(divID).html(elementHTML);
 
         } else if (elementID === elementSystem[1][1]) {
             arrayVariasi.forEach(variasi => {
                 $("#selectVaria").append('<option value="' + variasi + '">' + variasi + '</option>');
             });
         } else if (elementID === `#divSelectJht`) {
-            for (var i = 0; i < arrayJht.length; i++) {
-                $("#selectJht").append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit": "${arrayHargaJahit[i]}"}'>${arrayJht[i]}</option>`);
-            }
+            arrayJht.forEach(tipeJht => {
+                $("#selectJht").append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
+            });
         }
     }
 
-    addSJStd();
+    addBusaStang();
     createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
 
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
-    function cekStdAddBoxes(tipeStd) {
+    function cekBusaStangAddBoxes(tipeBusaStang) {
         try {
-            for (const std of arrayStd) {
-                if (tipeStd === std.nama) {
-                    console.log('namaStd1:' + tipeStd);
-                    console.log('namaStd2:' + std.nama);
-                    console.log('hargaStd:' + std.harga);
+            console.log('masuk ke try');
+            console.log(arrayBusaStang);
+            console.log(arrayBusaStang.length);
+
+            for (let i = 0; i < arrayBusaStang.length; i++) {
+                console.log('masuk ke for');
+                if (tipeBusaStang === arrayBusaStang[i].nama) {
+                    console.log('masuk ke if');
+                    console.log('namaTankpad1:' + tipeBusaStang);
+                    console.log('namaTankpad2:' + arrayBusaStang[i].nama);
+                    console.log('hargaTankpad:' + arrayBusaStang[i].harga);
 
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
@@ -233,21 +240,28 @@ $htmlLogWarning .= "</div>";
                             createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
                         }
                     }
-                    $(`#inputHargaStd`).val(std.harga);
-                    console.log('Harga Std:');
-                    console.log($(`#inputHargaStd`).val());
+                    $(`#inputHargaBusaStang`).val(arrayBusaStang[i].harga);
+                    console.log('Harga Busa Stang:');
+                    console.log($(`#inputHargaBusaStang`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Std not found!")
+                    console.log("Nama Busa Stang not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
-
             }
+
         } catch (error) {
             console.log(error);
         }
+
     }
+    console.log('cekBusaStangAddBoxes');
+
+    setTimeout(() => {
+        cekBusaStangAddBoxes("Busa Stang");
+    }, 300);
+
 
     function closeAndAddBox(elementToRemove, divID, divElementID, i, j) {
         $(elementToRemove).remove();
@@ -281,7 +295,7 @@ $htmlLogWarning .= "</div>";
         } else if (value === 'Desc') {
             // removeElement(indexElementSystem);
             $('#boxDesc').remove();
-            createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][1]);
         }
     }
 
@@ -313,7 +327,7 @@ $htmlLogWarning .= "</div>";
         }
     }
 
-    function cekStdAddBoxes2() {
+    function cekTankpadAddBoxes2() {
         indexElementSystem = 1;
         for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);
@@ -323,10 +337,6 @@ $htmlLogWarning .= "</div>";
         }
     }
 </script>
-
-<style>
-
-</style>
 
 <?php
 include_once "01-footer.php";

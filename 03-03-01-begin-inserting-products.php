@@ -86,18 +86,18 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
         <a href="03-03-02-sj-varia3.php" class="productType position-absolute top-0 left-50 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Varia</span>
         </a>
-        <div class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        <a href="03-03-03-sj-kombi.php" class="productType position-absolute top-1em left-35 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Kombi</span>
-        </div>
-        <div class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
+        </a>
+        <a href="03-03-04-sj-std.php" class="productType position-absolute top-1em left-65 transform-translate--50_0 circle-L bg-color-orange-1 grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">SJ<br>Std</span>
-        </div>
-        <div class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
+        </a>
+        <a href="03-03-05-tankpad.php" class="productType position-absolute top-5em left-30 transform-translate--50_0 circle-L bg-color-soft-red grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Tank<br>Pad</span>
-        </div>
-        <div class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
+        </a>
+        <a href="03-03-06-busa-stang.php" class="productType position-absolute top-5em left-70 transform-translate--50_0 circle-L bg-color-grey grid-1-auto justify-items-center">
             <span class="font-size-0_8em text-center font-weight-bold">Busa<br>Stang</span>
-        </div>
+        </a>
         <div class="position-absolute top-5em left-50 transform-translate--50_0 grid-1-auto justify-items-center" onclick="toggleProductType();">
             <div class="circle-medium bg-color-orange-2 grid-1-auto justify-items-center">
                 <span class="color-white font-weight-bold font-size-1_5em">+</span>

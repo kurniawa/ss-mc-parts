@@ -1,15 +1,11 @@
 <?php
+include_once "01-config.php";
+include_once "01-header.php";
 include_once "01-backUpSQLTable.php";
-$tipe = "sj-varia";
-$bahan = "";
-$varia = "";
-$harga_bahan = "";
+$tipe = "tankpad";
+$tankpad = "";
+$harga_tankpad = "";
 $jahit = "";
-
-$ukuran = "";
-$tipe_ukuran = "";
-$nama_nota_ukuran = "";
-$harga_ukuran = 0;
 
 $jumlah = "";
 $ktrg = "";
@@ -27,41 +23,23 @@ $id_spk = null;
 
 // Definisi column yang nantinya berguna untuk pengecekan (bukan dalam scope selection ini)
 $column_to_check = ["tipe"];
-$value_to_check = ["sj-varia"];
+$value_to_check = ["tankpad"];
 
+// var_dump($_POST);
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $status = "OK";
     $htmlLogOK = $htmlLogOK . "REQUEST METHOD: POST<br><br>";
 
     $id_spk = $_POST["id_spk"];
+    $tankpad = $_POST["tankpad"];
+    $harga_tankpad = $_POST["harga_tankpad"];
 
-    $bahan = $_POST["bahan"];
-    $varia = $_POST["varia"];
-    $harga_bahan = $_POST["harga_bahan"];
+    $harga_price_list += (int)$harga_tankpad;
 
-    array_push($column_to_check, "bahan", "varia");
-    array_push($value_to_check, $bahan, $varia);
-    $harga_price_list += (int)$harga_bahan;
-
-    $nama_lengkap .= "$bahan $varia";
+    $nama_lengkap .= "TP $tankpad";
     $nama_nota = $nama_lengkap;
-    if (isset($_POST["ukuran"])) {
-        $ukuran = $_POST["ukuran"];
-        // var_dump($ukuran);
-        $ukuran = json_decode($ukuran, true);
-        // echo "<br><br>";
-        // var_dump($ukuran);
-        // $tipe_ukuran = $ukuran->tipeUkuran;
-        $tipe_ukuran = $ukuran["tipeUkuran"];
-        $nama_nota_ukuran = $ukuran["namaNotaUkuran"];
-        $harga_ukuran = $ukuran["hargaUkuran"];
-        array_push($column_to_check, "ukuran");
-        array_push($value_to_check, $tipe_ukuran);
-        $nama_lengkap .= " $tipe_ukuran";
-        $nama_nota .= " $nama_nota_ukuran";
-        $harga_price_list += (int)$harga_ukuran;
-    }
 
+    // var_dump($nama_lengkap);
     if (isset($_POST["jahit"])) {
         $jahit = $_POST["jahit"];
         $jahit = json_decode($jahit, true);
@@ -69,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $harga_jahit = $jahit["hargaJahit"];
         // $data_harga_jahit = dbGetWithFilter("harga_lain", "nama", $jahit);
 
-        br_2x();
+        // br_2x();
         // var_dump($data_harga_jahit);
         // br_2x();
 
@@ -89,19 +67,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $jumlah = $_POST["jumlah"];
 
+    array_push($column_to_check, "nama_lengkap", "nama_nota");
+    array_push($value_to_check, $nama_lengkap, $nama_nota);
+
     array_push($column_to_check, "harga_price_list");
     array_push($value_to_check, $harga_price_list);
 
     $htmlLogOK = $htmlLogOK .
-        "bahan: " . $bahan . "<br>" .
-        "varia: " . $varia . "<br>" .
-        "harga_bahan: " . $harga_bahan . "<br>" .
+        "tankpad: " . $tankpad . "<br>" .
+        "harga_tankpad: " . $harga_tankpad . "<br>" .
         "jahit: " . $tipe_jahit . "<br>" .
         "harga_jahit: " . $harga_jahit . "<br>" .
-        "ukuran (encoded): " . json_encode($ukuran) . "<br>" .
-        "tipe_ukuran: " . $tipe_ukuran . "<br>" .
-        "nama_nota_ukuran: " . $nama_nota_ukuran . "<br>" .
-        "harga_ukuran: " . $harga_ukuran . "<br>" .
+        "nama_lengkap: " . $nama_lengkap . "<br>" .
         "ktrg: " . $ktrg . "<br>" .
         "jumlah: " . $jumlah . "<br><br>";
 } else {
@@ -113,20 +90,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $id_produk = 0;
 if ($status == "OK") {
     // Cek apakah produk yang diedit tersebut sudah ada atau belum
-    var_dump($column_to_check);
-    echo "<br><br>";
-    var_dump($value_to_check);
-    echo "<br><br>";
+    // var_dump($column_to_check);
+    // echo "<br><br>";
+    // var_dump($value_to_check);
+    // echo "<br><br>";
     $check_produk = dbCheck("produk", $column_to_check, $value_to_check);
-    var_dump($check_produk[0]);
-    br_2x();
-    var_dump($check_produk);
-    br_2x();
+    // var_dump($check_produk[0]);
+    // br_2x();
+    // var_dump($check_produk);
+    // br_2x();
     if ($check_produk == "BELUM ADA") {
         $id_produk = nextID("produk", "id");
+
         array_unshift($column_to_check, "id");
         array_unshift($value_to_check, $id_produk);
         dbInsert("produk", $column_to_check, $value_to_check);
+        backUpSQLTable("produk");
     } else {
         array_unshift($column_to_check, "id");
         array_unshift($value_to_check, $id_produk);
@@ -149,3 +128,53 @@ if ($status == "OK") {
     dbInsert("spk_contains_produk", $column, $value);
     backUpSQLTable("spk_contains_produk");
 }
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
+
+?>
+
+<div class="mt-2em text-center">
+    <button id='backToSPK' class="btn-1 d-inline-block bg-color-orange-1" onclick="backToSPK();">Kembali ke SPK</button>
+</div>
+
+<div class="divLogError"></div>
+<div class="divLogOK"></div>
+<div class="divLogWarning"></div>
+
+<script>
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
+
+    $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
+    $('.divLogOK').html(htmlLogOK);
+
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
+
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
+    }
+
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
+
+    function backToSPK() {
+        window.history.go(-2);
+    }
+</script>
+
+<?php
+include_once "01-footer.php";
+?>

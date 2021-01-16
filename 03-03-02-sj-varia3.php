@@ -386,9 +386,6 @@ $htmlLogWarning = $htmlLogWarning . "</div>";
             for (var i = 0; i < arrayJht.length; i++) {
                 $("#selectJht-" + indexSJVaria).append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit":" ${arrayHargaJahit[i]}"}'>${arrayJht[i]}</option>`);
             }
-            // arrayJht.forEach(tipeJht => {
-            //     $("#selectJht-" + indexSJVaria).append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
-            // });
         } else if (elementID === `#divSelectUkuran-${indexSJVaria}`) {
             for (var i = 0; i < arrayTipeUkuran.length; i++) {
                 $("#selectUkuran-" + indexSJVaria).append(`<option value='{"tipeUkuran":"${arrayTipeUkuran[i]}","namaNotaUkuran":"${arrayNamaNotaUkuran[i]}","hargaUkuran":${arrayHargaUkuran[i]}}'>${arrayTipeUkuran[i]}</option>`);

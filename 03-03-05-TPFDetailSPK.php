@@ -22,17 +22,16 @@ if ($status == "OK") {
 $htmlLogError .= "</div>";
 $htmlLogOK .= "</div>";
 $htmlLogWarning .= "</div>";
-
 ?>
 
-<form action="03-03-04-sjStdFDetailSPK-db.php" method="POST" id="containerSJStd">
+<form action="03-03-05-TPFDetailSPK-db.php" method="POST" id="containerTankPad">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
-            <h2>Tipe: Sarung Jok Standard</h2>
+            <h2>Tipe: Tankpad</h2>
         </div>
 
-        <div id="divArraySJStd">
+        <div id="divArrayTankpad">
 
         </div>
 
@@ -52,8 +51,10 @@ $htmlLogWarning .= "</div>";
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
         </button>
+
     </div>
     <input type="hidden" name="id_spk" value="<?= $id_spk; ?>">
+
 </form>
 
 <div class="divLogError"></div>
@@ -99,57 +100,55 @@ $htmlLogWarning .= "</div>";
 </script>
 
 <script src="js/variableForNewSPK.js"></script>
+
 <script>
-    function addSJStd() {
-        let elementsToAppend =
-            `<div id="divSJStd" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
-                <div id='divStd'></div>
-                <div id='divJht'></div>
+    function addTankpad() {
+        var elementsToAppend =
+            `<div id="divTankpad" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
+                <div id='divTankpad2'></div>
                 <div id='divDesc'></div>
                 <div id='divJumlah'></div>
             </div>`;
 
-        $('#divArraySJStd').append(elementsToAppend);
+        $('#divArrayTankpad').append(elementsToAppend);
     }
 
-    let indexElementSystem = 0;
-    let elementSystem = [
-        [`#divStd`, `#inputStd`],
+    var indexElementSystem = 0;
+    var elementSystem = [
+        [`#divTankpad2`, `#inputTankpad`],
         [
             [`#availableOptions`, `#boxJumlah`],
-            [`#availableOptions`, `#boxJht`],
             [`#availableOptions`, `#boxDesc`]
         ],
         [
             [`#divJumlah`, `#divInputJumlah`],
-            [`#divJht`, `#divSelectJht`],
             [`#divDesc`, `#divTADesc`]
         ]
     ];
 
     // console.log(elementSystem);
 
-    let htmlBoxJumlah =
+    var htmlBoxJumlah =
         `<div id="boxJumlah" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl2ElementFromBox("Jumlah");'>
         Jumlah
     </div>`;
 
-    let htmlBoxJht =
+    var htmlBoxJht =
         `<div id="boxJht" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl2ElementFromBox("Jht");'>
         + Jahit
     </div>`;
 
-    let htmlBoxDesc =
+    var htmlBoxDesc =
         `<div id="boxDesc" class="d-inline-block mr-0_5em pt-0_5em pb-0_5em pl-1em pr-1em b-radius-5px bg-color-soft-red" onclick='addLvl2ElementFromBox("Desc");'>
         + Ktrgn
     </div>`;
 
-    let htmlDivInputJumlah =
+    var htmlDivInputJumlah =
         `<div id="divInputJumlah" class="mt-1em">
             <input type="number" name="jumlah" id="inputJumlah" min="0" step="1" placeholder="Jumlah" class="pt-0_5em pb-0_5em">
         </div>`;
 
-    let htmlDivSelectJht =
+    var htmlDivSelectJht =
         `<div id='divSelectJht' class="grid-2-auto_10 mt-1em">
             <select name="jahit" id="selectJht" class="pt-0_5em pb-0_5em">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
@@ -157,21 +156,21 @@ $htmlLogWarning .= "</div>";
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[2][1][1]}","${elementSystem[1][1][0]}","${elementSystem[1][1][1]}", 1, 1);'></span>
         </div>`;
 
-    let htmlDivTADesc =
+    var htmlDivTADesc =
         `<div id="divTADesc" class="mt-1em">
-            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][2][1]}", "${elementSystem[1][2][0]}","${elementSystem[1][2][1]}", 1, 2);'></span></div>
+            <div class='text-right'><span class='ui-icon ui-icon-closethick' onclick='closeAndAddBox("${elementSystem[2][1][1]}", "${elementSystem[1][1][0]}","${elementSystem[1][1][1]}", 1, 1);'></span></div>
             <textarea class="pt-1em pl-1em text-area-mode-1" name="ktrg" id="taDesc" placeholder="Keterangan"></textarea>
         </div>`;
 
 
-    let elementHTML = [
-        `<input id="inputStd" name="std" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Standard" onkeyup="cekStdAddBoxes(this.value);">
-        <input id='inputHargaStd' name="harga_std" type='hidden'>
+    var elementHTML = [
+        `<input id="inputTankpad" name="tankpad" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Tankpad" onkeyup="cekTankpadAddBoxes(this.value);">
+        <input id='inputHargaTankpad' name="harga_tankpad" type='hidden'>
         `,
 
-        [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
+        [htmlBoxJumlah, htmlBoxDesc],
 
-        [htmlDivInputJumlah, htmlDivSelectJht, htmlDivTADesc]
+        [htmlDivInputJumlah, htmlDivTADesc]
 
     ];
 
@@ -186,13 +185,13 @@ $htmlLogWarning .= "</div>";
         }
         $(divID).html(elementHTML);
 
-        if (elementID === `#inputStd`) {
-            $("#inputStd").autocomplete({
-                source: arrayTipeStd,
+        if (elementID === `#inputTankpad`) {
+            $("#inputTankpad").autocomplete({
+                source: arrayTipeTankpad,
                 select: function(event, ui) {
                     console.log(ui);
                     console.log(ui.item.value);
-                    cekStdAddBoxes(ui.item.value);
+                    cekTankpadAddBoxes(ui.item.value);
                     // sjVaria.push({
                     //     'nama_bahan': ui.item.value
                     // });
@@ -212,33 +211,33 @@ $htmlLogWarning .= "</div>";
         }
     }
 
-    addSJStd();
+    addTankpad();
     createElement(elementSystem[indexElementSystem][0], elementSystem[indexElementSystem][1], elementHTML[indexElementSystem]);
 
     // fungsi langsung dipanggil untuk langsung menambahkan element2 input SJ Varia pertama pada halaman web.
 
-    function cekStdAddBoxes(tipeStd) {
+    function cekTankpadAddBoxes(tipeTankpad) {
         try {
-            for (const std of arrayStd) {
-                if (tipeStd === std.nama) {
-                    console.log('namaStd1:' + tipeStd);
-                    console.log('namaStd2:' + std.nama);
-                    console.log('hargaStd:' + std.harga);
+            for (const tankpad of arrayTankpad) {
+                if (tipeTankpad === tankpad.nama) {
+                    console.log('namaTankpad1:' + tipeTankpad);
+                    console.log('namaTankpad2:' + tankpad.nama);
+                    console.log('hargaTankpad:' + tankpad.harga);
 
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
-                    for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+                    for (var i = 0; i < elementSystem[indexElementSystem].length; i++) {
                         console.log('i: ' + i);
                         if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
                             createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
                         }
                     }
-                    $(`#inputHargaStd`).val(std.harga);
-                    console.log('Harga Std:');
-                    console.log($(`#inputHargaStd`).val());
+                    $(`#inputHargaTankpad`).val(tankpad.harga);
+                    console.log('Harga Tankpad:');
+                    console.log($(`#inputHargaTankpad`).val());
                     throw Error("Actually this error is to break the loop only. Because break; cannot used for forEach loop.");
                 } else {
-                    console.log("Nama Std not found!")
+                    console.log("Nama Tankpad not found!")
                     indexElementSystem = 1;
                     removeElement(indexElementSystem);
                 }
@@ -259,7 +258,7 @@ $htmlLogWarning .= "</div>";
 
         indexElementSystem = 2;
         removeElement(indexElementSystem);
-        for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+        for (var i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);
             if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
                 createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
@@ -281,7 +280,7 @@ $htmlLogWarning .= "</div>";
         } else if (value === 'Desc') {
             // removeElement(indexElementSystem);
             $('#boxDesc').remove();
-            createElement(elementSystem[indexElementSystem][2][0], elementSystem[indexElementSystem][2][1], elementHTML[indexElementSystem][2]);
+            createElement(elementSystem[indexElementSystem][1][0], elementSystem[indexElementSystem][1][1], elementHTML[indexElementSystem][1]);
         }
     }
 
@@ -295,9 +294,9 @@ $htmlLogWarning .= "</div>";
     }
 
     function removeElement(pointerElementSystemNow) {
-        for (let i = pointerElementSystemNow; i < elementSystem.length; i++) {
+        for (var i = pointerElementSystemNow; i < elementSystem.length; i++) {
             if (i === 2 || i === 3) {
-                for (let j = 0; j < elementSystem[i].length; j++) {
+                for (var j = 0; j < elementSystem[i].length; j++) {
                     removeElement2(elementSystem[i][j][1]);
                     console.log(i + ' ' + j + ' ' + ' ' + 1);
                 }
@@ -313,9 +312,11 @@ $htmlLogWarning .= "</div>";
         }
     }
 
-    function cekStdAddBoxes2() {
+
+
+    function cekTankpadAddBoxes2() {
         indexElementSystem = 1;
-        for (let i = 0; i < elementSystem[indexElementSystem].length; i++) {
+        for (var i = 0; i < elementSystem[indexElementSystem].length; i++) {
             console.log('i: ' + i);
             if ($(elementSystem[indexElementSystem][i][1]).length === 0) {
                 createElement(elementSystem[indexElementSystem][i][0], elementSystem[indexElementSystem][i][1], elementHTML[indexElementSystem][i]);
@@ -323,11 +324,6 @@ $htmlLogWarning .= "</div>";
         }
     }
 </script>
-
-<style>
-
-</style>
-
 <?php
 include_once "01-footer.php";
 ?>

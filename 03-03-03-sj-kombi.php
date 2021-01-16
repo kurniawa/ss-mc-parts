@@ -1,13 +1,45 @@
 <?php
 include_once "01-header.php";
-if (isset($_GET['i'])) {
-    $m = $_GET['i'];
+include_once "01-config.php";
+
+$mode = "";
+$id_spk = "none";
+$id_spk_contains_item = "none";
+$id_produk = "none";
+$item_to_edit = "none";
+$spk_contains_item = "none";
+$id = "undefined";
+$action = "03-03-02-sj-varia-addItemFromNewSJVaria.php";
+
+if (isset($_GET["id_spk"]) && isset($_GET["id_spk_contains_item"]) && isset($_GET["id_produk"])) {
+    $mode = "edit";
+    $id_spk = $_GET["id_spk"];
+    $id_spk_contains_item = $_GET["id_spk_contains_item"];
+    $id_produk = $_GET["id_produk"];
+    $action = "03-03-02-sj-varia-3.php";
+
+    $htmlLogOK = $htmlLogOK .
+        "
+    id_spk: $id_spk<br>
+    id_spk_contains_item: $id_spk_contains_item<br>
+    id_produk: $id_produk<br><br>
+    ";
+
+    $item_to_edit = dbGetWithFilter("produk", "id", $id_produk);
+    $spk_contains_item = dbGetWithFilter("spk_contains_produk", "id", $id_spk_contains_item);
 } else {
-    $m = 'undefined';
+    $id = 'undefined';
 }
+
+// var_dump($item_to_edit);
+
+$htmlLogError = $htmlLogError . "</div>";
+$htmlLogOK = $htmlLogOK . "</div>";
+$htmlLogWarning = $htmlLogWarning . "</div>";
+
 ?>
 
-<div id="containerSJKombi">
+<form action="03-03-03-addKombiFNewSPK.php" method="POST" id="containerSJKombi">
 
     <div class="ml-0_5em mr-0_5em mt-2em">
         <div>
@@ -29,58 +61,65 @@ if (isset($_GET['i'])) {
             </div>
 
         </div>
-        <div id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
+        <button type="submit" id="bottomDiv" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="insertItemToLocal();">
 
             <span class="justify-self-center font-weight-bold">TAMBAH ITEM KE SPK</span>
 
-        </div>
-        <div id="bottomDiv2" class="position-absolute bottom-0_5em w-calc-100-1em h-4em bg-color-orange-2 grid-1-auto" onclick="confirmEditItemSPK();">
-
-            <span class="justify-self-center font-weight-bold">EDIT ITEM SPK</span>
-
-        </div>
+        </button>
 
     </div>
-</div>
+    <input type="hidden" name="id_spk" value="<?= $id_spk ?>">
+    <input type="hidden" name="id_spk_contains_item" value="<?= $id_spk_contains_item ?>">
+    <input type="hidden" name="id_produk" value="<?= $id_produk ?>">
+    <input type="hidden" name="harga_jahit">
+    <input type="hidden" name="harga_ukuran">
+</form>
+
+<div class="divLogError"></div>
+<div class="divLogOK"></div>
+<div class="divLogWarning"></div>
 
 <script>
-    // codingan untuk antisipasi editing item
+    var htmlLogError = `<?= $htmlLogError; ?>`;
+    var htmlLogOK = `<?= $htmlLogOK; ?>`;
+    var htmlLogWarning = `<?= $htmlLogWarning; ?>`;
 
-    let indexSJVaria = 0; // index yang akan memudahkan apabila nantinya ada item sejenis yang sekaligus mau ditambahkan, yang hanya beda gambar atau warna misalnya.
-    let sjVaria = [{}];
-    let pilihanSJVariaSejenis = [] // ini nanti untuk pilihan item sejenis yang mau ditambahkan
-    let arrayKombi = new Array();
-    let arrayTipeKombi = new Array();
-    let arrayJht = new Array();
+    $('.divLogError').html(htmlLogError);
+    $('.divLogWarning').html(htmlLogWarning);
+    $('.divLogOK').html(htmlLogOK);
 
-    // ini nantinya untuk menampung id - id element yang mau di remove atau di reset
-    let idElementToRemove;
-    let idElementToReset;
+    if ($('.logError').html() === '') {
+        $('.divLogError').hide();
+    } else {
+        $('.divLogError').show();
+    }
 
-    $(document).ready(function() {
+    if ($('.logWarning').html() === '') {
+        $('.divLogWarning').hide();
+    } else {
+        $('.divLogWarning').show();
+    }
 
-        fetch('json/products.json').then(response => response.json()).then(data => {
-            console.log(data);
+    if ($('.logOK').html() === '') {
+        $('.divLogOK').hide();
+    } else {
+        $('.divLogOK').show();
+    }
 
-            for (const kombi of data[1].varia) {
-                arrayKombi.push({
-                    nama: kombi.nama_varia,
-                    harga: kombi.harga
-                });
-                arrayTipeKombi.push(kombi.nama_varia);
-            }
+    function backToSPK() {
+        window.history.go(-2);
+    }
 
-            console.log(arrayKombi);
+    var status = "<?= $status; ?>";
+    var id_spk = 0;
+    if (status == "OK") {
+        id_spk = <?= $id_spk; ?>;
+    }
+</script>
 
-            for (const jht of data[0].jahit[0].tipe_jht) {
-                arrayJht.push(jht);
-            }
-            console.log(arrayJht);
-        });
+<script src="js/variableForNewSPK.js"></script>
 
-
-    });
-
+<script>
     function addSJKombi() {
         let elementsToAppend =
             `<div id="divSJKombi" class="b-1px-solid-grey pt-1em pb-1em pl-1em pr-1em">
@@ -133,7 +172,7 @@ if (isset($_GET['i'])) {
 
     let htmlDivSelectJht =
         `<div id='divSelectJht' class="grid-2-auto_10 mt-1em">
-            <select name="selectJht" id="selectJht" class="pt-0_5em pb-0_5em">
+            <select name="jahit" id="selectJht" class="pt-0_5em pb-0_5em">
                 <option value="" disabled selected>Pilih Jenis Jahit</option>
             </select>
             <span class="ui-icon ui-icon-closethick justify-self-center" onclick='closeAndAddBox("${elementSystem[2][1][1]}","${elementSystem[1][1][0]}","${elementSystem[1][1][1]}", 1, 1);'></span>
@@ -147,8 +186,8 @@ if (isset($_GET['i'])) {
 
 
     let elementHTML = [
-        `<input id="inputKombi" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Kombinasi" onkeyup="cekKombiAddBoxes(this.value);">
-        <input id='inputHargaKombi' type='hidden'>
+        `<input id="inputKombi" name="kombi" class="input-1 mt-1em pb-1em" type="text" placeholder="Nama/Tipe Kombinasi" onkeyup="cekKombiAddBoxes(this.value);">
+        <input id='inputHargaKombi' name="harga_kombi" type='hidden'>
         `,
 
         [htmlBoxJumlah, htmlBoxJht, htmlBoxDesc],
@@ -193,9 +232,9 @@ if (isset($_GET['i'])) {
                 $("#selectVaria").append('<option value="' + variasi + '">' + variasi + '</option>');
             });
         } else if (elementID === `#divSelectJht`) {
-            arrayJht.forEach(tipeJht => {
-                $("#selectJht").append('<option value="' + tipeJht + '">' + tipeJht + '</option>');
-            });
+            for (var i = 0; i < arrayJht.length; i++) {
+                $("#selectJht-" + indexSJVaria).append(`<option value='{"tipeJahit": "${arrayJht[i]}", "hargaJahit":" ${arrayHargaJahit[i]}"}'>${arrayJht[i]}</option>`);
+            }
         }
     }
 
@@ -381,18 +420,18 @@ if (isset($_GET['i'])) {
         location.href = '03-03-01-inserting-items.php';
     }
 
-    let m = <?php echo $m ?>;
-    console.log(m);
-    $('#bottomDiv2').hide()
-    setTimeout(() => {
+    // let m = <-?php echo $m ?>;
+    // console.log(m);
+    // $('#bottomDiv2').hide()
+    // setTimeout(() => {
 
-        if (m !== undefined) {
-            editMode();
-            $('#bottomDiv2').show();
-            $('#bottomDiv').hide();
-        }
+    //     if (m !== undefined) {
+    //         editMode();
+    //         $('#bottomDiv2').show();
+    //         $('#bottomDiv').hide();
+    //     }
 
-    }, 300);
+    // }, 300);
 
     function editMode() {
         console.log('edit mode');
